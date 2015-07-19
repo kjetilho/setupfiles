@@ -1,0 +1,10 @@
+[user]
+	name = Kjetil Torgrim Homme
+	email = kjetil.homme@redpill-linpro.com
+[github]
+	user = kjetilho
+	token = c70dcaa6951ecd73af11897d05001394
+[push]
+	default = current
+[alias]
+	clog = log --graph --decorate --color
