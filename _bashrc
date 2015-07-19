@@ -1,0 +1,422 @@
+# .bashrc
+
+case $LD_PRELOAD in
+    ?*)
+        # Set by replacebell -- we don't want this to stick around
+        unset LD_PRELOAD
+        ;;
+esac
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc
+fi
+
+# User specific aliases and functions
+
+case $(uname) in
+    SunOS)
+	export PATH=/usr/mysql/bin:/usr/bin:/usr/local/bin:/usr/sbin:/sbin:/usr/local/sbin:/usr/gnu/bin
+	;;
+    *)
+        declare -a hosts
+        if [ -e ~/.ssh/known_hosts ]; then
+            hosts=(`awk -F"[ ,]" '/^([0-9]+[.]|\[)/ { next } {print $1}' ~/.ssh/known_hosts`)
+        fi
+        if [ -e ~/.ssh/config ]; then
+            hosts=(${hosts[*]} `awk '/^Host / { print $2 }' ~/.ssh/config`)
+        fi
+	complete -r
+        complete -W "${hosts[*]}" ssh ssh-keygen ping ping6 host showmount mtr traceroute vlan cssh console
+        complete -W "${hosts[*]}" -o default scp rsync bacula-conf
+        ;;
+esac
+
+if [ -e $HOME/.work-password-store ]
+then
+	alias workpass='PASSWORD_STORE_GPG_OPTS="--trust-model always" PASSWORD_STORE_DIR=~/.work-password-store ${HOME}/.work-password-store/bin/pass'
+	. ${HOME}/.work-password-store/bin/workpass.bash-completion
+fi
+
+mypath=$HOME/bin:/opt/vagrant/bin:$PATH:/stat/local/bin
+
+if [ -x /usr/local/bin/cknfs ]
+then
+    echo cknfs >&2
+    export PATH=$(/usr/local/bin/cknfs -t 2 -su $mypath)
+    echo cknfs done >&2
+else
+    export PATH=$mypath
+fi
+
+if [ -d $HOME/lib/perl/share/perl ]
+then
+	export PERL5LIB=$(echo $HOME/lib/perl/share/perl/5.* | tr " " :)
+fi
+
+if [ -d /opt/python ]
+then
+	export PYTHONPATH=/opt/python/lib/python2.7/site-packages
+fi
+
+# Ruby stuff
+# [ -r ~/.rvm/scripts/rvm ] && . ~/.rvm/scripts/rvm
+
+# If not running interactively, don't do anything
+[ -z "$PS1" ] && return
+
+if [ "$BASH_VERSINFO"0 -ge 40 ]
+then
+    echo "yay, **"
+    shopt -s globstar
+fi
+
+_rl="`tput rmm`"
+_tb='\e]0;\u@\H\a'
+_status='\e[$(($??1:0))m'
+_prompt=': [\u@\h \w];'
+_reset='\[\e[0m\]'
+
+case $TERM in
+	linux)	PS1="\[${_status}\]${_prompt}${_reset} "
+		;;
+	xterm*)	PS1="\[${_rl}${_tb}${_status}\]${_prompt}${_reset} "
+		;;
+	*)	PS1="${_prompt} "
+		;;
+esac
+
+export VIMINIT=':set cp
+set noai
+set nosi
+syntax off'
+unalias vi la 2>/dev/null
+
+if [ disabled = yes -a "$DISPLAY" != "" ]
+then
+	# Find suitable locale for Evolution
+	unset LC_TIME
+	for loc in $(locale -a | grep -i 'en_.*utf')
+	do
+		# why did I want to do this?
+		# case $loc in
+		# 	en_US*) export LANG=$loc ;;
+		# esac
+		if [ "$LC_TIME" = "" ]
+		then
+			[ "$(LC_TIME=$loc date +%p)" = "" ] && export LC_TIME="$loc"
+		fi
+	done
+fi
+
+if [ "$XTERM_LANG" != "" ]
+then
+    export LANG="$XTERM_LANG"
+fi
+
+export LC_COLLATE=C
+export EDITOR=vi
+export PAGER=less
+export GIT_PAGER="less -F"
+
+grep_options="--directories=skip --colour=auto"
+alias grep="grep $grep_options"
+alias egrep="egrep $grep_options"
+alias fgrep="fgrep $grep_options"
+
+export GREP_COLOR="01"
+export LESS="-j4R"
+unset LESSOPEN
+export PKGBUILD_IPS_SERVER=http://osol.repo.linpro.no:10000
+
+HISTTIMEFORMAT="%H:%M:%S "
+HISTSIZE=50000
+HISTFILESIZE=50000
+
+alias ls="ls -F"
+alias hsot=host
+alias mv="mv -i"
+
+bind "set prefer-visible-bell Off"
+bind '"\en": history-search-forward'
+bind '"\ep": history-search-backward'
+# bind "set mark-modified-lines On"
+bind "set revert-all-at-newline On"
+
+ssh() {
+    unset LC_TIME
+    env TERM=xterm ssh "$@"
+}
+
+cssh() {
+    unset LC_TIME
+    command cssh "$@"
+}
+
+percd() {
+    history -w
+    builtin cd "$@" && {
+        [ -d ~/.bash_history.d ] || mkdir -p ~/.bash_history.d
+        HISTFILE=$HOME/.bash_history.d/${PWD//\//_}
+        history -c
+        if [ -r $HISTFILE ]
+        then
+            history -r
+        fi
+    }
+}
+
+stderr() { echo "$@" >&2; }
+
+nosvn() {
+    find . \( -type d -name '.svn' -prune \) -o \( "$@" \)
+}
+
+newest() {
+    if [ -z "$1" ]
+    then
+        nosvn -printf '%T+ %p\n' | sort -rn | head -1
+    else 
+        find . \( -type d -name '.svn' -prune \) -o \
+            \( "$@" -printf '%T+ %p\n' \) | sort -rn | head -1
+    fi
+}
+
+alias finn='set -f; do_finn'
+do_finn() {
+    name="$1"; shift;
+    if echo "$name" | grep '^[a-zA-Z0-9_.-]*$' >/dev/null
+    then
+        name="*$name*"
+    fi
+    case $1 in
+        [a-zA-Z]*)
+            nosvn -name "$name" -print0 | xargs -0 "$@"
+            ;;
+        *)
+            nosvn -name "$name" "$@" -print
+            ;;
+    esac
+    set +f
+}
+
+forallf() {
+    nosvn -type f -print0 | xargs -0 "$@"
+}
+
+foralld() {
+    nosvn -type d -print0 | xargs -0 "$@"
+}
+
+hdr() {
+    nosvn -type f \( -name '*.h' -o -name '*.hh' \) -print0 | xargs -0 "$@"
+}
+
+src() {
+    nosvn -type f \( \
+           -name '*.[physicCl]' \
+           -o -name '*.p[lmyp]' \
+           -o -name '*.cc' \
+           -o -name '*.hh' \
+           -o -name '*.cpp' \
+	   -o -name '*.rb' \
+	   -o -name '*.erb' \
+	   -o -name '*.cf' \
+	   -o -name '*.cfg' \
+	   -o -name '*.conf' \
+	\) -print0 | xargs -0 "$@"
+}
+
+la() {
+	for p do
+		case $(type "$p") in
+			*" is a"*)
+				type "$p" | head -1
+				;;
+			*)
+				ls -lL $(type -p "$p")
+				;;
+		esac
+	done
+}
+
+File() {
+    for file
+    do
+        [ -L "$file" ] && file=$(readlink -f "$file")
+        file "$file"
+    done
+}
+
+lw() {
+    local strings p full
+    case $# in
+        0)  stderr "Usage: lw [-s] <program> [<program> ...]"
+            stderr "View the listed programs. With -s, run strings."
+            return
+            ;;
+        *)  strings=false;
+            case $1 in
+                -s)  strings=true; shift;;
+            esac
+            for p do
+                full=`type -path "$p"`
+                $strings && ( strings "$full" | $PAGER ) || $PAGER "$full"
+            done
+            ;;
+    esac
+}
+
+mysudo() {
+        HOME=/root pfexec bash
+}
+
+myget() {
+    local url
+    for url; do wget -r -nd -l 1 -A "${url##*/}" "${url%/*}"; done
+}
+
+sleep-until() {
+    local target=$(date -d "$*" +%s.%N)
+    sleep $(echo $target - $(date -d "now" +%s.%N) | bc)
+} 
+
+case `uname -n`:$COLUMNS in
+    login.redpill-linpro.com:64)
+        screen -Urx
+        ;;
+    feh.ms.redpill-linpro.com:*)
+        if [ "$CHOOSEHOST" ]
+        then
+            bind 'set show-all-if-ambiguous On'
+            bind 'set page-completions Off'
+            bind 'C-w: menu-complete'
+            complete -W ssh -E
+            unset LC_TIME
+
+            command_not_found_handle() {
+                host=$1; shift
+                for m in ${hosts[*]}
+                do
+                    case $m in
+                        $host*|$host)
+                            case $m/$host in
+                                *-mgmt*/*-mg*)
+                                    host=$m
+                                    break
+                                    ;;
+                                *-mgmt*/*)
+                                    : # ignore mgmt address unless specified
+                                    ;;
+                                *)
+                                    host=$m
+                                    break
+                                    ;;
+                            esac
+                            ;;
+                    esac
+                done
+
+                for m in ${hosts[*]}
+                do
+                    case $m in
+                        $host.*|$host)
+                            host=$m
+                            break
+                            ;;
+                    esac
+                done
+                case $1 in
+                    cl|clean)
+                        ssh-keygen -R $host
+                        ;;
+                    *)
+                        echo "logging in to $host ... "
+                        ssh $host "$@"
+                        ;;
+                esac
+            }
+        else
+            unset hosts
+        fi
+        ;;
+    *)
+        unset hosts
+        ;;
+esac
+
+stockprice() {
+    local date="$1"
+    local ticker="$2"
+    # charmap=$(locale -c charmap | tail -1)
+    curl -s "http://hopey.netfonds.no/paperhistory.php?paper=$ticker&csv_format=txt"| egrep "^(quote|$date)" | iconv -f latin1 -t utf8 | sed "s/ Børs//"
+}
+
+function repeat() {
+        declare -i num=$1; shift
+        while [ $num -gt 0 ]; do
+                "$@" || return
+                num=num-1
+        done
+}
+
+function up () { 
+        case $# in 
+                0) cd ..
+                   ;;
+                1) savepwd=$PWD;
+                   repeat $1 cd ..;
+                   OLDPWD=$savepwd
+                   ;;
+        esac
+}
+
+g() {
+    case $1 in
+        p|pu|pup|pupp|puppet) cd ~/svn/puppet ;;
+        n|na|nag|nagi|nagios) cd ~/svn/nagios/nagios-config ;;
+        b|ba|bar|bare|bareos) cd ~/git/git.i.bitbit.net/backup/bareos-osl ;;
+        bk|bks|bksd|bacula) cd ~/git/git.i.bitbit.net/backup/bacula-ksd ;;
+        bc|bch|bcheck) cd ~/git/git.i.bitbit.net/backup/bacula-check ;;
+        *)
+            for m in ~/svn/$1* \
+                     ~/git/git.i.bitbit.net/*/$1* \
+                     ~/git/git.i.bitbit.net/*/*$1*
+            do
+                [ -d "$m" ] && cd "$m" && return
+            done
+    esac
+}
+h() {
+    for m in ${hosts[*]}
+    do
+        case $m in
+            *$1*)
+                echo $m;
+                ;;
+        esac
+    done
+}
+
+alias getvnx='emcinfo -h mav-ds-pr-emc01.get.c.bitbit.net -u admin'
+
+# output from portloginshow
+function fe() {
+    case $1 in
+        *:*:*)
+            wwn="$1"
+            ;;
+        *)
+            wwn="$2"
+            ;;
+    esac
+    grep -h -i -B 4 $wwn $HOME/tmp/*-zone | grep 'Zone:'
+}
+
+function horse-en() {
+    for i in a b c d e
+    do
+        aspell -d en dump master | 
+            grep -v "['A-Z]" | shuf -n 4 | xargs echo
+    done
+}
