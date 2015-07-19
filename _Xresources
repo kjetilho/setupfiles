@@ -1,0 +1,100 @@
+! Fix the Xft dpi to 96; this prevents tiny fonts
+! or HUGE fonts depending on the screen size.
+
+#include ".Xresources-solarized"
+
+Xft.dpi: 96
+
+/*
+XTerm*utf8Fonts.font:     	-*-fixed-medium-r-*-*-20-*-*-*-*-*-iso10646-*
+XTerm*background:               white
+XTerm*foreground:               black
+*/
+XTerm*faceName:         	Bitstream Vera Sans Mono
+XTerm*faceSize:         	9
+
+! Solarized Dark theme begins
+xterm_remote*background:              S_base03
+xterm_remote*foreground:              K_S_base0
+xterm_remote*fading:                  40
+xterm_remote*fadeColor:               S_base03
+xterm_remote*cursorColor:             S_base1
+xterm_remote*pointerColorBackground:  S_base01
+xterm_remote*pointerColorForeground:  S_base1
+
+xterm_remote*color0:                  S_base02
+xterm_remote*color1:                  S_red
+xterm_remote*color2:                  S_green
+xterm_remote*color3:                  S_yellow
+xterm_remote*color4:                  S_blue
+xterm_remote*color5:                  S_magenta
+xterm_remote*color6:                  S_cyan
+xterm_remote*color7:                  S_base2
+xterm_remote*color9:                  S_orange
+xterm_remote*color8:                  S_base03
+xterm_remote*color10:                 S_base01
+xterm_remote*color11:                 S_base00
+xterm_remote*color12:                 S_base0
+xterm_remote*color13:                 S_violet
+xterm_remote*color14:                 S_base1
+xterm_remote*color15:                 S_base3
+! solarized Light theme ends
+
+
+XTerm*CharClass:                33:48,35-37:48,45-47:48,126:48
+XTerm*saveLines:                5000
+XTerm.VT100.backarrowKey:       false
+XTerm*eightBitInput:		false
+XTerm*scrollBar:		true
+XTerm.VT100.visualBell:         true
+XTerm.VT100.scrollKey:		true
+XTerm.VT100.scrollTtyOutput:	false
+/* 'on' interoperates badly after all */
+XTerm*selectToClipboard:        off
+XTerm*SimpleMenu*menuLabel.font: lucidasanstypewriter-14
+XTerm*SimpleMenu*font: lucidasanstypewriter-12
+
+XLock.font:			-*-lucidatypewriter-medium-r-*-*-*-140-*-*-*-*-iso10646-*
+irssi*background:		gray
+irssi*foreground:		black
+irssi.VT100.visualBell:		false
+irssi.VT100.geometry:		84x34
+irssi*faceName:         	Bitstream Vera Sans Mono
+irssi*faceSize:			9
+irssi*color3:                   S_yellow
+
+XTerm.VT100.Translations:       #override \n\
+          <KeyPress> F11:       string("exec bash\n") \n\
+    Shift <KeyPress> F12:       string(":set cp paste syntax=off\n") \n\
+          <KeyPress> F12:       string("export VIMINIT=':set cp'; export EDITOR=vi; ") \
+                                string("[ -r /usr/share/terminfo/x/$TERM ]||export TERM=xterm;") \
+                                string("PS1=\\\\[") \
+                                string(0x22) \
+                                string("`tput rmm`") \
+                                string(0x22) \
+                                string("'\\e]0;\\u@\\H\\a\\e[$(($??1:0))m\\]: ") \
+                                string("[\\u@\\h \\w];\\[\\e[0m\\] '\n") \n\
+~Ctrl~Shift <Btn2Up>:           insert-selection(PRIMARY, CUT_BUFFER0) \n\
+~Ctrl Shift <Btn2Up>:           insert-selection(CLIPBOARD, CUT_BUFFER1) \n\
+     ~Shift <BtnUp>:            select-end(PRIMARY, CUT_BUFFER0) \n\
+      Shift <BtnUp>:            select-end(CLIPBOARD, CUT_BUFFER1) \n\
+     ~Shift <Btn3Up>:           select-end(PRIMARY, CUT_BUFFER0) \n\
+      Shift <Btn3Up>:           select-end(CLIPBOARD, CUT_BUFFER1) \n\
+       Meta <KeyPress> F1:      insert-selection(PRIMARY) \n\
+       Meta <KeyPress> F2:      insert-selection(CLIPBOARD) \n\
+       Meta <KeyPress> F3:      insert-selection(CUT_BUFFER0) \n\
+       Meta <KeyPress> F4:      insert-selection(CUT_BUFFER1) \n\
+       Meta <KeyPress> F5:      insert-selection(PRIMARY, CUT_BUFFER0) \n\
+ Shift Meta <KeyPress> comma:   insert-selection(CLIPBOARD, CUT_BUFFER1) \n\
+~Shift Meta <KeyPress> comma:   insert-selection(PRIMARY, CUT_BUFFER0) \n\
+ Shift Meta <KeyPress> period:  insert-selection(PRIMARY, CUT_BUFFER0) \n\
+       Meta <KeyPress> ae:      insert-selection(CLIPBOARD, CUT_BUFFER1)
+
+Emacs.background:       MidnightBlue
+Emacs.foreground:       White
+Emacs.borderWidth:      0
+Emacs.cursorColor:      Red
+Emacs.pointerColor:     Red
+Emacs.MenuBar:		off
+Emacs.ToolBar:		0
+
