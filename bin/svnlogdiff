@@ -1,0 +1,22 @@
+#! /bin/bash
+
+usage() {
+        echo "Usage: $0 [count] FILE [diff-options]" >&2
+        exit 64
+}
+
+count=5
+
+case $1 in
+     [0-9]*) count=$1; shift;;
+esac
+
+[ $# = 0 ] && usage
+
+file="$1"; shift
+
+svn log "$file" | awk '/^r[0-9]/ {print substr($1, 2)}' | head -n $count | while read rev
+do
+   svn log -r$rev
+   svn diff -c$rev "$@"
+done

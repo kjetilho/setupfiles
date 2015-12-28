@@ -1,0 +1,14 @@
+#! /usr/bin/perl -w
+
+use POSIX;
+
+my $expr = join(" ", @ARGV);
+$expr =~ s/,(\d\d\d)/$1/g;
+
+my $a = eval $expr;
+if ($a == int($a)) {
+    print $a, "\n";
+} else {
+    printf ("%.6f\n", $a);
+}
+

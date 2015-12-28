@@ -1,0 +1,4 @@
+#! /bin/sh
+
+echo Type remark. End with CTRL/D
+cat >/dev/null

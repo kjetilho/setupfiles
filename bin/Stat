@@ -1,0 +1,90 @@
+#! /usr/bin/perl -w
+#
+# Trivial statistical analysis
+#
+
+use strict;
+use Data::Dumper;
+use Getopt::Long;
+
+sub usage {
+    print STDERR "Usage: $0 [-s SCALEFACTOR] [-k]\n";
+    exit(64);
+}
+
+sub statistics {
+    my ($data) = @_;
+
+    my $els = @{$data};
+    my %stats = ("count" => $els);
+
+    my $sum = 0;
+    for my $i (@{$data}) {
+	$sum += $i;
+    }
+    $stats{"sum"} = $sum;
+    my $avg = $sum / $els;
+    $stats{"avg"} = $avg;
+
+    my @sorted = sort {$a <=> $b} @{$data};
+    $stats{"min"} = $sorted[0];
+    $stats{"max"} = $sorted[$#sorted];
+    $stats{"10%"} = $sorted[int($#sorted * 0.10)];
+    $stats{"25%"} = $sorted[int($#sorted * 0.25)];
+    $stats{"75%"} = $sorted[int($#sorted * 0.75)];
+    $stats{"90%"} = $sorted[int($#sorted * 0.90)];
+
+    if ($els % 2 == 0) {
+	$stats{"median"} = ($sorted[$els/2-1] + $sorted[$els/2])/2;
+    } else {
+	$stats{"median"} = $sorted[($els-1)/2];
+    }
+    my $acc = 0;
+    for my $i (@{$data}) {
+	$acc += ($i - $avg)**2;
+    }
+    $stats{"stddev"} = ($acc/$els)**.5;
+    return \%stats;
+}
+
+my $scale = 1;
+my $bykey;
+
+GetOptions("scale|s=f", \$scale,
+           "key|k", \$bykey)
+    or usage();
+
+my %data;
+my @values;
+while (<>) {
+    @values = split();
+    if ($bykey) {
+        my $key = shift @values;
+        push(@{$data{$key}}, @values);
+    } else {
+        # The key is the column number
+        for my $c (0..$#values) {
+            push(@{$data{$c}}, $values[$c]/$scale);
+        }
+    }
+}
+
+my $s;
+
+format =
+#count      avg  std.dev     min       25%      50%      75%       max  dataset
+@####  @####.## @##.#### @####.## @####.## @####.## @####.## @######.## @*
+$s->{count}, $s->{avg}, $s->{stddev}, $s->{min}, $s->{'25%'}, $s->{median}, $s->{'75%'}, $s->{max}, $s->{dataset}
+.
+
+print " count      avg  std.dev     min       25%      50%      75%       max  dataset\n";
+
+
+# It is unlikely that there are more than 9 columns, so we cheat and
+# use lexical sorting of keys in all cases.
+
+for my $d (sort keys %data) {
+    $s = statistics($data{$d});
+    $s->{dataset} = $d;
+    write;
+}
