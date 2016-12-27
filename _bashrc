@@ -59,9 +59,6 @@ then
 	export PYTHONPATH=/opt/python/lib/python2.7/site-packages
 fi
 
-# Ruby stuff
-# [ -r ~/.rvm/scripts/rvm ] && . ~/.rvm/scripts/rvm
-
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
@@ -72,7 +69,7 @@ then
 fi
 
 _rl="`tput rmm`"
-_tb='\e]0;\u@\H\a'
+_tb='\e]0;${CHOOSEHOST+» }\u@\H\a'
 _status='\e[$(($??1:0))m'
 _prompt=': [\u@\h \w];'
 _reset='\[\e[0m\]'
@@ -127,7 +124,6 @@ alias fgrep="fgrep $grep_options"
 export GREP_COLOR="01"
 export LESS="-j4R"
 unset LESSOPEN
-export PKGBUILD_IPS_SERVER=http://osol.repo.linpro.no:10000
 
 HISTTIMEFORMAT="%H:%M:%S "
 HISTSIZE=50000
@@ -142,15 +138,15 @@ bind '"\en": history-search-forward'
 bind '"\ep": history-search-backward'
 # bind "set mark-modified-lines On"
 bind "set revert-all-at-newline On"
+bind 'Control-g: "git branch\n"'
 
 ssh() {
-    unset LC_TIME
-    env TERM=xterm ssh "$@"
+    printf '\e]0;%s\a' "$1"
+    env TERM=xterm ssh -F $HOME/.ssh/config "$@"
 }
 
 cssh() {
-    unset LC_TIME
-    command cssh "$@"
+    command cssh -o "-F $HOME/.ssh/config" "$@"
 }
 
 percd() {
@@ -246,6 +242,16 @@ File() {
         [ -L "$file" ] && file=$(readlink -f "$file")
         file "$file"
     done
+}
+
+e() {
+    if [ -S /tmp/emacs$UID/server ]
+    then
+        echo "Loading in Emacs ..."
+	emacsclient -n "$@"
+    else
+        vi "$@"
+    fi
 }
 
 lw() {
@@ -373,19 +379,47 @@ function up () {
 
 g() {
     case $1 in
-        p|pu|pup|pupp|puppet) cd ~/svn/puppet ;;
-        n|na|nag|nagi|nagios) cd ~/svn/nagios/nagios-config ;;
+        p|pu) cd ~/svn/puppet ;;
+        pup|pupp|puppet) cd ~/git/git.i.bitbit.net/puppet-mod/puppet ;;
         b|ba|bar|bare|bareos) cd ~/git/git.i.bitbit.net/backup/bareos-osl ;;
         bk|bks|bksd|bacula) cd ~/git/git.i.bitbit.net/backup/bacula-ksd ;;
         bc|bch|bcheck) cd ~/git/git.i.bitbit.net/backup/bacula-check ;;
         *)
-            for m in ~/svn/$1* \
-                     ~/git/git.i.bitbit.net/*/$1* \
-                     ~/git/git.i.bitbit.net/*/*$1*
+            for p in "git/git.i.bitbit.net/*/$1" \
+                     "git/git.i.bitbit.net/*/$1*" \
+                     "git/gitlab.redpill-linpro.com/$1*" \
+                     "git/git.i.bitbit.net/*/*$1*" \
+                     "svn/$1*" \
+                     "git/github.com/*/$1*" \
+                     "git/*/*$1*"
             do
-                [ -d "$m" ] && cd "$m" && return
+                for m in $HOME/$p
+                do
+                    [ -d "$m" ] && cd "$m" && return
+                done
             done
+            ;;
     esac
+}
+gclone() {
+    url="git@git.i.bitbit.net:$1.git"
+    dir=$(dirname "$1")
+    cd ~/git/git.i.bitbit.net/$dir
+    git clone $url
+}
+
+upd() {
+    (cd $HOME/svn
+    for m in puppet
+    do
+        (cd $m 2>/dev/null && svn up)
+    done
+    cd $HOME/git/git.i.bitbit.net
+    for m in */*
+    do
+        (cd $m && git pull --ff-only)
+    done
+    )
 }
 h() {
     for m in ${hosts[*]}
@@ -420,3 +454,6 @@ function horse-en() {
             grep -v "['A-Z]" | shuf -n 4 | xargs echo
     done
 }
+alias cwdiff="wdiff -n -w $'\033[30;41m' -x $'\033[0m' -y $'\033[30;42m' -z $'\033[0m'"
+alias qr="xclip -o selection clipboard | qrencode --size 10 -o - | feh -x --title QR -g +200+200 -"
+alias trunc='cut -c-${COLUMNS-80}'
