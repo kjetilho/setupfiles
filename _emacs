@@ -12,9 +12,9 @@
 (setq calendar-week-start-day 1)
 
 (setq-default indent-tabs-mode nil)
-(setq puppet-indent-level 4 puppet-include-indent 4)
+(setq puppet-indent-level 2 puppet-include-indent 4)
 (setq perl-indent-level 4 cperl-indent-level 4)
-(setq ruby-indent-level 4)
+(setq ruby-indent-level 2)
 (add-hook 'c-mode-common-hook (lambda () (c-set-style "awk")))
 
 (if (not window-system)
