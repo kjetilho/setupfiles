@@ -8,3 +8,4 @@
 	default = current
 [alias]
 	clog = log --graph --decorate --color
+	logv = log --name-status
