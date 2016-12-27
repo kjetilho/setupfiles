@@ -8,7 +8,7 @@ use Data::Dumper;
 use Getopt::Long;
 
 sub usage {
-    print STDERR "Usage: $0 [-s SCALEFACTOR] [-k]\n";
+    print STDERR "Usage: $0 [-s SCALEFACTOR] [-k] [--wide]\n";
     exit(64);
 }
 
@@ -49,10 +49,12 @@ sub statistics {
 
 my $scale = 1;
 my $bykey;
+my $wide;
 
 GetOptions("scale|s=f", \$scale,
-           "key|k", \$bykey)
-    or usage();
+           "key|k", \$bykey,
+           "wide|w", \$wide,
+    ) or usage();
 
 my %data;
 my @values;
@@ -71,14 +73,26 @@ while (<>) {
 
 my $s;
 
-format =
-#count      avg  std.dev     min       25%      50%      75%       max  dataset
-@####  @####.## @##.#### @####.## @####.## @####.## @####.## @######.## @*
+if ($wide) {
+    format wide =
+#count      avg  std.dev     min       10%      25%      50%      75%       90%         max  dataset
+@####  @####.## @###.### @####.## @####.## @####.## @####.## @####.## @#####.## @########.## @*
+$s->{count}, $s->{avg}, $s->{stddev}, $s->{min}, $s->{'10%'}, $s->{'25%'}, $s->{median}, $s->{'75%'}, $s->{'90%'}, $s->{max}, $s->{dataset}
+.
+    $~ = 'wide';
+    print " count      avg  std.dev     min       10%      25%      50%      75%       90%         max  dataset\n";
+
+} else {
+    
+    format normal =
+#count      avg  std.dev     min       25%      50%      75%       max dataset
+@####  @####.## @###.### @####.## @####.## @####.## @####.## @######.## @*
 $s->{count}, $s->{avg}, $s->{stddev}, $s->{min}, $s->{'25%'}, $s->{median}, $s->{'75%'}, $s->{max}, $s->{dataset}
 .
 
-print " count      avg  std.dev     min       25%      50%      75%       max  dataset\n";
-
+    $~ = 'normal';
+    print " count      avg  std.dev     min       25%      50%      75%       max dataset\n";
+}
 
 # It is unlikely that there are more than 9 columns, so we cheat and
 # use lexical sorting of keys in all cases.
