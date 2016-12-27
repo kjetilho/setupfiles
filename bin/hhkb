@@ -1,0 +1,12 @@
+#! /bin/sh
+
+if lsusb | grep -q Chicony
+then
+	xmodmap $HOME/.Xmodmap.hhkb
+	xmodmap -e 'add shift = Shift_L'
+	xmodmap -e 'add shift = Shift_R'
+	xmodmap -e 'add control = Control_L'
+else
+	setxkbmap -option compose:rctrl -option nbsp:none -option ctrl:nocaps 'no(nodeadkeys)'
+fi
+

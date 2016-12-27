@@ -1,0 +1,33 @@
+! keycode 107 = BackSpace 
+! keycode  22 = Delete
+keycode  34 = bracketleft braceleft ae AE
+keycode  35 = bracketright braceright aring Aring
+keycode  51 = backslash bar oslash Ooblique
+!keycode  47 = semicolon colon leftsinglequotemark guillemotleft
+!keycode  48 = apostrophe quotedbl rightsinglequotemark guillemotright
+keycode  59 = comma less leftsinglequotemark guillemotleft
+keycode  60 = period greater rightsinglequotemark guillemotright
+
+! Lite
+!      64 - 131 - SPACE - 129 - 113
+! Lite2
+! Fn - 64 - 115 - SPACE - 116 - 113
+! 64 er i utgangspunktet Alt_L
+! Lucid Lite2, Fedora 21 Lite2:
+! Fn - 64    - 133     - SPACE - 134     - 108
+! Fn - Alt_L - Super_L - SPACE - Super_R - Alt_R
+keycode 64 = Super_L
+!keycode 64 = Meta_L
+!keycode 115 = Alt_L
+!keycode 131 = Alt_L
+keycode 133 = Meta_L
+!keycode 133 = Alt_L
+!keycode 116 = Mode_switch
+!keycode 129 = Mode_switch
+keycode 134 = Mode_switch
+!keycode 113 = Multi_key
+keycode 108 = Multi_key
+clear mod4
+add mod4 = Super_L
+clear mod1
+add mod1 = Alt_L Meta_L
