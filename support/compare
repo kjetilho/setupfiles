@@ -1,0 +1,9 @@
+#! /bin/bash
+
+find . \( \( -name .git -o -name '*~' -o -name support \) -prune \) -o -type f -print | while read path
+do
+	dest=${path/_/.}
+	diff -bu `pwd`/$path $HOME/$dest
+done
+
+

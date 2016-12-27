@@ -1,0 +1,23 @@
+#! /bin/bash
+
+for path in */
+do
+	[ "$path" = "support/" ] && continue
+	dest=${path/_/.}
+	mkdir -p $HOME/$dest
+done
+
+find . \( \( -name .git -o -name '*~' -o -name support \) -prune \) -o -type f -print | while read path
+do
+	dest=${path/_/.}
+	case $path in
+		./_ssh/*)
+			chmod 700 $HOME/.ssh
+			cp -p $path $HOME/$dest
+			continue
+			;;
+	esac
+	[ -L $dest ] || ln -s -f `pwd`/$path $HOME/$dest
+done
+
+
