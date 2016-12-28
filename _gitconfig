@@ -7,5 +7,8 @@
 [push]
 	default = current
 [alias]
-	clog = log --graph --decorate --color
-	logv = log --name-status
+	clog = log --graph --oneline --abbrev-commit --all --decorate --color
+	logv = log --name-status --find-renames
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%C(bold blue) <%an>%Creset' --abbrev-commit
+[core]
+	excludesfile = /home/kjetilho/.gitignore_global
