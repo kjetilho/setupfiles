@@ -1,0 +1,6 @@
+nyttige ting å ha installert:
+
+for activate-window:
+- xdotool
+- wmctrl
+
