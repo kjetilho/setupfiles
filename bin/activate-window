@@ -1,0 +1,32 @@
+#! /usr/bin/perl
+use strict;
+use warnings;
+use Getopt::Long;
+
+sub usage() {
+    print STDERR "Usage: $0 pattern\n";
+    exit(64);
+}
+usage() unless @ARGV == 1;
+
+my $pattern = shift;
+
+open(my $wmctrl, '-|', 'wmctrl', '-l', '-G') or die "wmctrl -l: $!\n";
+
+my @windows;
+while (<$wmctrl>) {
+    my ($id, $desktop, $x, $y, $w, $h, $host, $title) =
+        (/^(\S+)\s+(-?\d+)\s+(-?\d+)\s+(-?\d+)\s+(\d+)\s+(\d+)\s+(\S+)\s+(.*)/);
+    if ($title =~ $pattern) {
+        push(@windows, [ $id, $desktop, $x, $y, $w, $h ] );
+    }
+}
+close($wmctrl);
+
+if (@windows == 1 || @windows > 1) { # TODO: cycle through multiple matching windows
+    my ($id, $desktop, $x, $y, $w, $h) = @{$windows[0]};
+    system('wmctrl', '-s', $desktop);
+    system('xdotool', 'mousemove', int($x + $w/2), int($y + $h/2));
+}
+
+
