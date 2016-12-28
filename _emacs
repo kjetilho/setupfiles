@@ -1,12 +1,26 @@
+(setq inhibit-startup-message t)
+(menu-bar-mode -1)
+
 (add-to-list 'load-path "~/git/gnus/lisp")
 (add-to-list 'load-path "~/lib/elisp")
 
-(setq inhibit-startup-message t)
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.org/packages/")
+             '("melpa-stable" . "https://stable.melpa.org/packages/"))
+(package-initialize)
+
+;; Bootstrap `use-package'
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+(use-package markdown-mode
+  :ensure t)
 
 (setq visible-bell t)
 (setq mouse-yank-at-point t)
 (transient-mark-mode -1)
-(menu-bar-mode -1)
 
 (setq sentence-end-double-space t)
 (setq calendar-week-start-day 1)
@@ -43,7 +57,7 @@
 
 (setq gnus-select-method '(nntp "news.gmane.org"))
 (setq browse-url-browser-function 'browse-url-generic)
-(setq browse-url-generic-program "google-chrome")
+(setq browse-url-generic-program "firefox")
 (setq gnus-novice-user nil)
 (setq nnimap-expunge nil)
 
@@ -72,7 +86,6 @@
  '(gnus-summary-thread-gathering-function (quote gnus-gather-threads-by-references))
  '(line-move-visual nil)
  '(mm-text-html-renderer (quote w3m))
- '(puppet-indent-level 4)
  '(send-mail-function (quote sendmail-send-it))
  '(user-mail-address "kjetil.homme@redpill-linpro.com")
  '(x-select-enable-clipboard t))
@@ -83,3 +96,4 @@
  ;; If there is more than one, they won't work right.
  '(default ((t (:inherit nil :stipple nil :background "MidnightBlue" :foreground "White" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 100 :width normal :foundry "unknown" :family "DejaVu Sans Mono")))))
 
+(put 'narrow-to-page 'disabled nil)
