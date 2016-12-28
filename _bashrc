@@ -244,16 +244,6 @@ File() {
     done
 }
 
-e() {
-    if [ -S /tmp/emacs$UID/server ]
-    then
-        echo "Loading in Emacs ..."
-	emacsclient -n "$@"
-    else
-        vi "$@"
-    fi
-}
-
 lw() {
     local strings p full
     case $# in

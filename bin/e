@@ -1,0 +1,10 @@
+#! /bin/bash
+
+if [ -S /tmp/emacs$UID/server ]
+then
+    echo "Loading in Emacs ..."
+    emacsclient -n "$@"
+    type -p activate-window >/dev/null && activate-window emacs
+else
+    vi "$@"
+fi
