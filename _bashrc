@@ -38,7 +38,7 @@ then
 	. ${HOME}/.work-password-store/bin/workpass.bash-completion
 fi
 
-mypath=$HOME/bin:/opt/vagrant/bin:$PATH:/stat/local/bin
+mypath=$HOME/bin:/usr/java/latest/bin:/opt/vagrant/bin:$PATH:/stat/local/bin
 
 if [ -x /usr/local/bin/cknfs ]
 then
@@ -77,7 +77,7 @@ _reset='\[\e[0m\]'
 case $TERM in
 	linux)	PS1="\[${_status}\]${_prompt}${_reset} "
 		;;
-	xterm*)	PS1="\[${_rl}${_tb}${_status}\]${_prompt}${_reset} "
+	xterm*|rxvt*)	PS1="\[${_rl}${_tb}${_status}\]${_prompt}${_reset} "
 		;;
 	*)	PS1="${_prompt} "
 		;;
@@ -124,6 +124,37 @@ alias fgrep="fgrep $grep_options"
 export GREP_COLOR="01"
 export LESS="-j4R"
 unset LESSOPEN
+less() {
+    # we only check the first non-option argument for the :linenum suffix
+    declare -a opts
+    while [ $# -gt 0 ]
+    do
+        case $1 in
+            [-+]*)
+                opts=( ${opts[@]} "$1" )
+                shift;
+                ;;
+            *:*)
+                if [ ! -e "$1" ]
+                then
+                    base=${1%:*}
+                    num=${1##*:}
+                    if [ -e "$base" ]
+                    then
+                        shift
+                        command less -N -j0 +"$num" ${opts[@]} "$base" "$@"
+                        return
+                    fi
+                fi
+                break
+                ;;
+            *)
+                break
+                ;;
+        esac
+    done
+    command less ${opts[@]} "$@"
+}
 
 HISTTIMEFORMAT="%H:%M:%S "
 HISTSIZE=50000
@@ -281,7 +312,7 @@ case `uname -n`:$COLUMNS in
     login.redpill-linpro.com:64)
         screen -Urx
         ;;
-    feh.ms.redpill-linpro.com:*)
+    *.ms.redpill-linpro.com:*)
         if [ "$CHOOSEHOST" ]
         then
             bind 'set show-all-if-ambiguous On'
