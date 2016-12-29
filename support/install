@@ -3,22 +3,25 @@
 for path in */
 do
 	[ "$path" = "support/" ] && continue
-	dest=${path/_/.}
+	dest=${path/#_/.}
 	mkdir -p $HOME/$dest
 done
 
-find . \( \( -name .git -o -name '*~' -o -name support \) -prune \) -o -type f -print | while read path
-do
-	dest=$HOME/${path/_/.}
+find . \( \( -name .git -o -name '*~' -o -name support \) -prune \) -o -type f -print |
+    cut -c3- |
+    while read path
+    do
+	dest=$HOME/${path/#_/.}
 	cmp $path $dest >/dev/null 2>&1 && continue
 	case $path in
-		./_ssh/*)
-			cp -v $path $dest
-			find $HOME/.ssh -perm /077 -print -exec chmod go-rwx {} +
-			continue
-			;;
+	    _ssh/*)
+		cp -v $path $dest
+		find $HOME/.ssh -perm /077 -print -exec chmod go-rwx {} +
+		continue
+		;;
 	esac
 	ln -v -r -s -f `pwd`/$path $dest
-done
+    done
+
 
 
