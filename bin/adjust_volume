@@ -1,0 +1,21 @@
+#! /bin/bash
+
+if [ $# != 2 ]
+then
+    cat <<EOF >&2
+Usage: $0 <channel> <adjustment>
+
+Examples:
+  volume_adjust Master toggle   -- toggles mute on/off
+  volume_adjust Master 5%+      -- increase volume by 5%
+
+EOF
+    exit 64
+fi
+
+case $1 in
+    toggle) amixer sset Master toggle ;;
+    *)      amixer set Master $1 ;;
+esac
+sleep 0.1
+pkill -USR1 i3status

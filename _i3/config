@@ -152,5 +152,13 @@ bar {
         status_command i3status
 }
 
+bindsym $mod+XF86AudioRaiseVolume exec "adjust_volume Master 5%+"
+bindsym $mod+XF86AudioLowerVolume exec "adjust_volume Master 5%-"
+bindsym $mod+XF86AudioMute exec "adjust_volume Master toggle"
+bindsym $mod+minus exec "adjust_volume Master 5%-"
+bindsym $mod+equal exec "adjust_volume Master 5%+"
+bindsym $mod+Shift+minus exec "adjust_volume Master toggle"
+bindsym $mod+Shift+equal exec "adjust_volume Master toggle"
+
 exec nm-applet
 exec /home/kjetilho/bin/hhkb
