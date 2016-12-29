@@ -9,15 +9,16 @@ done
 
 find . \( \( -name .git -o -name '*~' -o -name support \) -prune \) -o -type f -print | while read path
 do
-	dest=${path/_/.}
+	dest=$HOME/${path/_/.}
+	cmp $path $dest >/dev/null 2>&1 && continue
 	case $path in
 		./_ssh/*)
-			chmod 700 $HOME/.ssh
-			cp -p $path $HOME/$dest
+			cp -v $path $dest
+			find $HOME/.ssh -perm /077 -print -exec chmod go-rwx {} +
 			continue
 			;;
 	esac
-	[ -L $dest ] || ln -s -f `pwd`/$path $HOME/$dest
+	ln -v -r -s -f `pwd`/$path $dest
 done
 
 
