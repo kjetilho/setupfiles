@@ -1,21 +1,4 @@
-#! /usr/bin/perl
-
-use Config;
-use File::Basename qw(basename dirname);
-
-($VERSION)=' $Id: rename.PL,v 1.9 Exp $ '=~/v\s*(\d+(?:\.\d+)+)/;
-
-chdir(dirname($0));
-($file = basename($0)) =~ s/\.PL$//;
-$file =~ s/\.pl$//
-        if ($Config{'osname'} eq 'VMS' or
-            $Config{'osname'} eq 'OS2');  # "case-forgiving"
-open OUT,">$file" or die "Can't create $file: $!";
-chmod(0755, $file);
-print "Extracting $file\n";
-
-print OUT <<"!DO!SUBST!";
-$Config{'startperl'}
+#!/usr/bin/perl
 
 #line 18
 
@@ -26,11 +9,8 @@ use Text::Abbrev;
 use File::Basename;
 use File::Glob ':bsd_glob';
 
-my \$VERSION = '$VERSION';
+my $VERSION = '1.9';
 
-!DO!SUBST!
-
-print OUT<<'!NO!SUBST!';
 Getopt::Long::config(qw(bundling));
 $Getopt::Long::prefix = '--';
 
@@ -465,4 +445,3 @@ If you give an invalid Perl expression you'll get a syntax error.
 Peder Stray <pederst@cpan.org>, original script from Larry Wall.
 
 =cut
-!NO!SUBST!
