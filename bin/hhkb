@@ -7,6 +7,13 @@ then
 	xmodmap -e 'add shift = Shift_R'
 	xmodmap -e 'add control = Control_L'
 else
+	# not really Happy Hacking
 	setxkbmap -option compose:rctrl -option nbsp:none -option ctrl:nocaps 'no(nodeadkeys)'
 fi
 
+# not really Keyboard
+xrandr | awk '$2 == "connected" {
+	if (sz && $3 < sz)
+		system("xrandr --output " $1 " --left-of " out);
+	out = $1; sz = $3
+}'
