@@ -13,7 +13,7 @@ general {
 
 order += "ipv6"
 order += "disk /"
-order += "disk /home"
+order += "disk /home/kjetilho"
 # order += "run_watch DHCP"
 # order += "run_watch VPN"
 # order += "wireless _first_"
@@ -59,8 +59,8 @@ disk "/" {
         format = "/ %avail"
 }
 
-disk "/home" {
-        format = "/home %avail"
+disk "/home/kjetilho" {
+        format = "~ %avail"
 }
 
 volume master {
