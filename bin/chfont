@@ -1,0 +1,28 @@
+#! /usr/bin/perl
+
+use strict;
+use warnings;
+
+my $font = "Bitstream Vera Sans Mono";
+my $size = 8;
+my $xft;
+
+if ($font =~ /\s/) {
+    $xft = 1;
+}
+
+unless (@ARGV == 1) {
+    print STDERR "Usage. $0 SIZE | FONT-NAME\n";
+    print STDERR "Default FONT-NAME is $font-$size\n";
+    exit(64);
+}
+if ($ARGV[0] =~/^\d+$/) {
+    $font = "xft:$font-$ARGV[0]";
+} elsif ($ARGV[0] =~/\s/) {
+    $font = "xft:$ARGV[0]";
+} else {
+    $font = "$ARGV[0]";
+}
+    
+printf("\e]50;%s\a", $font);
+
