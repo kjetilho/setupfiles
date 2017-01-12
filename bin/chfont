@@ -11,7 +11,7 @@ if ($font =~ /\s/) {
     $xft = 1;
 }
 
-unless (@ARGV == 1) {
+if (@ARGV != 1 || $ARGV[0] =~ /^-/) {
     print STDERR "Usage. $0 SIZE | FONT-NAME\n";
     print STDERR "Default FONT-NAME is $font-$size\n";
     exit(64);
