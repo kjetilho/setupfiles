@@ -5,15 +5,31 @@
 
 Xft.dpi: 96
 
+#define MONO_FONT Bitstream Vera Sans Mono
+
+#if NUM_SCREENS == 1 && WIDTH <= 1600
+#  define FONT_SIZE_NORMAL 8
+#  define FONT_SIZE_SMALL 7
+#  define FONT_SIZE_BIG 9
+#  define FONT_SIZE_HUGE 16
+#else
+#  define FONT_SIZE_NORMAL 9
+#  define FONT_SIZE_SMALL 8
+#  define FONT_SIZE_BIG 10
+#  define FONT_SIZE_HUGE 18
+#endif
+
 /*
 XTerm*utf8Fonts.font:     	-*-fixed-medium-r-*-*-20-*-*-*-*-*-iso10646-*
 XTerm*background:               white
 XTerm*foreground:               black
 */
-XTerm*faceName:         	Bitstream Vera Sans Mono
-XTerm*faceSize:         	8
-Rxvt*font:                      xft:Bitstream Vera Sans Mono-8
-/* Rxvt.letterSpace:               -1 *//* Urxvt calculates wrong overall width for my font at size 9 */
+XTerm*faceName:         	MONO_FONT
+XTerm*faceSize:         	FONT_SIZE_NORMAL
+Rxvt*font:                      xft:MONO_FONT-FONT_SIZE_NORMAL
+#if FONT_SIZE_NORMAL == 9
+Rxvt.letterSpace:               -1 *//* Urxvt calculates wrong overall width for my font at size 9 */
+#endif
 
 URxvt.perl-ext:   default,selection-to-clipboard
 URxvt.iso14755:   false
@@ -71,7 +87,7 @@ XLock.font:			-*-lucidatypewriter-medium-r-*-*-*-140-*-*-*-*-iso10646-*
 irssi*background:		gray
 irssi*foreground:		black
 irssi.VT100.visualBell:		false
-irssi*faceName:         	Bitstream Vera Sans Mono
+irssi*faceName:         	MONO_FONT
 /* suitable for secondary screen on scribus */
 #ifdef SRVR_scribus_ms_redpill_linpro_com
 irssi*faceSize:			20
@@ -87,6 +103,12 @@ irssi*pointerColor:             darkred
 
 Rxvt.keysym.C-F12:              string:export VIMINIT=:set\ cp;export EDITOR=vi;[ -r /usr/share/terminfo/${TERM:0:1}/$TERM ]||export TERM=xterm;PS1="\\[`tput rmm`\\e]0;\\u@\\H\\a\\e["'$(($??1:0))'"m\\]: [\\u@\\h \\w];\\[\\e[0m\\] "\n
 Rxvt.keysym.C-F11:              string:type tabashco >/dev/null 2>&1 && echo "Spicing up" && exec tabashco\n
+
+Rxvt.keysym.C-F10:              command:\033]50;xft:MONO_FONT-FONT_SIZE_SMALL\007
+Rxvt.keysym.Mod4-F10:           command:\033]50;xft:MONO_FONT-FONT_SIZE_NORMAL\007
+Rxvt.keysym.Mod4-C-F10:         command:\033]50;xft:MONO_FONT-FONT_SIZE_BIG\007
+Rxvt.keysym.Mod4-C-S-F10:       command:\033]50;xft:MONO_FONT-FONT_SIZE_HUGE\007
+
 
 XTerm.VT100.Translations:       #override \n\
           <KeyPress> F11:       string("exec bash\n") \n\
