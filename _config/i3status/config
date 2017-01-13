@@ -8,6 +8,7 @@
 
 general {
         colors = true
+        output_format = i3bar
         interval = 5
 }
 
@@ -36,9 +37,17 @@ ethernet _first_ {
 
 battery 0 {
         format = "%status %percentage %remaining"
-        format_down = "A/C"
+        # format = "%status %percentage %remaining %emptytime"
+        format_down = "⚇ A/C"
+        status_chr = "⚇"
+        status_bat = "⚡"
+        status_full = "⚡"
+        threshold_type = time
+        low_threshold = 15 # minutes
+        hide_seconds = true
+        integer_battery_capacity = true
 }
-
+ 
 run_watch DHCP {
         pidfile = "/var/run/dhclient*.pid"
 }
