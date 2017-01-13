@@ -152,9 +152,10 @@ bindsym $mod+r mode "resize"
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-        status_command i3status
+        status_command my_i3status
 }
-
+bindsym XF86MonBrightnessDown  exec "chbacklight -5"
+bindsym XF86MonBrightnessUp    exec "chbacklight +5"
 bindsym XF86AudioRaiseVolume   exec "adjust_volume Master 5%+"
 bindsym XF86AudioLowerVolume   exec "adjust_volume Master 5%-"
 bindsym XF86AudioMute          exec "adjust_volume Master toggle"

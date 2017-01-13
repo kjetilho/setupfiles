@@ -1,0 +1,83 @@
+#! /bin/bash
+
+# Requires sudoers rule:
+#
+# Cmnd_Alias BACKLIGHT = /usr/libexec/gsd-backlight-helper
+# kjetilho  ALL = (root) NOPASSWD: BACKLIGHT
+
+set -e
+
+tmpdir="/run/user/$UID"
+
+if [ ! -w "$tmpdir" ]
+then
+    tmpdir="/tmp/$USER"
+    if [ ! -d "$tmpdir" ]
+    then
+        mkdir "$tmpdir"
+    fi
+fi
+
+maxfile="$tmpdir/backlight.max"
+curfile="$tmpdir/backlight.cur"
+
+if [ ! -r "$maxfile" ]
+then
+    /usr/libexec/gsd-backlight-helper --get-max-brightness > "$maxfile.tmp" &&
+        mv "$maxfile.tmp" "$maxfile"
+fi
+max=$(< "$maxfile")
+if [ ! -r "$curfile" ]
+then
+    /usr/libexec/gsd-backlight-helper --get-brightness > "$curfile.tmp" &&
+        mv "$curfile.tmp" "$curfile"
+fi
+cur=$(< "$curfile")
+
+case $1 in
+    "") echo $((100 * (cur + 1) / max))
+        exit 0
+        ;;
+    -\?|--*)
+        echo "Usage: $0 [+adjustment|-adjustment|brightness]" >&2
+        echo "All values should be given in percent." >&2
+        exit 64
+        ;;
+    [0-9]|[1-9][0-9]|100)
+        newpct="$1"
+        echo "New value is [$newpct]"
+        ;;
+    [-+][1-9]|[-+][1-9][0-9])
+        newpct=$((100 * (cur + 1) / max $1))
+        if [ $newpct -gt 100 ]
+        then
+            echo "hit ceiling at [$newpct]"
+            newpct=100
+        elif [ $newpct -lt 0 ]
+        then
+            echo "hit floor at [$newpct]"
+            newpct=0
+        fi
+        ;;
+    *)
+        echo "Invalid argument $1" >&2
+        echo "Usage: $0 [+adjustment|-adjustment|brightness]" >&2
+        echo "All values should be given in percent." >&2
+        exit 64
+        ;;
+esac
+
+newval=$((newpct *  max / 100))
+if [ $newval != $cur ]
+then
+    echo "Setting brightness to $newval (was $cur)"
+    sudo /usr/libexec/gsd-backlight-helper --set-brightness $newval
+    /usr/libexec/gsd-backlight-helper --get-brightness > "$curfile.tmp" &&
+        mv "$curfile.tmp" "$curfile"
+    pkill -USR1 -x i3status
+fi
+
+             
+        
+        
+        

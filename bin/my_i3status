@@ -1,0 +1,25 @@
+#! /usr/bin/perl
+
+# Don't die when instant update is requested with a sloppy 
+#   pkill -USR1 i3status
+$SIG{USR1} = undef;
+
+open(my $i3, '-|', 'i3status') or die "i3status: $!\n";
+$| = 1;
+
+# We wing it and don't bother to look at JSON data.  Let's just copy
+# data until the line contains a full_text.
+
+while (<$i3>) {
+    if (/full_text/) {
+        my $info = generate_info();
+        s{^,?\[}{$&$info};
+    }
+    print $_;
+}
+
+sub generate_info {
+    my $brightness = `chbacklight`;
+    sprintf('{"name":"brightness 0", "full_text": "[☼ %d%%]"},', $brightness);
+}
+
