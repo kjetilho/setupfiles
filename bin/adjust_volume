@@ -18,4 +18,4 @@ case $2 in
     *)      amixer set $1 $2 >/dev/null ;;
 esac
 
-pkill -USR1 i3status
+pkill -USR1 -x i3status
