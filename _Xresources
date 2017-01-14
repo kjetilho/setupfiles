@@ -137,11 +137,12 @@ XTerm.VT100.Translations:       #override \n\
  Shift Meta <KeyPress> period:  insert-selection(PRIMARY, CUT_BUFFER0) \n\
        Meta <KeyPress> ae:      insert-selection(CLIPBOARD, CUT_BUFFER1)
 
-Emacs.background:       MidnightBlue
+/* MidnightBlue is #191970, let's go deeper purple */
+Emacs.background:       #230470
 Emacs.foreground:       White
 Emacs.borderWidth:      0
-Emacs.cursorColor:      Red
-Emacs.pointerColor:     Red
+Emacs.cursorColor:      Cyan
+Emacs.pointerColor:     Cyan
 Emacs.MenuBar:		off
 Emacs.ToolBar:		0
 
