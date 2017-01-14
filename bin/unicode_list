@@ -1,0 +1,42 @@
+#! /usr/bin/perl -C127
+
+use warnings;
+use strict;
+use utf8;
+use charnames qw(:full);
+
+my $filter_letters = 1;
+my $i = 0;
+
+if (@ARGV == 1) {
+    if ($ARGV[0] =~ /^U\+([0-9a-fx]+)$/i) {
+        $i = hex($1);
+    } elsif ($ARGV[0] =~ /^0([0-9a-fx]+)$/i) {
+        $i = oct($1);
+    }  elsif ($ARGV[0] =~ /^([0-9a-fx]+)$/i) {
+        $i = $1;
+    } else {
+        print STDERR "Unrecognised start point syntax.\n";
+        print STDERR "Use U+XXXXX or numeric value in decimal, octal or hexadecimal\n";
+        exit(2);
+    }
+} elsif (@ARGV > 1) {
+    print STDERR "Usage: $0 [startpoint]\n";
+    print STDERR "Use U+XXXXX or numeric value in decimal, octal or hexadecimal\n";
+    exit(64);
+}
+
+while ($i++ < 0x1ffff) {
+      my $name = charnames::viacode($i);
+      next unless $name;
+      if ($filter_letters) {
+          next if $name =~ / (LETTER|VOWEL|CONSONANT|SYLLABLE|SYLLABICS|LIGATURE) /;
+          next if $name =~ /^(COMBINING|LINEAR [AB]|CUNEIFORM|HANGUL|CJK UNIFIED) /;
+      }
+      if ($i < 32) {
+          printf("%5x ^%c %s\n", $i, $i+64, $name);
+      } else {
+          printf("%5x %s  %s\n", $i, chr($i), $name);
+      }
+}
+      
