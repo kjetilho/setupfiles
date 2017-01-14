@@ -1,0 +1,91 @@
+#! /usr/bin/perl -C127
+
+use warnings;
+use strict;
+use utf8;
+use POSIX;
+use Getopt::Long;
+
+my $width = 5;
+my $format;
+
+sub usage {
+    print <<"_EOF_";
+  Usage: $0 [OPTIONS] PERCENT
+         $0 [OPTIONS] VALUE MAX
+Options:
+  --width N   How many characters to print.  Default $width.
+  --format F  How to format output.  Default is %s
+
+Format specification can have one or two parameters.  %s is
+substituted with the graphics, padded to width.  Any other
+specification is used to format the percentage.
+
+_EOF_
+    exit(64);
+}
+
+sub get_format_specifiers {
+    my ($fmt) = @_;
+    $fmt =~ s/%%//;
+    my @specs;
+    push(@specs, $1) while $fmt =~ s/%.*?([a-z])//i;
+    return @specs;
+}
+
+sub replace_escapes {
+    my ($fmt) = @_;
+    $fmt =~ s/\\r/\r/g;
+    $fmt =~ s/\\a/\a/g;
+    $fmt =~ s/\\n/\n/g;
+    $fmt =~ s/\\t/\t/g;
+    $fmt;
+}
+
+my $pct = 0;
+
+GetOptions('width|w=i' => \$width,
+           'format|f=s' => \$format)
+    or usage();
+
+if (@ARGV == 1) {
+    $pct = $ARGV[0];
+} elsif (@ARGV == 2) {
+    $pct = $ARGV[0] / $ARGV[1] * 100;
+} else {
+    usage();
+}
+
+$format ||= "%s";
+
+# We use these characters:
+#
+# 2588 █  FULL BLOCK
+# 2589 ▉  LEFT SEVEN EIGHTHS BLOCK
+# 258a ▊  LEFT THREE QUARTERS BLOCK
+# 258b ▋  LEFT FIVE EIGHTHS BLOCK
+# 258c ▌  LEFT HALF BLOCK
+# 258d ▍  LEFT THREE EIGHTHS BLOCK
+# 258e ▎  LEFT ONE QUARTER BLOCK
+# 258f ▏  LEFT ONE EIGHTH BLOCK
+
+my $symbols = ' ▏▎▍▌▋▊▉';
+my $full = '█';
+my ($remainder, $integral) = POSIX::modf($pct/100 * $width);
+my $bar = $full x $integral;
+my $pick = POSIX::trunc($remainder * length($symbols));
+$bar .= substr($symbols, $pick, 1)
+    unless $pick == 0; # don't tack on extra space (for 100% case)
+$bar = sprintf("%-${width}s", $bar);
+
+$format = replace_escapes($format);
+my @args;
+for my $spec (get_format_specifiers($format)) {
+    if ($spec eq 's') {
+        push(@args, $bar);
+    } else {
+        push(@args, $pct);
+    }
+}
+
+printf($format, @args);
