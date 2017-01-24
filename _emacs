@@ -1,6 +1,11 @@
 (setq inhibit-startup-message t)
 (menu-bar-mode -1)
 
+(if (not window-system)
+    nil
+  (require 'server)
+  (if (server-running-p) nil (server-start)))
+
 (add-to-list 'load-path "~/git/gnus/lisp")
 (add-to-list 'load-path "~/lib/elisp")
 
