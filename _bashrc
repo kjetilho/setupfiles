@@ -49,6 +49,8 @@ else
     export PATH=$mypath
 fi
 
+type rbenv >/dev/null 2>&1 && eval "$(rbenv init -)"
+
 if [ -d $HOME/lib/perl/share/perl ]
 then
 	export PERL5LIB=$(echo $HOME/lib/perl/share/perl/5.* | tr " " :)
