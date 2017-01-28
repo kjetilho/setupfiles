@@ -113,6 +113,11 @@ then
     export LANG="$XTERM_LANG"
 fi
 
+if [ -n "SSH_CLIENT" ]
+then
+    export MOSH_SERVER_NETWORK_TMOUT=604800
+fi
+
 export LC_COLLATE=C
 export EDITOR=vi
 export PAGER=less
