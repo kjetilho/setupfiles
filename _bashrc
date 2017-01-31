@@ -43,7 +43,7 @@ mypath=$HOME/.rbenv/bin:$HOME/bin:/usr/java/latest/bin:/opt/vagrant/bin:$PATH:/s
 if [ -x /usr/local/bin/cknfs ]
 then
     echo cknfs >&2
-    export PATH=$(/usr/local/bin/cknfs -t 2 -su $mypath)
+    export PATH=$(/usr/local/bin/cknfs -q -t 2 -su $mypath)
     echo cknfs done >&2
 else
     export PATH=$mypath
