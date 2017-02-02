@@ -1,0 +1,24 @@
+#! /usr/bin/perl -C127
+
+use warnings;
+use strict;
+use utf8;
+use charnames qw(:full);
+
+for (@ARGV) {
+    my $code;
+    if (/^0x[0-9a-f]+$/i || /^\d+$/) {
+        my $code = oct($_);
+        printf "%3d 0x%02x 0%03o 0b%08b %c\n", ($code)x5;
+    } else {
+        for (split //) {
+            my $code = ord($_);
+            if ($code <= 255) {
+                printf "%3d 0x%02x 0%03o 0b%08b %c %s\n", ($code)x5, charnames::viacode($code);
+            } else {
+                printf "U+%05x  %c %s\n", ($code)x2, charnames::viacode($code);
+            }
+        }
+    }
+}
+
