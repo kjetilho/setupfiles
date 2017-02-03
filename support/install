@@ -9,7 +9,7 @@ done
 
 if ln --help | grep -q -e --relative
 then
-	ln() { ln -r "$@"; }
+	ln() { command ln -r "$@"; }
 fi
 
 find . \( \( -name .git -o -name '*~' -o -name support \) -prune \) -o -type f -print |
