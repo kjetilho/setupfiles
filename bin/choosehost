@@ -1,0 +1,30 @@
+#! /usr/bin/perl -w
+
+use strict;
+use Getopt::Std;
+
+our $opt_u;
+our $opt_b;
+our $opt_n;
+$opt_n = "xterm_remote";
+
+getopts("u:b:n:") || die;
+
+my %col = (
+    "root" => '#202b36', # '#fdc',
+    "default" => '#eef',
+);
+
+my @xterm_args = ();
+my @extra = ();
+
+if ($opt_u) {
+    $ENV{CHOOSEUSER} = $opt_u;
+    $opt_b ||= $col{$opt_u} if defined $col{$opt_u};
+}
+push(@xterm_args, "-name", $opt_n);
+push(@xterm_args, "-bg", $opt_b) if $opt_b;
+
+$ENV{CHOOSEHOST} = join(" ", "true", @extra, @ARGV);
+
+exec("urxvt", @xterm_args);
