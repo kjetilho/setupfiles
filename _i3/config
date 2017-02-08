@@ -31,8 +31,13 @@ for_window [title="feh"] floating enable
 for_window [title="gimp"] floating enable
 
 # start a terminal
-bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+Return       exec i3-sensible-terminal
 bindsym $mod+Shift+Return exec choosehost
+bindsym $mod+Shift+i      exec replacebell urxvt -name irssi
+
+# lock screen
+bindsym Meta+p exec xscreensaver -lock
+bindsym Pause  exec xscreensaver -lock
 
 # kill focused window
 bindsym $mod+Shift+q kill
