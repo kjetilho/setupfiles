@@ -16,3 +16,7 @@ cknfs:
   cd cknfs
   make
   sudo make install
+
+replacebell comes from
+  http://stromberg.dnsalias.org/~strombrg/replacebell/replacebell-1.05.tar.gz
+  it uses paplay from pulseaudio-utils to play WAV files

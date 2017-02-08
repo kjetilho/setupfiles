@@ -1,0 +1,5 @@
+#! /bin/sh
+
+# libbell.so will run $HOME/bin/bell when XBell is called
+export LD_PRELOAD=$HOME/lib/libbell.so.1.0
+exec "$@"

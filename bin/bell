@@ -1,0 +1,3 @@
+#! /bin/sh
+
+paplay $HOME/lib/ahem.wav &
