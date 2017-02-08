@@ -92,6 +92,7 @@ irssi*faceName:         	MONO_FONT
 #ifdef SRVR_scribus_ms_redpill_linpro_com
 irssi*faceSize:			20
 irssi.VT100.geometry:		90x37+0+0
+irssi*font:			xft:MONO_FONT-20
 #else
 irssi.VT100.geometry:		84x34
 irssi*faceSize:			9
