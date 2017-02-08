@@ -1,5 +1,5 @@
 #! /bin/sh
 
 xrdb -load /etc/X11/Xresources
-xrdb -I$HOME -merge $HOME/.Xresources
+xrdb -I$HOME/lib -merge $HOME/.Xresources
 

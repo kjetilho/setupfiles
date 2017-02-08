@@ -1,7 +1,7 @@
 ! Fix the Xft dpi to 96; this prevents tiny fonts
 ! or HUGE fonts depending on the screen size.
 
-#include ".Xresources-solarized"
+#include <Xresources-solarized>
 
 Xft.dpi: 96
 
@@ -86,7 +86,7 @@ XTerm*SimpleMenu*font: lucidasanstypewriter-12
 XLock.font:			-*-lucidatypewriter-medium-r-*-*-*-140-*-*-*-*-iso10646-*
 irssi*background:		gray
 irssi*foreground:		black
-irssi.VT100.visualBell:		false
+irssi*visualBell:		false
 irssi*faceName:         	MONO_FONT
 /* suitable for secondary screen on scribus */
 #ifdef SRVR_scribus_ms_redpill_linpro_com
