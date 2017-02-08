@@ -214,3 +214,4 @@ bindsym $mod+Shift+KP_Subtract exec "adjust_volume Master toggle"
 
 exec nm-applet
 exec /home/kjetilho/bin/hhkb
+exec xscreensaver
