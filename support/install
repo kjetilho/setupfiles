@@ -12,6 +12,13 @@ then
 	ln() { command ln -r "$@"; }
 fi
 
+if [ support/setcursor.c -nt bin/setcursor ]
+then
+    cc -Wall support/setcursor.c -o bin/setcursor -lX11
+fi
+
+mkdir -p $HOME/lib/X11/fonts $HOME/lib/elisp
+
 find . \( \( -name .git -o -name '*~' -o -name support \) -prune \) -o -type f -print |
     cut -c3- |
     while read path
@@ -27,6 +34,3 @@ find . \( \( -name .git -o -name '*~' -o -name support \) -prune \) -o -type f -
 	esac
 	ln -v -s -f `pwd`/$path $dest
     done
-
-
-

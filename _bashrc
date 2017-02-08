@@ -4,6 +4,10 @@ case $LD_PRELOAD in
     ?*)
         # Set by replacebell -- we don't want this to stick around
         unset LD_PRELOAD
+        # This is (probably) the Irssi window
+        case $DISPLAY in
+             ?*) setcursor 56 ;;
+        esac
         ;;
 esac
 
