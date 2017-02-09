@@ -10,10 +10,16 @@ for (@ARGV) {
     if (/^0x[0-9a-f]+$/i || /^0b[01]+$/ || /^\d+$/) {
         my $code = /^0/ ? oct($_) : $_;
         if ($code <= 0x10FFFD && defined charnames::viacode($code)) {
-            printf("0x%02x 0%03o %5d 0b%08b %c   %s\n",
-                   ($code)x5, charnames::viacode($code));
+            if ($code <= 0xff) {
+                printf("%7s 0%03o %5d 0b%08b %c   %s\n",
+                       fmt_hex($code), ($code)x4, charnames::viacode($code));
+            } else {
+                printf("%7s   %8d            %c   %s\n",
+                       fmt_hex($code), ($code)x2, charnames::viacode($code));
+            }
         } else {
-            printf("0x%02x 0%03o %5d 0b%08b\n", ($code)x4);
+            printf("%7s %7d %s\n",
+                   fmt_hex($code), $code, fmt_human($code));
         }
     } elsif (/^U\+([0-9a-f]+)$/i) {
         my $code = hex($1);
@@ -27,13 +33,27 @@ for (@ARGV) {
         for (split //) {
             my $code = ord($_);
             if ($code <= 255) {
-                printf("0x%02x 0%03o %5d 0b%08b %c   %s\n",
-                       ($code)x5, charnames::viacode($code));
+                printf("%7s 0%03o %5d 0b%08b %c   %s\n",
+                       fmt_hex($code), ($code)x4, charnames::viacode($code));
             } else {
-                printf("U+%05X %7d %10s %c   %s\n",
+                printf("U+%05X    %7d %10s %c   %s\n",
                        ($code)x2, '', $code, charnames::viacode($code));
             }
         }
     }
 }
 
+sub fmt_human {
+    my ($num) = @_;
+    my @units = qw(Ki Mi Gi Ti Pi Ei);
+    my $unit;
+    while ($num > 2047 && @units) {
+        $unit = shift(@units);
+        $num /= 1024;
+    }
+    sprintf("%d%s", $num, $unit);
+}
+
+sub fmt_hex {
+    sprintf("0x%X", shift);
+}
