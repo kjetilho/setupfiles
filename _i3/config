@@ -36,8 +36,8 @@ bindsym $mod+Shift+Return exec choosehost
 bindsym $mod+Shift+i      exec replacebell urxvt -name irssi
 
 # lock screen
-bindsym Meta+p exec xscreensaver -lock
-bindsym Pause  exec xscreensaver -lock
+bindsym Meta+p exec xscreensaver-command -lock
+bindsym Pause  exec xscreensaver-command -lock
 
 # kill focused window
 bindsym $mod+Shift+q kill
