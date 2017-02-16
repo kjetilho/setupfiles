@@ -9,7 +9,7 @@ for rbenv:
   cd ~/.rbenv && src/configure && make -C src
   git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
   . ~/.bashrc
-  rbenv install ruby-1.9.3-p551
+  rbenv install 1.9.3-p551
 
 cknfs:
   git clone https://github.com/kjetilho/cknfs.git
