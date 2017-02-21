@@ -40,7 +40,7 @@ bindsym mod1+Shift+p exec xscreensaver-command -lock
 bindsym Pause  exec xscreensaver-command -lock
 
 # kill focused window
-bindsym $mod+Shift+q kill
+bindsym $mod+Control+Escape kill
 
 # start dmenu (a program launcher)
 # bindsym $mod+d exec dmenu_run
@@ -86,9 +86,13 @@ bindsym $mod+v split v
 bindsym $mod+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
-bindsym $mod+s layout stacking
-bindsym $mod+w layout tabbed
-bindsym $mod+e layout toggle split
+bindsym $mod+Shift+s layout stacking
+bindsym $mod+Shift+w layout tabbed
+bindsym $mod+Shift+e layout toggle split
+
+# activate interesting windows
+bindsym $mod+e exec activate-window emacs
+bindsym $mod+t exec activate-window Thunderbird
 
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
@@ -151,7 +155,7 @@ bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+bindsym $mod+Shift+q exec "i3-nagbar -t warning -m 'You pressed the quit shortcut. Do you really want to quit i3? This will end your X session.' -b 'Yes, exit quit' 'i3-msg exit'"
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
