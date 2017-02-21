@@ -14,14 +14,21 @@ my $pattern = shift;
 open(my $wmctrl, '-|', 'wmctrl', '-l', '-G') or die "wmctrl -l: $!\n";
 
 my @windows;
+my @iwindows;
+
 while (<$wmctrl>) {
     my ($id, $desktop, $x, $y, $w, $h, $host, $title) =
         (/^(\S+)\s+(-?\d+)\s+(-?\d+)\s+(-?\d+)\s+(\d+)\s+(\d+)\s+(\S+)\s+(.*)/);
     if ($title =~ $pattern) {
         push(@windows, [ $id, $desktop, $x, $y, $w, $h ] );
+    } elsif ($title =~ /$pattern/i) {
+        push(@iwindows, [ $id, $desktop, $x, $y, $w, $h ] );
     }
 }
 close($wmctrl);
+
+# Use case-insensitive matches if no case-sensitive match
+@windows = @iwindows if @windows == 0;
 
 if (@windows == 1 || @windows > 1) { # TODO: cycle through multiple matching windows
     my ($id, $desktop, $x, $y, $w, $h) = @{$windows[0]};
