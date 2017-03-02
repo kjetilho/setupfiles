@@ -183,7 +183,7 @@ alias mv="mv -i"
 bind "set prefer-visible-bell Off"
 bind '"\en": history-search-forward'
 bind '"\ep": history-search-backward'
-# bind "set mark-modified-lines On"
+bind "set mark-modified-lines On"
 bind "set revert-all-at-newline On"
 bind 'Control-g: "git branch\n"'
 
