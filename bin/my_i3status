@@ -1,25 +1,69 @@
-#! /usr/bin/perl
+#! /usr/bin/perl -CSDL
+
+use warnings;
+use strict;
+use utf8;
+use JSON;
 
 # Don't die when instant update is requested with a sloppy 
 #   pkill -USR1 i3status
 $SIG{USR1} = undef;
 
+# See if this workstation has a directly attached display (== laptop)
+my $xrandr = `xrandr`;
+my $builtin_panel = $xrandr =~ /^LVDS\d+ connected/m;
+
 open(my $i3, '-|', 'i3status') or die "i3status: $!\n";
 $| = 1;
 
-# We wing it and don't bother to look at JSON data.  Let's just copy
+my $json = JSON->new->utf8(0);
+
+my $previous_battery_level = 100;
+
+# We wing it and don't bother to look at partial JSON data.  Let's just copy
 # data until the line contains a full_text.
 
 while (<$i3>) {
     if (/full_text/) {
-        my $info = generate_info();
-        s{^,?\[}{$&$info};
+        my $comma = s/^,//;
+        my $info = $json->decode($_);
+
+        if ($builtin_panel) {
+            unshift(@{$info}, brightness());
+        }
+        check_battery(find_section($info, 'battery'));
+        $_ = ($comma ? "," : ''). $json->encode($info) . "\n";
     }
     print $_;
 }
 
-sub generate_info {
-    my $brightness = `chbacklight`;
-    sprintf('{"name":"brightness 0", "full_text": "[☼ %d%%]"},', $brightness);
+sub find_section {
+    my ($info, $title) = @_;
+
+    my $i = -1;
+    while (++$i < scalar @{$info}) {
+        return $info->[$i] if $info->[$i]->{name} eq $title;
+    }
+    die;
 }
 
+sub brightness {
+    chomp(my $brightness = `chbacklight`);
+    return {"name" => "brightness 0", "full_text" => "[☼ ${brightness}%]"};
+}
+
+
+sub check_battery {
+    my ($info) = @_;
+
+    if ($info->{full_text} =~ /(\d+)%/) {
+        my $level = $1;
+        if ($level <= 5 && $level < $previous_battery_level) {
+            system("zenity --warning --text 'Only $level% battery left!' &");
+        }
+        $previous_battery_level = $level;
+    } else {
+        # charging or something?  resetting.
+        $previous_battery_level = 100;
+    }
+}
