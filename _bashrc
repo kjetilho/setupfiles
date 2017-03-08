@@ -188,7 +188,7 @@ bind "set revert-all-at-newline On"
 bind 'Control-g: "git branch\n"'
 
 ssh() {
-    printf '\e]0;%s\a' "$1"
+    printf '\e]0;%s\a' "$1" >&2
     env TERM=xterm ssh -F $HOME/.ssh/config "$@"
 }
 
