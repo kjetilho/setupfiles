@@ -78,6 +78,7 @@ XTerm.VT100.scrollKey:		true
 XTerm.VT100.scrollTtyOutput:	false
 Rxvt.scrollTtyKeypress:         true
 Rxvt.scrollTtyOutput:	        false
+Rxvt.scrollWithBuffer:          true
 /* 'on' interoperates badly after all */
 XTerm*selectToClipboard:        off
 XTerm*SimpleMenu*menuLabel.font: lucidasanstypewriter-14
