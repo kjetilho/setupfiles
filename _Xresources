@@ -83,12 +83,15 @@ Rxvt.scrollWithBuffer:          true
 XTerm*selectToClipboard:        off
 XTerm*SimpleMenu*menuLabel.font: lucidasanstypewriter-14
 XTerm*SimpleMenu*font: lucidasanstypewriter-12
+Rxvt.thickness:                 2
+URxvt.thickness:                 2
 
 XLock.font:			-*-lucidatypewriter-medium-r-*-*-*-140-*-*-*-*-iso10646-*
 irssi*background:		gray
 irssi*foreground:		black
 irssi*visualBell:		false
 irssi*faceName:         	MONO_FONT
+irssi*scrollBar:		false
 /* suitable for secondary screen on scribus */
 #ifdef SRVR_scribus_ms_redpill_linpro_com
 irssi*faceSize:			20

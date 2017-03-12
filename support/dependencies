@@ -1,5 +1,8 @@
 nyttige ting å ha installert:
 
+tilgang til appres:
+- xorg-x11-resutils
+
 for activate-window:
 - xdotool
 - wmctrl
