@@ -1,0 +1,5 @@
+#! /bin/bash
+
+replacebell urxvt -name irssi -e mosh njus.no &
+sleep 0.1
+activate-window mosh && setcursor 56
