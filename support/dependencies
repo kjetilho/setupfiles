@@ -13,6 +13,8 @@ for rbenv:
   git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
   . ~/.bashrc
   rbenv install 1.9.3-p551
+  # eh, why did I make a note of this?  /opt/local?
+  env RUBY_CONFIGURE_OPTS=--with-openssl-dir=/opt/local rbenv install 1.9.3-p551
 
 cknfs:
   git clone https://github.com/kjetilho/cknfs.git
