@@ -79,6 +79,10 @@ XTerm.VT100.scrollTtyOutput:	false
 Rxvt.scrollTtyKeypress:         true
 Rxvt.scrollTtyOutput:	        false
 Rxvt.scrollWithBuffer:          true
+Rxvt.scrollstyle:               plain /* thickness has no effect for other styles */
+Rxvt.thickness:                 5     /* smaller values are ignored */
+Rxvt.keysym.C-Prior:            command:\033]720;12\007
+Rxvt.keysym.C-Next:             command:\033]721;12\007
 /* 'on' interoperates badly after all */
 XTerm*selectToClipboard:        off
 XTerm*SimpleMenu*menuLabel.font: lucidasanstypewriter-14
