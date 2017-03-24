@@ -87,8 +87,6 @@ Rxvt.keysym.C-Next:             command:\033]721;12\007
 XTerm*selectToClipboard:        off
 XTerm*SimpleMenu*menuLabel.font: lucidasanstypewriter-14
 XTerm*SimpleMenu*font: lucidasanstypewriter-12
-Rxvt.thickness:                 2
-URxvt.thickness:                 2
 
 XLock.font:			-*-lucidatypewriter-medium-r-*-*-*-140-*-*-*-*-iso10646-*
 irssi*background:		gray
