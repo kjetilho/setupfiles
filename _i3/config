@@ -208,6 +208,7 @@ bindsym XF86MonBrightnessUp    exec "chbacklight +5"
 bindsym XF86AudioRaiseVolume   exec "adjust_volume Master 5%+"
 bindsym XF86AudioLowerVolume   exec "adjust_volume Master 5%-"
 bindsym XF86AudioMute          exec "adjust_volume Master toggle"
+bindsym Control+XF86AudioMute  exec "bt_connect"
 
 bindsym $mod+equal             exec "adjust_volume Master 5%+"
 bindsym $mod+minus             exec "adjust_volume Master 5%-"

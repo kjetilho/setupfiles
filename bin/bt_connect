@@ -1,0 +1,60 @@
+#! /usr/bin/perl
+
+use warnings;
+use strict;
+use Getopt::Long;
+use IPC::Open2;
+
+my $devname = "Jaybird X2";
+my $action = 'toggle';
+my $debug;
+
+GetOptions("device|d=s", \$devname,
+           "connect", sub { $action = 'connect' },
+           "disconnect", sub { $action = 'disconnect' },
+           "toggle", sub { $action = 'toggle' },
+           "debug", \$debug,
+    ) or usage();
+
+open2(my $chld_out, my $chld_in, 'bluetoothctl')
+    or die "bluetoothctl failed $!\n";
+close($chld_in);
+
+my %dev;
+
+while (<$chld_out>) {
+    next if /Controller/;
+    if (/Device ([0-9A-F:]{17})\s(.*)/) {
+        $dev{$2} = $1;
+    } else {
+        close($chld_out);
+        last;
+    }
+}
+
+die "$devname: Not found\n"
+    unless defined $dev{$devname};
+print STDERR "$devname is $dev{$devname}\n"
+    if $debug;
+
+my $pid = open2($chld_out, $chld_in, 'bluetoothctl')
+    or die "open2() failed $!";
+
+if ($action eq 'toggle') {
+    print $chld_in "info $dev{$devname}\n";
+    while (<$chld_out>) {
+        if (/Connected: yes/) {
+            $action = 'disconnect';
+            last;
+        } elsif (/Connected: no/) {
+            $action = 'connect';
+            last;
+        }
+    }
+}
+print STDOUT "${action}ing $devname\n";
+
+print $chld_in "$action $dev{$devname}\n";
+close($chld_in);
+my @slurp = <$chld_out>;
+close($chld_out);
