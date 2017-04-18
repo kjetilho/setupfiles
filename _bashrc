@@ -266,6 +266,9 @@ src() {
 	\) -print0 | xargs -0 "$@"
 }
 
+edit_last() { e $(fc -s "$@"); }
+alias e!=edit_last
+
 la() {
 	for p do
 		case $(type "$p") in
