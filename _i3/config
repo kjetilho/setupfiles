@@ -220,6 +220,9 @@ bindsym $mod+KP_Subtract       exec "adjust_volume Master 5%-"
 bindsym $mod+Shift+KP_Add      exec "adjust_volume Master toggle"
 bindsym $mod+Shift+KP_Subtract exec "adjust_volume Master toggle"
 
+bindsym --release Print        exec "scrot -s ~/Pictures/screenshots/win-%Y-%m-%d-%T.png"
+bindsym --release Shift+Print  exec "scrot ~/Pictures/screenshots/root-%Y-%m-%d-%T.png"
+
 exec nm-applet
 exec /home/kjetilho/bin/hhkb
 exec xscreensaver
