@@ -108,7 +108,7 @@ irssi*color3:                   S_yellow
 irssi*pointerShape:             gumby
 irssi*pointerColor:             darkred
 
-Rxvt.keysym.C-F12:              string:export VIMINIT=:set\ cp;export EDITOR=vi;[ -r /usr/share/terminfo/${TERM:0:1}/$TERM ]||export TERM=xterm;PS1="\\[`tput rmm`\\e]0;\\u@\\H\\a\\e["'$(($??1:0))'"m\\]: [\\u@\\h \\w];\\[\\e[0m\\] "\n
+Rxvt.keysym.C-F12:              string:export VIMINIT=:set\\ cp;export EDITOR=vi;[ -r /usr/share/terminfo/${TERM:0:1}/$TERM ]||export TERM=xterm;PS1="\\[`tput rmm`\\e]0;\\u@\\H\\a\\e["'$(($??1:0))'"m\\]: [\\u@\\h \\w];\\[\\e[0m\\] "\n
 Rxvt.keysym.C-F11:              string:type tabashco >/dev/null 2>&1 && echo "Spicing up" && exec tabashco\n
 
 Rxvt.keysym.C-F10:              command:\033]50;xft:MONO_FONT-FONT_SIZE_SMALL\007
