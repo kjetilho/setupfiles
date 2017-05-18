@@ -95,9 +95,10 @@
  '(gnus-summary-thread-gathering-function (quote gnus-gather-threads-by-references))
  '(line-move-visual nil)
  '(mm-text-html-renderer (quote w3m))
+ '(package-selected-packages (quote (markdown-mode use-package)))
+ '(select-enable-clipboard t)
  '(send-mail-function (quote sendmail-send-it))
- '(user-mail-address "kjetil.homme@redpill-linpro.com")
- '(x-select-enable-clipboard t))
+ '(user-mail-address "kjetil.homme@redpill-linpro.com"))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
