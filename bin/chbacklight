@@ -34,17 +34,21 @@ if (! -w "$tmpdir") {
 my $maxfile = "$tmpdir/backlight.max";
 my $curfile = "$tmpdir/backlight.cur";
 
-unless (-r $maxfile) {
-    system("/usr/libexec/gsd-backlight-helper --get-max-brightness > $maxfile.tmp")
-        && rename("$maxfile.tmp", $maxfile);
-}
-my $max = slurp($maxfile);
+my ($max, $cur);
 
-unless (-r $curfile) {
-    system("/usr/libexec/gsd-backlight-helper --get-brightness > $curfile.tmp")
-        && rename("$curfile.tmp", $curfile);
+if (-r $maxfile) {
+    $max = slurp($maxfile);
+} else {
+    $max = `/usr/libexec/gsd-backlight-helper --get-max-brightness`;
+    store($maxfile, $max);
 }
-my $cur = slurp($curfile);
+
+if (-r $curfile) {
+    $cur = slurp($curfile);
+} else {
+    $cur = `/usr/libexec/gsd-backlight-helper --get-brightness`;
+    store($curfile, $cur);
+}
 
 if (@ARGV && $ARGV[0] eq '--debug') {
     $debug++;
