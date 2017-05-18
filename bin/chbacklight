@@ -1,83 +1,116 @@
-#! /bin/bash
+#! /usr/bin/perl
 
 # Requires sudoers rule:
 #
 # Cmnd_Alias BACKLIGHT = /usr/libexec/gsd-backlight-helper
 # kjetilho  ALL = (root) NOPASSWD: BACKLIGHT
 
-set -e
+use warnings;
+use strict;
+use English;
 
-tmpdir="/run/user/$UID"
+sub usage {
+    print STDERR "Usage: $0 [+adjustment|-adjustment|brightness]\n";
+    print STDERR "All values should be given in percent.\n";
+    exit 64
+}
 
-if [ ! -w "$tmpdir" ]
-then
-    tmpdir="/tmp/$USER"
-    if [ ! -d "$tmpdir" ]
-    then
-        mkdir "$tmpdir"
-    fi
-fi
+my $debug;
 
-maxfile="$tmpdir/backlight.max"
-curfile="$tmpdir/backlight.cur"
+sub debug {
+    my $fmt = shift;
+    if ($debug) {
+        printf STDERR "DEBUG: $fmt\n", @_;
+    }
+}
 
-if [ ! -r "$maxfile" ]
-then
-    /usr/libexec/gsd-backlight-helper --get-max-brightness > "$maxfile.tmp" &&
-        mv "$maxfile.tmp" "$maxfile"
-fi
-max=$(< "$maxfile")
-if [ ! -r "$curfile" ]
-then
-    /usr/libexec/gsd-backlight-helper --get-brightness > "$curfile.tmp" &&
-        mv "$curfile.tmp" "$curfile"
-fi
-cur=$(< "$curfile")
+my $tmpdir = "/run/user/$UID";
 
-case $1 in
-    "") echo $((100 * (cur + 1) / max))
-        exit 0
-        ;;
-    -\?|--*)
-        echo "Usage: $0 [+adjustment|-adjustment|brightness]" >&2
-        echo "All values should be given in percent." >&2
-        exit 64
-        ;;
-    [0-9]|[1-9][0-9]|100)
-        newpct="$1"
-        echo "New value is [$newpct]"
-        ;;
-    [-+][1-9]|[-+][1-9][0-9])
-        newpct=$((100 * (cur + 1) / max $1))
-        if [ $newpct -gt 100 ]
-        then
-            echo "hit ceiling at [$newpct]"
-            newpct=100
-        elif [ $newpct -lt 0 ]
-        then
-            echo "hit floor at [$newpct]"
-            newpct=0
-        fi
-        ;;
-    *)
-        echo "Invalid argument $1" >&2
-        echo "Usage: $0 [+adjustment|-adjustment|brightness]" >&2
-        echo "All values should be given in percent." >&2
-        exit 64
-        ;;
-esac
+if (! -w "$tmpdir") {
+    $tmpdir = "/tmp/$UID";
+    mkdir($tmpdir) unless -d $tmpdir
+}
 
-newval=$((newpct *  max / 100))
-if [ $newval != $cur ]
-then
-    echo "Setting brightness to $newval (was $cur)"
-    sudo /usr/libexec/gsd-backlight-helper --set-brightness $newval
-    /usr/libexec/gsd-backlight-helper --get-brightness > "$curfile.tmp" &&
-        mv "$curfile.tmp" "$curfile"
-    pkill -USR1 -x i3status
-fi
+my $maxfile = "$tmpdir/backlight.max";
+my $curfile = "$tmpdir/backlight.cur";
 
-             
-        
-        
-        
+unless (-r $maxfile) {
+    system("/usr/libexec/gsd-backlight-helper --get-max-brightness > $maxfile.tmp")
+        && rename("$maxfile.tmp", $maxfile);
+}
+my $max = slurp($maxfile);
+
+unless (-r $curfile) {
+    system("/usr/libexec/gsd-backlight-helper --get-brightness > $curfile.tmp")
+        && rename("$curfile.tmp", $curfile);
+}
+my $cur = slurp($curfile);
+
+if (@ARGV && $ARGV[0] eq '--debug') {
+    $debug++;
+    shift;
+}
+
+usage() if @ARGV > 1;
+my $newval;
+
+if (@ARGV == 0) {
+    print int($cur / $max * 100), "\n";
+    exit(0);
+}
+
+if ($ARGV[0] =~ /^\+(\d+)$/) {
+    if ($cur == $max) {
+        debug("Already maxed at %d/%d", $cur, $max);
+        exit(0);
+    }
+    $newval = int( ($cur/$max * 100 + $1 + 0.5) / 100 * $max);
+    if ($newval == $cur) {
+        debug("Increment %d%% is too small to change value, bumping", $1);
+        ++$newval;
+    }
+} elsif ($ARGV[0] =~ /^-(\d+)$/) {
+    if ($cur == 0) {
+        debug("Already at zero");
+        exit(0);
+    }
+    $newval = int( ($cur/$max * 100 - $1 + 0.5) / 100 * $max);
+    if ($newval == $cur) {
+        debug("Decrement %d%% is too small to change value, bumping", $1);
+        --$newval;
+    } elsif ($newval < 0) {
+        debug("Hit bottom");
+        $newval = 0;
+    }
+} elsif ($ARGV[0] =~ /^(\d+)$/) {
+    usage() if $1 > 100;
+    $newval = int( ($1 + 0.5) / 100 * $max);
+} else {
+    usage();
+}
+if ($newval != $cur) {
+    debug("Setting brightness to %d (was %d)", $newval, $cur);
+    system("sudo /usr/libexec/gsd-backlight-helper --set-brightness $newval");
+    my $newcur = `/usr/libexec/gsd-backlight-helper --get-brightness`;
+    debug("New brightness is %d", $newcur);
+    store($curfile, $newcur);
+    system("pkill -USR1 -x i3status");
+}
+
+sub slurp {
+    my $fn = shift;
+    open (my $f, $fn)
+        or die "$fn: $!\n";
+    my $output = join('', <$f>);
+    close($f);
+    return $output;
+}
+
+sub store {
+    my $fn = shift;
+    open (my $f, ">", "$fn.tmp")
+        or die "$fn.tmp: $!\n";
+    print $f @_;
+    close($f) && rename("$fn.tmp", $fn)
+        or die "$fn: $!\n";
+}
