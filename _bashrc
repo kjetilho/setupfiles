@@ -132,6 +132,13 @@ export EDITOR=vi
 export PAGER=less
 export GIT_PAGER="less -F"
 
+# rspec-puppet
+if [ -d ~/git/git.i.bitbit.net/puppet-ms0/basemodules_common/modules/ ]
+then
+    export MODULEPATH=design:modules:~/git/git.i.bitbit.net/puppet-ms0/basemodules_common/modules/
+    export FUTURE_PARSER=yes STRICT_VARIABLES=yes
+fi
+
 grep_options="--directories=skip --colour=auto"
 alias grep="grep $grep_options"
 alias egrep="egrep $grep_options"
