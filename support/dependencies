@@ -1,14 +1,11 @@
 nyttige ting å ha installert:
 
-tilgang til appres:
-- xorg-x11-resutils
-
-for activate-window:
-- xdotool
-- wmctrl
-
-for horse-en:
- - aspell-en
+basis:               i3 network-manager-applet emacs subversion mosh
+for reset-resources: xorg-x11-resutils
+for myi3status:      perl-JSON
+for activate-window: xdotool wmctrl
+for setcursor:       libX11-devel
+for horse-en:        aspell-en
 
 for rbenv:
   git clone https://github.com/rbenv/rbenv.git ~/.rbenv
@@ -21,9 +18,7 @@ for rbenv:
 
 cknfs:
   git clone https://github.com/kjetilho/cknfs.git
-  cd cknfs
-  make
-  sudo make install
+  cd cknfs; make; sudo make install
 
 replacebell comes from
   http://stromberg.dnsalias.org/~strombrg/replacebell/replacebell-1.05.tar.gz
