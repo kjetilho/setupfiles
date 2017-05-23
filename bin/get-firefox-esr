@@ -1,0 +1,58 @@
+#! /bin/bash
+
+# For available versions, see https://www.mozilla.org/en-US/firefox/organizations/all/?q=english
+
+latest() {
+    curl -s 'https://www.mozilla.org/en-US/firefox/organizations/all/?q=english%20(US)' |
+        grep -m1 -o "firefox-52.*esr"
+}
+
+case $1 in
+    latest)
+        version="$(latest)" ;;
+    52.*esr)
+        version="firefox-${1}" ;;
+    [0-9]*)
+        version="firefox-52.${1}esr" ;;
+    *)
+        echo "Usage: get-firefox { MINOR | latest } - fetches 52.MINOR" >&2
+        echo "Latest version is $(latest)" >&2
+        exit 64
+        ;;
+esac
+
+if [ -d "/opt/${version}" ]
+then
+    echo "Already installed $version"
+    exit 0
+fi
+
+if [ ! -r "/tmp/${version}.tar.bz" ]
+then
+        wget -O "/tmp/${version}.tar.bz" "https://download.mozilla.org/?product=${version}-SSL&os=linux64&lang=en-US"
+fi
+ls -l "/tmp/${version}.tar.bz"
+read -p "Unpack download? " ans
+case $ans in
+   [yY]*) : ;;
+   *)     echo "Aborting."; exit 0;;
+esac
+
+cd /opt || exit 2
+
+mkdir -p "${version}" && cd "${version}" && tar jxvf "/tmp/${version}.tar.bz"
+cd ..
+if [ ! -d "${version}/firefox" ]
+then
+    echo "No firefox directory in tar file?  Aborting."
+    exit 1
+fi
+echo "Updating symlink"
+rm -f firefox
+ln -s "${version}/firefox" firefox
+
+read -p "Delete download? " ans
+case $ans in
+   [yY]*) rm -f "/tmp/${version}.tar.bz" ;;
+esac
+
