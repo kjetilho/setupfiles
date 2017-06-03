@@ -5,7 +5,7 @@ for reset-resources: xorg-x11-resutils
 for myi3status:      perl-JSON
 for activate-window: xdotool wmctrl
 for setcursor:       libX11-devel
-for horse-en:        aspell-en
+for horse:           aspell-en aspell-no
 
 for rbenv:
   git clone https://github.com/rbenv/rbenv.git ~/.rbenv

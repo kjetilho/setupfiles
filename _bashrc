@@ -494,13 +494,16 @@ function fe() {
     grep -h -i -B 4 $wwn $HOME/tmp/*-zone | grep 'Zone:'
 }
 
-function horse-en() {
+function horse() {
+    local lang="${1-en}" words=${2-4}
     for i in a b c d e
     do
-        aspell -d en dump master | 
-            grep -v "['A-Z]" | shuf -n 4 | xargs echo
+        aspell -d $lang dump master | 
+            grep -v "['A-Z]" | tr -d \" | shuf -n $words | xargs echo
     done
 }
+alias horse-en="horse en"
+
 alias cwdiff="wdiff -n -w $'\033[30;41m' -x $'\033[0m' -y $'\033[30;42m' -z $'\033[0m'"
 alias qr="xclip -o selection clipboard | qrencode --size 10 -o - | feh -x --title QR -g +200+200 -"
 alias trunc='cut -c-${COLUMNS-80}'
