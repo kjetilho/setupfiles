@@ -5,11 +5,18 @@ use strict;
 use Getopt::Long;
 use IPC::Open2;
 
-my $devname = "Jaybird X2";
 my $action = 'toggle';
 my $debug;
 
-GetOptions("device|d=s", \$devname,
+sub usage {
+    print STDERR "Usage: $0 [--debug] [-d DEV] {--connect|--disconnect|--toggle}\n";
+    exit(64);
+}
+
+my $devname;
+my @lookfor;
+
+GetOptions("device|d=s", \@lookfor,
            "connect", sub { $action = 'connect' },
            "disconnect", sub { $action = 'disconnect' },
            "toggle", sub { $action = 'toggle' },
@@ -20,20 +27,32 @@ open2(my $chld_out, my $chld_in, 'bluetoothctl')
     or die "bluetoothctl failed $!\n";
 close($chld_in);
 
+@lookfor = ('M9', 'Jaybird X2') unless @lookfor;
+
 my %dev;
 
 while (<$chld_out>) {
     next if /Controller/;
     if (/Device ([0-9A-F:]{17})\s(.*)/) {
         $dev{$2} = $1;
+        print STDERR "$2 is $1\n" if $debug;
     } else {
         close($chld_out);
         last;
     }
 }
 
-die "$devname: Not found\n"
+my $devid;
+
+for my $d (@lookfor) {
+    next unless defined $dev{$d};
+    $devname = $d;
+    last;
+}
+
+die "No device found\n"
     unless defined $dev{$devname};
+
 print STDERR "$devname is $dev{$devname}\n"
     if $debug;
 
