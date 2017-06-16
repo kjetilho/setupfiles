@@ -24,7 +24,7 @@ case $(uname) in
             hosts=(`awk -F"[ ,]" '/^([0-9]+[.]|\[)/ { next } {print $1}' ~/.ssh/known_hosts`)
         fi
         if [ -e ~/.ssh/config ]; then
-            hosts=(${hosts[*]} `awk '/^Host / { print $2 }' ~/.ssh/config`)
+            hosts=(${hosts[*]} `awk '/^Host [a-z0-9.-]+ *$/ { print $2 }' ~/.ssh/config`)
         fi
 	complete -r
         complete -W "${hosts[*]}" ssh ssh-keygen ping ping6 host showmount mtr traceroute vlan cssh console
