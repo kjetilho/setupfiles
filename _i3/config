@@ -39,8 +39,9 @@ bindsym $mod+Shift+i      exec run_irssi
 bindsym mod1+Shift+p exec xscreensaver-command -lock
 bindsym Pause  exec xscreensaver-command -lock
 
-# kill focused window
+# kill focused window ("kill" signals application nicely, like close in fvwm)
 bindsym $mod+Control+Escape kill
+bindsym $mod+F4 kill
 
 # start dmenu (a program launcher)
 # bindsym $mod+d exec dmenu_run
