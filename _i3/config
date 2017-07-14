@@ -37,7 +37,7 @@ bindsym $mod+Shift+i      exec run_irssi
 
 # lock screen
 bindsym mod1+Shift+p exec xscreensaver-command -lock
-bindsym Pause  exec xscreensaver-command -lock
+bindsym Pause        exec xscreensaver-command -lock
 
 # kill focused window ("kill" signals application nicely, like close in fvwm)
 bindsym $mod+Control+Escape kill
@@ -49,7 +49,7 @@ bindsym $mod+F4 kill
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
 #
-# 8Added Shift since I used mod+d to switch desktops previously so I press it all the time
+# Added Shift since I used mod+d to switch desktops previously so I press it all the time
 # -- kjetilho 2017-01-12]
 bindsym $mod+Shift+d exec --no-startup-id i3-dmenu-desktop
 
@@ -60,9 +60,9 @@ bindsym $mod+l focus up
 bindsym $mod+semicolon focus right
 
 # alternatively, you can use the cursor keys:
-bindsym $mod+Left focus left
-bindsym $mod+Down focus down
-bindsym $mod+Up focus up
+bindsym $mod+Left  focus left
+bindsym $mod+Down  focus down
+bindsym $mod+Up    focus up
 bindsym $mod+Right focus right
 
 # move focused window

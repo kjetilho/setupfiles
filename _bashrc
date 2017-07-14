@@ -42,7 +42,7 @@ then
 	. ${HOME}/.work-password-store/bin/workpass.bash-completion
 fi
 
-mypath=$HOME/.rbenv/bin:$HOME/bin:/usr/java/latest/bin:/opt/vagrant/bin:$PATH:/stat/local/bin
+mypath=$HOME/.rbenv/bin:$HOME/bin:/usr/java/latest/bin:/opt/vagrant/bin:/opt/firefox:$PATH:/stat/local/bin
 
 if [ -x /usr/local/bin/cknfs ]
 then
