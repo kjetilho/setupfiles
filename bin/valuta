@@ -1,0 +1,155 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+use LWP::UserAgent;
+use Data::Dumper;
+use Getopt::Long;
+use open OUT => ":locale";
+use utf8;
+
+sub version {
+    print <<EOT;
+Valuta version 0.08
+Looks up exchange rates for currencies.
+Copyright (c) 2001,2006,2008,2010,2015 Per Buer
+Contributions by Kjetil Torgrim Homme 2010, 2015
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+See http://www.gnu.org/licenses/gpl-3.0.txt for the full license.
+EOT
+    exit(0);
+}
+
+sub usage {
+    "Usage: $0 [--help] [currency] [amount]\n";
+}
+
+GetOptions('help|?' => sub { print usage; exit; },
+           'version|V' => \&version)
+    or die usage;
+
+# parameter switcharoo
+my ($PARM_valuta, $PARM_antall) = @ARGV;
+if (defined $PARM_antall && $PARM_antall !~ /^[0-9.]+$/) {
+    ($PARM_valuta, $PARM_antall) = ($PARM_antall, $PARM_valuta);
+}
+
+$PARM_valuta = uc $PARM_valuta
+    if defined $PARM_valuta;
+
+my %VALUTA =
+    get_valhash('https://www.dnb.no/portalfront/datafiles/miscellaneous/csv/kursliste.csv');
+
+if ($PARM_antall) {
+    unless (defined $VALUTA{$PARM_valuta} ) {
+	print("Unknown currency $PARM_valuta\n");
+	exit(1);
+    }
+
+    if ($PARM_antall) {
+        my $type = "kjøp/salg";
+        my $kjop = $VALUTA{$PARM_valuta}->{Kjop};
+        my $salg = $VALUTA{$PARM_valuta}->{Salg};
+        unless ($kjop) {
+            $kjop = $VALUTA{$PARM_valuta}->{Kjop_seddel};
+            $type = "kjøp/salg (sedler)";
+        }
+        unless ($salg) {
+            $salg = $VALUTA{$PARM_valuta}->{Salg_seddel};
+            $type = "kjøp/salg (sedler)";
+        }
+        # Some currencies may only be available for sale
+        $kjop = $salg unless $kjop;
+
+        printf("%7.2f %s <-- %7.2f / %7.2f NOK (%s)\n", $PARM_antall, $PARM_valuta, 
+               $kjop * $PARM_antall /  $VALUTA{$PARM_valuta}->{Pr},
+               $salg * $PARM_antall /  $VALUTA{$PARM_valuta}->{Pr},
+               $type);
+
+        printf("%7.2f NOK --> %7.2f / %7.2f %s (%s)\n", $PARM_antall, 
+               $PARM_antall / $kjop * $VALUTA{$PARM_valuta}->{Pr},
+               $PARM_antall / $salg * $VALUTA{$PARM_valuta}->{Pr},
+               $PARM_valuta, $type);
+    }
+
+} else {
+
+    printf("%3s %-6.6s %-18.18s %7s %7s %10s %10s %8s\n",
+	   '#','Valuta','Land','Kjøp','Salg','Kjøp(sed.)','Salg(sed.)',
+	   'diff/øre');
+
+    for my $valuta ($PARM_valuta || sort keys %VALUTA) {
+
+        printf("%3i %-4s %-20.20s %7s %7s %10s %10s %8s\n",
+               $VALUTA{$valuta}->{'Pr'},
+               $valuta, 
+               $VALUTA{$valuta}->{'Land'},
+               format_number($VALUTA{$valuta}->{'Kjop'}),
+               format_number($VALUTA{$valuta}->{'Salg'}),
+               format_number($VALUTA{$valuta}->{'Kjop_seddel'}),
+               format_number($VALUTA{$valuta}->{'Salg_seddel'}),
+               format_number($VALUTA{$valuta}->{'diff_i_ore'}),
+            );
+    }
+}
+
+
+
+sub get_valhash {
+    my ($URL) = @_;
+
+    my @keys = qw{Land Pr Kode Gnokka Kjop Salg diff_i_ore Kjop_seddel Salg_seddel Midtkurs};
+    my %H;  #  to be returned
+
+    my $ua = new LWP::UserAgent;
+    $ua->agent("LWP/Valuta/" . $ua->agent);
+    $ua->env_proxy();
+    
+    my $req = new HTTP::Request GET => $URL;
+    my $res;
+
+    my $attempts_left = 5;
+    while ($attempts_left--) {
+        $res = $ua->request($req);
+    } continue {
+        last if $res->is_success;
+        print "Error fetching rates: ", $res->status_line;
+        if ($attempts_left) {
+            print " ... retrying\n";
+            sleep(1);
+        } else {
+            print " ... giving up\n";
+            exit(1);
+        }
+    }
+
+    my @lines = split "[\r\n]+", $res->content;
+
+    shift @lines; shift @lines;
+    for (@lines) {
+	chomp;
+	my @vals = split(/,/); 
+	my $idx = $vals[2];
+	my %TH;
+
+	@TH{@keys} = @vals;
+	$H{$idx} = \%TH;
+    };
+    return %H;
+}
+
+sub format_number {
+    my ($number, $format) = @_;
+    $format ||= "%7.3f";
+    unless (defined $number && $number ne '') {
+        my $width = ($format =~ /(\d+)/);
+        return sprintf("%${width}s", "-");
+    }
+    return sprintf($format, $number);
+}
