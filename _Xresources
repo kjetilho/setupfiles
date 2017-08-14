@@ -33,7 +33,7 @@ Rxvt.letterSpace:               -1 *//* Urxvt calculates wrong overall width for
 
 URxvt.perl-ext:   default,selection-to-clipboard
 URxvt.iso14755:   false
-URxvt.selection.pattern-0:      ([a-zA-Z0-9/._-]+)
+URxvt.selection.pattern-0:      ([a-zA-Z0-9/._~-]+)
 URxvt.selection.pattern-1:      (.*)
 
 ! Solarized Dark theme begins
