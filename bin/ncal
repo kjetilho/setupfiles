@@ -1,0 +1,434 @@
+##! /snacks/bin/perl
+#
+# Orginal ide av jonhaug, utvidet masse av peder
+#
+
+eval 'exec perl -S -CSDL $0 ${1+"$@"}'
+    if 0; # not running under some shell
+
+use strict;
+use open IO  => ':locale';
+
+use POSIX;
+use Time::Local;
+use Date::Parse;
+use Getopt::Long;
+
+use Data::Dumper;
+
+sub requires {
+    my(@mods) = @_;
+    my $ok = 1;
+    for my $mod (@mods) {
+	eval "require $mod;";
+	if ($@) {
+	    $ok = 0;
+	    warn "Missing $mod\n" if $ENV{VERBOSE};
+	}
+	else {
+	    eval "$mod->import;";
+	}
+    }
+    warn "\n" if $ENV{VERBOSE} && !$ok;
+    $ok;
+}
+
+my($time);
+my($long,$lat) = (10.75, 59.95); # for oslo
+
+GetOptions(
+	'd=s' => \$time,
+	'long=f' => \$long,
+	'lat=f' => \$lat,
+	);
+
+$time = str2time($time) || time;
+
+my($month)  = shift;
+my($year)   = shift;
+my($cday,$cmonth,$cyear,$cyday,$cisdst) = (localtime $time)[3..5,7,8];
+
+$month = $month ? $month-1 : $cmonth;
+$year = $year ? $year-1900 : $cyear;
+
+if (@ARGV || $month =~ /\D/ || $month < 0 || $month > 11 || $year =~ /\D/) {
+    print "usage: ncal [month [year]]\n";
+    exit;
+}
+
+my @months = qw(Januar Februar Mars April Mai Juni Juli August
+		September Oktober November Desember);
+my(@days) = qw(31 28 31 30 31 30 31 31 30 31 30 31 30);
+my($leap) = $year % 4 == 0 && ($year % 100 != 0 || $year % 400 == 0);
+$days[1]++ if $leap;
+
+my($wday,$yday) = (localtime timelocal(0,0,12,1,$month,$year))[6,7];
+my($week) = ((localtime timelocal(0,0,12,1,0,$year))[6]+6)%7;
+
+$week = ($week < 4) + int(($yday + $week)/7);
+$wday = ($wday+6)%7; # norskifiser
+$year += 1900;
+$cyear += 1900;
+
+my($days) = $days[$month];
+
+my(%high);
+my(%name);
+sub set_high {
+    my($m, $d, $n, @h) = @_;
+    return unless $m == $month;
+    push @{$name{$d}}, [ $n, @h ] if $n;
+    for (@h) {
+	$high{$d}{$_}++;
+    }
+    return 1;
+}
+
+# --------- merk av merkedager ---
+
+# 1 => bold
+# 4 => undeline
+# 5 => blink
+# 7 => reverse
+# 30 + BGR => fg
+# 40 + BGR => bg
+
+# januar
+set_high( 0,  1, "1. nyttårsdag" => 1, 31);
+set_high( 0, 26, "Australia Day" => 32);
+    
+# februar
+set_high( 1,  4, "Ken Thompson (1943)", 32); # Co-author of UNIX
+set_high( 1,  6, "Samisk nasjonaldag", 1, 32);
+set_high( 1, 14, "Valentinsdag" => 1, 32);
+set_high( 1, 27, "International Polar Bear Day" => 32);
+set_high( 1, (7-(localtime timelocal(0,0,12,1,1,$year))[6])%7+8,
+	  "Morsdag" => 1, 35);
+
+# mars
+set_high( 2,  8, "Kvinnedagen" => 1, 35);
+set_high( 2,  9, "Barbies bursdag (1959)" => 32);
+set_high( 2, 10, "Bell ringte for første gang (1875)" => 32);
+#set_high( 2, 10, "Chuck Norris (1940)" => 32);
+#set_high( 2, 11, "Johnny Knoxville (1971)" => 32);
+set_high( 2, 12, "Første glasscola solgt (1894)" => 32);
+set_high( 2, 12, "World Wide Web (1989)" => 32);
+set_high( 2, 14, "Vilhelm Bjerknes (1862)" => 32);
+set_high( 2, 17, "St. Patricks Day" => 1, 32);
+set_high( 2, 20, "Screen (1987)" => 32);
+
+set_high( 2, $days[2]-(localtime timelocal(0,0,12,$days[2],2,$year))[6],
+	  "Sommertid, fremover en time 02:00" => 1, 32 );
+
+# april
+set_high( 3,  9, "Okkupasjonsdagen (1940)" => 1, 32);
+
+# mai
+set_high( 4,  1, "1. Mai" => 1, 31);
+set_high( 4,  8, "Frigjøringsdag (1945)" => 1, 32);
+set_high( 4, 17, "Nasjonaldagen (1814)" => 1, 31);
+set_high( 4, 21, "Talk like Yoda day" => 32);
+set_high( 4, 25, "Towel Day" => 32);
+    
+# juni
+set_high( 5,  7, "Unionsoppløsning (1905)" => 1, 32);
+set_high( 5,  8, "PHP (1995)" => 32);
+set_high( 5, 23, "Sankthansaften" => 1, 32);
+    
+# juli
+set_high( 6, 29, "Olsok" => 1, 32);
+set_high( 6, $days[2]-((localtime timelocal(0,0,12,$days[2],6,$year))[6]+2)%7,
+          "Sysadminday (www.sysadminday.com)" => 1, 32 );
+
+# august
+set_high( 7,  1, "MTVs første sending (1981)" => 32);
+set_high( 7,  2, "Borrelåsen ble patentert (1955)" => 32);
+set_high( 7,  3, "Charles Stanhope (1753)" => 32); # Kalkulatorens far
+set_high( 7,  5, "Niels Henrik Abel (1802)" =>  32);
+set_high( 7, 17, "Compact disc (1982)" =>  32);
+
+# september
+set_high( 8, 10, "PINGs bursdag" => 1, 36);
+set_high( 8, 19, "Talk like a pirate day" => 32);
+#set_high( 8, 23, "Datamusen ble oppfunnet (1982)" => 32);
+set_high( 8, $days[8]-((localtime timelocal(0,0,12,$days[8],8,$year))[6]+3)%7,
+	  "Fårikålens Festdag" => 1, 32 );
+
+# oktober
+set_high( 9, 13, "Ada Lovelace Day" => 32);
+set_high( 9, 24, "FN grunnlegges (1945)" => 1, 32);
+set_high( 9, $days[9]-(localtime timelocal(0,0,12,$days[9],9,$year))[6],
+	  "Vintertid, tilbake en time 03:00" => 1, 32 );
+
+# november
+set_high(10, (7-(localtime timelocal(0,0,12,1,10,$year))[6])%7+8,
+	 "Farsdag" => 1, 36);
+
+# desember
+set_high(11, 10, "Augusta Ada King, Countess of Lovelace (1815)" => 1, 36);
+set_high(11, 24, "Julaften"     =>    31);
+set_high(11, 25, "1. Juledag"   => 1, 31);
+set_high(11, 26, "2. Juledag"   => 1, 31);
+set_high(11, 31, "Nyttårsaften" =>    31);
+
+# i dag
+set_high($cmonth, $cday, "" => 7) if $year == $cyear;
+
+# påskebaserte helligdager
+if (requires("Date::Easter")) {
+    my($em,$ed) = easter($year);
+    my($easter) = timelocal(0,0,12,$ed,$em-1,$year);
+    
+    for ([ -49, "Fastelavnssøndag", 		1, 32 ],
+	 [ -48, "Blåmandag", 			1, 32 ],
+	 [ -47, "Feit-tirsdag (Mardi Gras)", 	1, 32 ],
+	 [ -46, "Askeonsdag", 			1, 32 ],
+	 [  -7, "Palmesøndag",                      1, 31 ],
+	 [  -3, "Skjærtorsdag", 			1, 31 ],
+	 [  -2, "Langfredag", 			1, 31 ],
+	 [  -1, "Påskeaften", 			1, 31 ],
+	 [   0, "1. Påskedag", 			1, 31 ],
+	 [   1, "2. Påskedag", 			1, 31 ],
+	 [  39, "Kristi himmelfart", 		1, 31 ],
+	 [  48, "Pinseaften", 			   31 ],
+	 [  49, "1. Pinsedag", 			1, 31 ],
+	 [  50, "2. Pinsedag", 			1, 31 ],
+	) {
+	my($offset,$name,@colors) = @$_;
+	my($d,$m) = (localtime $easter+$offset*24*60*60)[3,4];
+	set_high($m, $d, $name => @colors);
+    }
+}
+    
+# fullmåner
+if (requires("Astro::MoonPhase")) {
+    my %fullmoons;
+    for (7,$days-7) {
+	my($time) = timelocal(0,0,12,$_,$month,$year);
+	my(@phases) = phasehunt($time);
+	
+	$fullmoons{$phases[2]}++;
+    }
+    my $fullmooncount;
+    for my $phase (sort keys %fullmoons) {
+	
+	my(@time) = localtime $phase;
+	my($d,$m) = @time[3,4];
+	
+	my(@info,$info);
+	
+	push @info, ( "Wolf", "Ice", "Storm", "Growing", "Hare", "Mead",
+		      "Hay", "Corn", "Harvest", "Hunter's", "Snow", "Winter",
+		    )[$m];
+	
+	if ($fullmooncount>0) {
+	    # Andre fullmåne i måneden
+	    push @info, "Blue";
+	    
+	    # Vi har også en eldre definisjon, der Blue moon er den tredje
+	    # fullmånen i et kvartal av året som inneholder fire fullmåner.
+	    # Kvartalene det snakkes om skilles mellom 21 og 22 Mars
+	    # (Vårjevndøgn).  Denne typen Blue Moon er kjent som Farmers
+	    # Blue Moon.  Krever dog litt mer kalkulering for å finne den ;)
+	}
+	if (@info) {
+	    $info = " (";
+	    $info .= join "-, ", @info;
+	    $info =~ s/(.*)-, /$1 and /;
+	    $info .= " Moon)"
+	}
+	
+	if (set_high($m, $d, strftime("Fullmåne %H:%M:%S$info", @time) => 1, 33)) {
+	    $fullmooncount++;
+	}
+    }
+}
+
+# *solverv og jevndøgn
+if (requires("Astro::Time")) {
+    use Math::BigFloat;
+    my($m) = ($year-2000)/1000;
+    
+#    $m = Math::BigFloat->new($m);
+
+    my $ve  = (2451623.80984 + 
+	       365242.37404 * $m +
+	       0.05169 * $m * $m -
+	       0.00411 * $m * $m * $m -
+	       0.00057 * $m * $m * $m * $m
+	      );
+
+    my $ss = (2451716.56767 + 
+	      365241.62603 * $m +
+	      0.00325 * $m * $m +
+	      0.00888 * $m * $m * $m -
+	      0.00030 * $m * $m * $m * $m
+	     );
+
+    my $ae = (2451810.21715 +
+	      365242.01767 * $m -
+	      0.11575 * $m * $m +
+	      0.00337 * $m * $m * $m +
+	      0.00078 * $m * $m * $m * $m
+	     );
+
+    my $ws = (2451900.05952 +
+	      365242.74049 * $m -
+	      0.06223 * $m * $m -
+	      0.00823 * $m * $m * $m +
+	      0.00032 * $m * $m * $m * $m
+	     );
+
+    for ( [ $ve, "Vårjevndøgn" ],
+	  [ $ss, "Sommersolverv" ],
+	  [ $ae, "Høstjevndøgn" ],
+	  [ $ws, "Vintersolverv" ],
+	) {
+	my($x,$n) = @$_;
+
+	my $t = ($x - 2451545.0) / 36525;
+	my $w = (35999.373 * $t - 2.47) * atan2(1,1) / 45;
+	my $l = 1 + 0.0334 * cos($w) + 0.0007 * cos(2*$w);
+
+	my $s = 0;
+	for my $v ([ 485, 324.96,   1934.136 ],
+		   [ 203, 337.23,  32964.467 ],
+		   [ 199, 342.08,     20.186 ],
+		   [ 182,  27.85, 445267.112 ],
+		   [ 156,  73.14,  45036.886 ],
+		   [ 136, 171.52,  22518.443 ],
+		   [  77, 222.54,  65928.934 ],
+		   [  74, 296.72,   3034.906 ],
+		   [  70, 243.58,   9037.513 ],
+		   [  58, 119.81,  33718.147 ],
+		   [  52, 297.17,    150.678 ],
+		   [  50,  21.02,   2281.226 ],
+		   [  45, 247.54,  29929.562 ],
+		   [  44, 325.15,  31555.956 ],
+		   [  29,  60.93,   4443.417 ],
+		   [  18, 155.12,  67555.328 ],
+		   [  17, 288.79,   4562.452 ],
+		   [  16, 198.04,  62894.029 ],
+		   [  14, 199.76,  31436.921 ],
+		   [  12,  95.39,  14577.848 ],
+		   [  12, 287.11,  31931.756 ],
+		   [  12, 320.81,  34777.259 ],
+		   [   9, 227.73,   1222.114 ],
+		   [   8,  15.45,  16859.074 ],
+		  ) {
+	    my($a,$b,$c) = @$v;
+	    $s += $a * cos(($b + $c * $t) * atan2(1,1) / 45);
+	}
+
+	$x = $x + (0.00001 * $s / $l);
+
+	my $utx = $x - 2400000.5;
+	$utx = $utx - int $utx;
+
+	my($day, $month, $year, $ut) = mjd2cal($x-2400000.5);
+
+	my $hour = int($ut*24);
+	my $min  = int(($ut*24 - $hour)*60);
+	my $sec  = int((($ut*24 - $hour)*60-$min)*60);
+
+	my $time = timegm($sec,$min,$hour,$day,$month-1,$year);
+	($sec,$min,$hour,$day,$month,$year) = localtime($time);
+
+	set_high($month, $day, 
+		 sprintf("%s (%02d:%02d:%02d)", $n, $hour, $min, $sec) => 1, 32)
+
+    }
+}
+
+# --- output ---
+
+my(@outcal,@outname,$str);
+
+push @outcal, sprintf("%s%s %d", 
+		      " " x int((24-5-length($months[$month]))/2),
+		      $months[$month],
+		      $year,
+		     );
+push @outcal, "Uke  Ma Ti On To Fr Lø Sø";
+$str = sprintf "%3d %s", $week, "   "x$wday;
+
+for my $day (1..$days) {
+    my $num = sprintf "%3d", $day;
+    if (-t STDOUT && $high{$day}) {
+	$str .= sprintf(" \e[%sm%2d\e[m",
+			join(";", sort {$a<=>$b} keys %{$high{$day}}),
+			$day,
+		       );
+    } else {
+	$str .= sprintf " %2d", $day;
+    }
+    for my $nday (@{$name{$day}}) {
+	my($name,@high) = @$nday;
+	if (-t STDOUT) {
+	    push @outname, sprintf("\e[%sm%2d\e[m: %s",
+				   join(";", sort {$a<=>$b} @high),
+				   $day, $name );
+	} else {
+	    push @outname, sprintf("%2d: %s",
+				   $day, $name );
+	}
+    }
+
+    if (++$wday == 7) {
+	push @outcal, $str;
+	$str = sprintf "%3d ", ++$week unless $day == $days;
+	$wday = 0;
+    }
+}
+push @outcal, $str if $wday;
+
+# soloppgang og -nedgang
+if ($cmonth == $month && $cyear == $year && requires("Astro::Sunrise")) {
+    my($sunrise,$sunset) = sunrise($cyear, $cmonth+1, $cday,
+				   $long, $lat, +1, $cisdst);
+    
+    my($srh,$srm) = $sunrise =~ /(\d+):(\d+)/;
+    my($ssh,$ssm) = $sunset  =~ /(\d+):(\d+)/;
+    
+    my($dls) = ($ssh*60+$ssm) - ($srh*60+$srm);
+    my($dlh) = int($dls/60);
+    $dls = $dls % 60;
+
+    my $daylength = sprintf "%02d:%02d", $dlh, $dls;
+
+    push @outcal, "";
+    push @outcal, "Solen: Opp $sunrise  Ned $sunset  Dagen: $daylength";
+}
+
+my($width) = sort {$b<=>$a} 
+             map {my $x = $_; $x =~ s/\e\[.*?m//g; length $x}
+             @outcal;
+if (@outname < @outcal) {
+    unshift @outname, "";
+}
+while (@outname || @outcal) {
+    my $left = shift @outcal;
+    my $right = shift @outname;
+    my $strip = $left;
+    $strip =~ s/\e\[.*?m//g;
+    printf "%-".($width+length($left)-length($strip))."s   %s\n", $left, $right;
+}
+
+__END__
+
+sub calc_easter {
+    my($year) = @_;
+    my($a) = $year % 19;
+    my($b) = $year % 4;
+    my($c) = $year % 7;
+    $year -= 1900;
+    my($m) = (24, 24, 24, 25)[int($year/100)];
+    my($n) = (5, 5, 6, 0)[int($year/100)];
+    my($d) = (19*$a + $m) % 30;
+    my($e) = (2*$b + 4*$c + 6*$d + $n) % 7;
+    my($f) = $d + $e;
+
+    $f -= 7 if $f == 35 || ($f == 34 && $d == 28 && $a > 10);
+
+    return timelocal(0,0,12,22,2,$year)+$f*24*60*60;
+}
