@@ -17,7 +17,7 @@ then
     cc -Wall support/setcursor.c -o bin/setcursor -lX11
 fi
 
-mkdir -p $HOME/lib/X11/fonts $HOME/lib/elisp
+mkdir -p $HOME/lib/X11/fonts $HOME/lib/elisp $HOME/.config/openstack
 
 find . \( \( -name .git -o -name '*~' -o -name support \) -prune \) -o -type f -print |
     cut -c3- |
