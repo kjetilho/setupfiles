@@ -16,3 +16,6 @@
 
 [diff "gpg"]
 	textconv = gpg --quiet --decrypt --use-agent
+
+[diff]
+	noprefix = true
