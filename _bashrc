@@ -32,10 +32,15 @@ case $(uname) in
         ;;
 esac
 
-if [ -e /etc/bash_completion.d/password-store ]
-then
-        . /etc/bash_completion.d/password-store
-fi
+for comp in /usr/share/bash-completion/completions/pass /etc/bash_completion.d/password-store
+do
+    if [ -e "$comp" ]
+    then
+        . "$comp"
+        break
+    fi
+done
+
 if [ -e $HOME/.work-password-store ]
 then
 	alias workpass='PASSWORD_STORE_GPG_OPTS="--trust-model always" PASSWORD_STORE_DIR=~/.work-password-store ${HOME}/.work-password-store/bin/pass'
