@@ -76,7 +76,7 @@ then
 	export PYTHONPATH=/opt/python/lib/python2.7/site-packages
 fi
 
-# If not running interactively, don't do anything
+# If not running interactively, don't do anything more
 [ -z "$PS1" ] && return
 
 if [ "$BASH_VERSINFO"0 -ge 40 ]
@@ -104,6 +104,9 @@ set noai
 set nosi
 syntax off'
 unalias vi la 2>/dev/null
+
+# We don't want ^S
+[ -t 0 ] && stty stop undef
 
 if [ disabled = yes -a "$DISPLAY" != "" ]
 then
