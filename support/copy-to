@@ -1,0 +1,12 @@
+#! /bin/bash
+
+base=$(dirname $0)
+
+case $1 in
+  barbara*)
+    rsync -av $base/../ barbara.njus.no:lib/setupfiles/ &&
+	ssh barbara.njus.no lib/setupfiles/support/install
+    ;;
+  *) echo "Unknown destination" >&2
+     ;;
+esac
