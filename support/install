@@ -5,7 +5,7 @@ cd $(dirname $0)/..
 for path in $(find */ \! -name support -type d)
 do
         dest=${path/#_/.}
-        mkdir $HOME/$dest
+        mkdir -p $HOME/$dest
 done
 
 if ln --help | grep -q -e --relative
