@@ -52,8 +52,10 @@ fi
 # If not running interactively, don't do anything more
 ######################################################
 [ -z "$PS1" ] && return
-# also check if $- contains "i" for interactive
-[ ${-%i*} != $- ] && return
+
+# Does $- contain "i" for interactive?  We remove i* and see that the
+# value is unchanged.
+[ ${-%i*} = $- ] && return
 
 # TAB completion rules
 declare -a hosts
