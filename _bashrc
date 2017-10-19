@@ -18,34 +18,7 @@ case $(uname) in
     SunOS)
 	export PATH=/usr/mysql/bin:/usr/bin:/usr/local/bin:/usr/sbin:/sbin:/usr/local/sbin:/usr/gnu/bin
 	;;
-    *)
-        declare -a hosts
-        if [ -e ~/.ssh/known_hosts ]; then
-            hosts=(`awk -F"[ ,]" '/^([0-9]+[.]|\[)/ { next } {print $1}' ~/.ssh/known_hosts`)
-        fi
-        if [ -e ~/.ssh/config ]; then
-            hosts=(${hosts[*]} `awk '/^Host [a-z0-9.-]+ *$/ { print $2 }' ~/.ssh/config`)
-        fi
-	complete -r
-        complete -W "${hosts[*]}" ssh ssh-keygen ping ping6 host showmount mtr traceroute vlan cssh console
-        complete -W "${hosts[*]}" -o default scp rsync bacula-conf
-        ;;
 esac
-
-for comp in /usr/share/bash-completion/completions/pass /etc/bash_completion.d/password-store
-do
-    if [ -e "$comp" ]
-    then
-        . "$comp"
-        break
-    fi
-done
-
-if [ -e $HOME/.work-password-store ]
-then
-	alias workpass='PASSWORD_STORE_GPG_OPTS="--trust-model always" PASSWORD_STORE_DIR=~/.work-password-store ${HOME}/.work-password-store/bin/pass'
-	. ${HOME}/.work-password-store/bin/workpass.bash-completion
-fi
 
 mypath=$HOME/.rbenv/bin:$HOME/bin:/usr/java/latest/bin:/opt/vagrant/bin:/opt/firefox:$PATH:/stat/local/bin
 
@@ -77,7 +50,35 @@ then
 fi
 
 # If not running interactively, don't do anything more
+######################################################
 [ -z "$PS1" ] && return
+
+# TAB completion rules
+declare -a hosts
+if [ -e ~/.ssh/known_hosts ]; then
+    hosts=(`awk -F"[ ,]" '/^([0-9]+[.]|\[)/ { next } {print $1}' ~/.ssh/known_hosts`)
+fi
+if [ -e ~/.ssh/config ]; then
+    hosts=(${hosts[*]} `awk '/^Host [a-z0-9.-]+ *$/ { print $2 }' ~/.ssh/config`)
+fi
+complete -r
+complete -W "${hosts[*]}" ssh ssh-keygen ping ping6 host showmount mtr traceroute vlan cssh console
+complete -W "${hosts[*]}" -o default scp rsync bacula-conf
+
+for comp in /usr/share/bash-completion/completions/pass /etc/bash_completion.d/password-store
+do
+    if [ -e "$comp" ]
+    then
+        . "$comp"
+        break
+    fi
+done
+
+if [ -e $HOME/.work-password-store ]
+then
+	alias workpass='PASSWORD_STORE_GPG_OPTS="--trust-model always" PASSWORD_STORE_DIR=~/.work-password-store ${HOME}/.work-password-store/bin/pass'
+	. ${HOME}/.work-password-store/bin/workpass.bash-completion
+fi
 
 if [ "$BASH_VERSINFO"0 -ge 40 ]
 then
