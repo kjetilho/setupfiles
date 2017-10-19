@@ -2,11 +2,10 @@
 
 cd $(dirname $0)/..
 
-for path in */
+for path in $(find */ \! -name support -type d)
 do
-	[ "$path" = "support/" ] && continue
-	dest=${path/#_/.}
-	mkdir -p $HOME/$dest
+        dest=${path/#_/.}
+        mkdir $HOME/$dest
 done
 
 if ln --help | grep -q -e --relative
