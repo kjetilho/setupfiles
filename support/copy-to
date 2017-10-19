@@ -7,6 +7,10 @@ case $1 in
     rsync -av $base/../ barbara.njus.no:lib/setupfiles/ &&
 	ssh barbara.njus.no lib/setupfiles/support/install
     ;;
+  gorgon*)
+    rsync -av $base/../ gorgon.hmg9.vgnett.no:lib/setupfiles/ &&
+	ssh gorgon.hmg9.vgnett.no lib/setupfiles/support/install
+    ;;
   *) echo "Unknown destination" >&2
      ;;
 esac
