@@ -151,6 +151,8 @@ then
     export MODULEPATH=design:modules:~/git/git.i.bitbit.net/puppet-ms0/basemodules_common/modules/
     export FUTURE_PARSER=yes STRICT_VARIABLES=yes
 fi
+b3() { env PUPPET_VERSION='~> 3.0' bundle "$@"; }
+b4() { env PUPPET_VERSION='~> 4.0' bundle "$@"; }
 
 grep_options="--directories=skip --colour=auto"
 alias grep="grep $grep_options"
@@ -442,7 +444,6 @@ g() {
         p|pu) cd ~/svn/puppet ;;
         pup|pupp|puppet) cd ~/git/git.i.bitbit.net/puppet-mod/puppet ;;
         b|ba|bar|bare|bareos) cd ~/git/git.i.bitbit.net/backup/bareos-osl ;;
-        bk|bks|bksd|bacula) cd ~/git/git.i.bitbit.net/backup/bacula-ksd ;;
         bc|bch|bcheck) cd ~/git/git.i.bitbit.net/backup/bacula-check ;;
         *)
             for p in "git/git.i.bitbit.net/*/$1" \
