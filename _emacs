@@ -34,7 +34,7 @@
 (setq sentence-end-double-space t)
 (setq calendar-week-start-day 1)
 
-(setq-default indent-tabs-mode nil)
+;; (setq-default indent-tabs-mode nil) # this changes TAB to space too aggressively
 (setq puppet-indent-level 2 puppet-include-indent 4)
 (setq perl-indent-level 4 cperl-indent-level 4)
 (setq ruby-indent-level 2)
