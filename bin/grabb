@@ -1,0 +1,46 @@
+#! /bin/bash
+
+if ! type scrot > /dev/null 2>&1
+then
+    i3-nagbar -m "Screen capture program 'scrot' is not installed" -t error
+    exit 1
+fi
+
+mkdir -p $HOME/Pictures/screenshots
+cd $HOME/Pictures/screenshots
+
+tmp=$(mktemp -d)
+trap "rm -r $tmp" 0 1 2 15
+
+tmpfile=$tmp/dump.png
+
+case $1 in
+    --all)
+        dump=desktop
+        capture=scrot
+        ;;
+    --select*)
+        dump="window"
+        capture="scrot -s"
+        ;;
+    *)
+        i3-nagbar -m "Unknown parameter to grabb, '$1'" -t error
+        exit 1
+        ;;
+esac
+
+$capture $tmpfile
+dest=$(zenity --file-selection --confirm-overwrite --filename="$dump-$(date +%Y-%m-%d-%T).png" --save)
+case $dest in
+    *.jpg)
+        convert "$tmpfile" "$dest"
+        ;;
+    "")
+        # cancel
+        exit 0
+        ;;
+    *)
+        mv "$tmpfile" "$dest"
+        ;;
+esac
+
