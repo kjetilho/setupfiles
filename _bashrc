@@ -296,16 +296,23 @@ edit_last() { e $(fc -s "$@"); }
 alias e!=edit_last
 
 la() {
-	for p do
-		case $(type "$p") in
-			*" is a"*)
-				type "$p" | head -1
-				;;
-			*)
-				ls -lL $(type -p "$p")
-				;;
-		esac
-	done
+    for p do
+        files=$(type -a "$p" | while read e
+                do
+	            case "$e" in
+		        "$p is a"*)
+                            echo "$e" >&2
+                            ;;
+                        "$p ()")
+                            # function definition, ignore
+                            ;;
+                        "$p is "*)
+		            echo "$e" | cut -d' ' -f3-
+                            ;;
+                    esac
+	        done) 2>&1
+        [ "$files" ] && ls -lL $files
+    done
 }
 
 File() {
