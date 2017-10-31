@@ -96,6 +96,7 @@ bindsym $mod+Shift+e layout toggle split
 # activate interesting windows
 bindsym $mod+e [class="Emacs"] focus
 bindsym $mod+t [class="Thunderbird"] focus
+bindsym $mod+m [class="Mattermost"] focus
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
 
