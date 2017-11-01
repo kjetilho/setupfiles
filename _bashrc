@@ -296,12 +296,13 @@ edit_last() { e $(fc -s "$@"); }
 alias e!=edit_last
 
 la() {
+    # base 4.3 is confused where to end $() with case inside.
     for p do
-        files=$(type -a "$p" | while read e
+        files=`type -a "$p" | while read e
                 do
-	            case "$e" in
+	            case $e in
 		        "$p is a"*)
-                            echo "$e" >&2
+                            echo "$e"
                             ;;
                         "$p ()")
                             # function definition, ignore
@@ -310,7 +311,7 @@ la() {
 		            echo "$e" | cut -d' ' -f3-
                             ;;
                     esac
-	        done) 2>&1
+	        done` 2>&1
         [ "$files" ] && ls -lL $files
     done
 }
