@@ -9,7 +9,9 @@
 [alias]
 	clog = log --graph --oneline --abbrev-commit --all --decorate --color
 	logv = log --name-status --find-renames
-	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%C(bold blue) <%an>%Creset' --abbrev-commit
+        lg = log -p
+        lol = log --graph --abbrev-commit --date=relative --decorate
+        lola = log --graph --abbrev-commit --date=relative --decorate --all
 
 [core]
 	excludesfile = /home/kjetilho/.gitignore_global
