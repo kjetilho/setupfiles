@@ -48,7 +48,7 @@
 
 solarized*background:              S_L_base03
 solarized*foreground:              K_S_L_base0
-solarized*fading:                  40
+solarized*fading:                  30
 solarized*fadeColor:               S_L_base03
 solarized*cursorColor:             S_L_base1
 solarized*pointerColorBackground:  S_L_base01
