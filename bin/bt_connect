@@ -7,14 +7,16 @@ use IPC::Open2;
 
 my $action = 'toggle';
 my $debug;
+# Reverse prefered order, since -d adds to end of array
+my @lookfor = ('M9', 'Jaybird X2', 'ATH-ANC40BT');
 
 sub usage {
     print STDERR "Usage: $0 [--debug] [-d DEV] {--connect|--disconnect|--toggle}\n";
+    print "Known devices to look for are: ", join(" ", reverse @lookfor), "\n";
     exit(64);
 }
 
 my $devname;
-my @lookfor;
 
 GetOptions("device|d=s", \@lookfor,
            "connect", sub { $action = 'connect' },
@@ -27,7 +29,7 @@ open2(my $chld_out, my $chld_in, 'bluetoothctl')
     or die "bluetoothctl failed $!\n";
 close($chld_in);
 
-@lookfor = ('M9', 'Jaybird X2') unless @lookfor;
+@lookfor = reverse @lookfor;
 
 my %dev;
 
@@ -50,8 +52,13 @@ for my $d (@lookfor) {
     last;
 }
 
-die "No device found\n"
-    unless defined $dev{$devname};
+unless (defined $dev{$devname}) {
+    print "No device found.  These bluetooth devices were seen:\n";
+    for my $n (sort keys %dev) {
+	print "  $n\n";
+    }
+    exit(1);
+}
 
 print STDERR "$devname is $dev{$devname}\n"
     if $debug;
