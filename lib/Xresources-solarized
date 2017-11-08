@@ -13,6 +13,7 @@
 #define S_blue          #268bd2
 #define S_cyan          #2aa198
 #define S_green         #859900
+#define K_S_green       #40c000 /* kjetilho: make it greener */
 
 
 ! Dark
@@ -56,7 +57,7 @@ solarized*pointerColorForeground:  S_L_base1
 
 solarized*color0:                  S_L_base02
 solarized*color1:                  S_red
-solarized*color2:                  S_green
+solarized*color2:                  K_S_green
 solarized*color3:                  S_yellow
 solarized*color4:                  S_blue
 solarized*color5:                  S_magenta
