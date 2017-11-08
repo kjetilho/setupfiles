@@ -21,3 +21,5 @@
 
 [diff]
 	noprefix = true
+[pull]
+	rebase = true
