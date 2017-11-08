@@ -24,6 +24,7 @@ sub lookfor {
 }
 
 GetOptions('caps!', \$caps,
+	   'version', sub { print "Perl-Diceware 1.0\n"; exit(0) },
 	   'num|n=i', \$num_words,
 	   'delimiter|d=s', \$delimiter,
 	   'wordlist|w=s', \$wordlist,
