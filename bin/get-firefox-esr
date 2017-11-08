@@ -3,8 +3,8 @@
 # For available versions, see https://www.mozilla.org/en-US/firefox/organizations/all/?q=english
 
 latest() {
-    curl -s 'https://www.mozilla.org/en-US/firefox/organizations/all/?q=english%20(US)' |
-        grep -m1 -o "firefox-52.*esr"
+    curl -s -I 'https://download.mozilla.org/?product=firefox-esr-latest-ssl&os=linux64&lang=en-US' |
+        grep -m1 -o "firefox-52.[0-9.]*esr"
 }
 
 case $1 in
