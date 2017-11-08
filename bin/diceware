@@ -1,0 +1,59 @@
+#! /usr/bin/perl
+use warnings;
+use strict;
+use Getopt::Long;
+
+# Need to handle:
+#   diceware --no-caps -d ' ' -w eff_large
+
+my $aspell_cmd = "aspell -d sv dump master|";
+my $wordlist = $aspell_cmd;
+
+my $num_words = 6;
+my $caps = 1;
+my $delimiter = '';
+
+sub lookfor {
+    my $file = shift;
+    return $file if -e $file;
+
+    for my $suff (".txt", "_wordlist.txt") {
+	return "${file}${suff}" if -e "${file}${suff}";
+    }
+    return $file;
+}
+
+GetOptions('caps!', \$caps,
+	   'num|n=i', \$num_words,
+	   'delimiter|d=s', \$delimiter,
+	   'wordlist|w=s', \$wordlist,
+    ) or usage();
+
+if ($wordlist eq 'eff_large') {
+    $wordlist = lookfor($wordlist);
+    $wordlist = $aspell_cmd if ! -e $wordlist;
+} elsif ($wordlist !~ /\|/) {
+    $wordlist = lookfor($wordlist);
+}
+
+open(my $stream, $wordlist) or die "$wordlist: $!\n";
+my @words;
+
+while (<$stream>) {
+    chomp;
+    s/^\d+\s+//; # diceware format is "32242\tgiggly\n"
+    push(@words, $_);
+}
+@words = map { ucfirst } @words if $caps;
+
+my $avail_words = @words;
+
+die "Too few words in word list ($avail_words)!\n" if $avail_words < 3000;
+
+my @phrase;
+while (@phrase < $num_words) {
+    push(@phrase, $words[rand($avail_words)]);
+}
+
+print join($delimiter, @phrase), "\n";
+
