@@ -36,7 +36,8 @@
 #define S_L_base01        #93a1a1
 #define S_L_base00        #839496
 #define S_L_base0         #657b83
-#define K_S_L_base0       #323d41 /* kjetilho: a little (50%) darker foreground */
+#define K_S_L_base0_50    #323d41 /* kjetilho: a little (50%) darker foreground */
+#define K_S_L_base0       #1e2527 /* kjetilho: a little (70%) darker foreground */
 #define S_L_base1         #586e75
 #define S_L_base2         #073642
 #define S_L_base3         #002b36
@@ -49,7 +50,7 @@
 
 solarized*background:              S_L_base03
 solarized*foreground:              K_S_L_base0
-solarized*fading:                  30
+solarized*fading:                  25
 solarized*fadeColor:               S_L_base03
 solarized*cursorColor:             S_L_base1
 solarized*pointerColorBackground:  S_L_base01
