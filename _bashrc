@@ -151,8 +151,18 @@ then
     export MODULEPATH=design:modules:~/git/git.i.bitbit.net/puppet-ms0/basemodules_common/modules/
     export FUTURE_PARSER=yes STRICT_VARIABLES=yes
 fi
-b3() { env PUPPET_VERSION='~> 3.0' PUPPET_GEM_VERSION='~> 4.0' bundle "$@"; }
-b4() { env PUPPET_VERSION='~> 4.0' PUPPET_GEM_VERSION='~> 4.0' bundle "$@"; }
+bN() {
+    declare ver="$1";
+    declare -a cmd=(bundle)
+    shift;
+    case $1 in
+	rake|rspec) cmd=("${cmd[@]}" exec) ;;
+    esac
+    env PUPPET_VERSION="~> $ver.0" PUPPET_GEM_VERSION="~> $ver.0" "${cmd[@]}" "$@"
+}
+b3() { bN 3 "$@"; }
+b4() { bN 4 "$@"; }
+b5() { bN 5 "$@"; }
 
 grep_options="--directories=skip --colour=auto"
 alias grep="grep $grep_options"
