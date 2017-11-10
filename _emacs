@@ -23,9 +23,9 @@
 (use-package markdown-mode
   :ensure t)
 
-(require 'ws-trim)
+;;(require 'ws-trim)
 ;; default ws-trim-level is 0, only individually edited lines
-(global-ws-trim-mode t)
+;;(global-ws-trim-mode t)
 
 (setq visible-bell t)
 (setq mouse-yank-at-point t)
