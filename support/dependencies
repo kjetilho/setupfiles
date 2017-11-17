@@ -24,3 +24,6 @@ cknfs:
 replacebell comes from
   http://stromberg.dnsalias.org/~strombrg/replacebell/replacebell-1.05.tar.gz
   it uses paplay from pulseaudio-utils to play WAV files
+
+Firefox:
+ * turn off web search in address bar: about:config, keyword.enable -> false
