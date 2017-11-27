@@ -1,4 +1,10 @@
 #! /bin/bash
+#
+# Grabb a screenshot from i3wm
+#
+# bindsym --release $mod+Shift+Print  exec "grabb --all"
+# bindsym --release $mod+Print        exec "grabb --select"
+#
 
 if ! type scrot > /dev/null 2>&1
 then
@@ -44,4 +50,4 @@ case $dest in
         ;;
 esac
 
-echo "$dest" | xclip -selection 'clipboard'
+printf "%s" "$dest" | xclip
