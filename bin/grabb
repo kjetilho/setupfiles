@@ -44,3 +44,4 @@ case $dest in
         ;;
 esac
 
+echo "$dest" | xclip -selection 'clipboard'
