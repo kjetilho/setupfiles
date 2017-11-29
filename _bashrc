@@ -513,8 +513,6 @@ h() {
     done
 }
 
-alias getvnx='emcinfo -h mav-ds-pr-emc01.get.c.bitbit.net -u admin'
-
 # output from portloginshow
 function fe() {
     case $1 in
@@ -554,3 +552,4 @@ osinit() {
         fi
     fi
 }
+alias r='. ~/.bashrc'
