@@ -1,0 +1,22 @@
+#! /bin/bash
+
+usage() {
+    echo "Usage: $0 [--verbose] {PlayPause|Stop|Next|Previous}" >&2
+    echo "Sends command to Spotify over dbus" >&2
+    exit 64
+}
+
+case $1 in
+    -v|--verbose) shift ;;
+    *)  exec >/dev/null ;;
+esac
+
+[ $# = 1 ] || usage
+
+mpris=org.mpris.MediaPlayer2
+case $1 in
+    PlayPause|Stop|Next|Previous)
+        dbus-send --print-reply --dest=$mpris.spotify /${mpris//.//} $mpris.Player.$1 ;;
+    *)
+        usage ;;
+esac

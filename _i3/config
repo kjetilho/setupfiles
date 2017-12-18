@@ -215,6 +215,15 @@ bindsym XF86AudioRaiseVolume   exec "adjust_volume Master 5%+"
 bindsym XF86AudioLowerVolume   exec "adjust_volume Master 5%-"
 bindsym XF86AudioMute          exec "adjust_volume Master toggle"
 bindsym Control+XF86AudioMute  exec "bt_connect"
+bindsym XF86AudioPlay          exec "spotify-dbus PlayPause"
+bindsym $mod4+Pause            exec "spotify-dbus PlayPause"
+
+bindsym XF86AudioStop          exec "spotify-dbus Stop"
+bindsym XF86AudioNext          exec "spotify-dbus Next"
+bindsym XF86AudioPrev          exec "spotify-dbus Previous"
+# PageUp skips to next, PageDn skips back
+bindsym $mod+Prior             exec "spotify-dbus Next"
+bindsym $mod+Next              exec "spotify-dbus Previous"
 
 bindsym $mod+equal             exec "adjust_volume Master 5%+"
 bindsym $mod+minus             exec "adjust_volume Master 5%-"
