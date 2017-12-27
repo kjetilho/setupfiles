@@ -54,7 +54,11 @@ while (@phrase < $num_words) {
     push(@phrase, $words[rand($avail_words)]);
 }
 
-print join($delimiter, @phrase), "\n";
+my $result = join($delimiter, @phrase);
+die "Too short passphrase ($result)!"
+    if length $result < 12;
+
+print "$result\n";
 
 sub aspell_list {
     my $lang = "en";
