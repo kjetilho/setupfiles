@@ -155,6 +155,14 @@ bN() {
     declare ver="$1";
     declare -a cmd=(bundle)
     shift;
+    if [ ! -r .ruby-version ]
+    then
+        rbenv local 2.1.10
+    fi
+    if [ ! -r .bundle/config ]
+    then
+        env PUPPET_VERSION="~> $ver.0" PUPPET_GEM_VERSION="~> $ver.0" bundle install --path=$HOME/.cache/bundler/
+    fi
     case $1 in
 	rake|rspec) cmd=("${cmd[@]}" exec) ;;
     esac
