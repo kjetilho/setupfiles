@@ -2,12 +2,12 @@
 use warnings;
 use strict;
 use Getopt::Long;
+use IPC::Open3;
 
 # Need to handle:
 #   diceware --no-caps -d ' ' -w eff_large
 
-my $aspell_cmd = "aspell -d sv dump master|";
-my $wordlist = $aspell_cmd;
+my $wordlist;
 
 my $num_words = 6;
 my $caps = 1;
@@ -16,7 +16,6 @@ my $delimiter = '';
 sub lookfor {
     my $file = shift;
     return $file if -e $file;
-
     for my $suff (".txt", "_wordlist.txt") {
 	return "${file}${suff}" if -e "${file}${suff}";
     }
@@ -30,20 +29,19 @@ GetOptions('caps!', \$caps,
 	   'wordlist|w=s', \$wordlist,
     ) or usage();
 
-if ($wordlist eq 'eff_large') {
-    $wordlist = lookfor($wordlist);
-    $wordlist = $aspell_cmd if ! -e $wordlist;
-} elsif ($wordlist !~ /\|/) {
-    $wordlist = lookfor($wordlist);
-}
+$wordlist = lookfor($wordlist) if $wordlist;
 
-open(my $stream, $wordlist) or die "$wordlist: $!\n";
 my @words;
+if ($wordlist && -e $wordlist) {
+    open(my $stream, $wordlist) or die "$wordlist: $!\n";
 
-while (<$stream>) {
-    chomp;
-    s/^\d+\s+//; # diceware format is "32242\tgiggly\n"
-    push(@words, $_);
+    while (<$stream>) {
+        chomp;
+        s/^\d+\s+//; # diceware format is "32242\tgiggly\n"
+        push(@words, $_);
+    }
+} else {
+    @words = aspell_list();
 }
 @words = map { ucfirst } @words if $caps;
 
@@ -58,3 +56,38 @@ while (@phrase < $num_words) {
 
 print join($delimiter, @phrase), "\n";
 
+sub aspell_list {
+    my $lang = "en";
+
+    my @words;
+    my ($raw, $pruned);
+
+    my @cmd = ("aspell", "-d", $lang, "dump", "master");
+    open(my $stream, "-|", @cmd) or die join(" ", @cmd) . ": $!\n";
+
+    my($wtr, $rdr);
+    use Symbol 'gensym';
+    $rdr = gensym;
+    my $pid = open3($wtr, $rdr, $rdr, "aspell", "-l", $lang, "munch-list")
+        or die "aspell munch-list: $!\n";
+
+    while (<$stream>) {
+        ++$raw;
+        next unless /^[a-z]{4,12}$/; # skip short words and names
+        ++$pruned;
+        print $wtr $_;
+    }
+    close($stream);
+    close($wtr);
+    while (<$rdr>) {
+        chomp;
+        s|/.*||;
+        push(@words, $_);
+    }
+    close($rdr);
+    waitpid($pid, 0);
+    die "aspell -l $lang munch-list: $?\n" unless $? == 0;
+
+    # printf(STDERR "Words: %d raw, %d pruned, %d affixes\n", $raw, $pruned, scalar @words);
+    @words;
+}
