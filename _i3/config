@@ -238,6 +238,7 @@ bindsym $mod+Shift+KP_Subtract exec "adjust_volume Master toggle"
 bindsym --release $mod+Shift+Print  exec "grabb --all"
 bindsym --release $mod+Print        exec "grabb --select"
 
+exec reset-resources
 exec nm-applet
 exec /home/kjetilho/bin/hhkb
 exec xscreensaver
