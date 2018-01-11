@@ -99,6 +99,8 @@ bindsym $mod+Shift+e layout toggle split
 bindsym $mod+e [class="Emacs"] focus
 bindsym $mod+t [class="Thunderbird"] focus
 bindsym $mod+m [class="Mattermost"] focus
+bindsym XF86Mail [class="Evolution"] focus
+bindsym XF86HomePage [class="Firefox"] focus
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
 
@@ -114,6 +116,8 @@ bindsym $mod+a focus parent
 # focus the child container
 bindsym $mod+Shift+a focus child
 #bindsym $mod+d focus child
+
+bindsym $mod+b workspace back_and_forth
 
 # switch to workspace
 bindsym $mod+1 workspace 1
