@@ -6,6 +6,8 @@
   (require 'server)
   (if (server-running-p) nil (server-start)))
 
+(add-hook 'server-visit-hook 'turn-on-auto-revert-mode)
+
 (add-to-list 'load-path "~/git/gnus/lisp")
 (add-to-list 'load-path "~/lib/elisp")
 
