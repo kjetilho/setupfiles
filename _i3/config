@@ -45,7 +45,6 @@ bindsym Pause        exec xscreensaver-command -lock
 # kill focused window ("kill" signals application nicely, like close in fvwm)
 bindsym $mod+Control+Escape kill
 bindsym $mod+F4 kill
-bindsym $mod+w kill
 
 # start dmenu (a program launcher)
 # bindsym $mod+d exec dmenu_run
