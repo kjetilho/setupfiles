@@ -1,0 +1,22 @@
+#! /usr/bin/perl
+
+use strict;
+use warnings;
+use Getopt::Long;
+
+my $updown = "up";
+my $site = "osl2";
+my $port = "udp:1194";
+
+sub usage {
+    print STDERR "Usage: $0 [{up|down}] [SITE] [PROTO:PORT]\n";
+    exit(64);
+}
+$updown = shift if @ARGV && $ARGV[0] =~ /^(up|down)$/;
+$site = shift if @ARGV && $ARGV[0] =~ /^(osl[123]|ksd1)$/;
+$port = shift if @ARGV && $ARGV[0] =~ /^(udp|tcp):\d+$/;
+usage() if @ARGV;
+
+system("nmcli", "con", $updown, "RL MS $site $port");
+
+
