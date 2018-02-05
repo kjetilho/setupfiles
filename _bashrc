@@ -215,6 +215,9 @@ less() {
 HISTTIMEFORMAT="%H:%M:%S "
 HISTSIZE=50000
 HISTFILESIZE=50000
+# ikkje lagre kommandoar som startar med ":" (i praksis ":;") eller " " i historikk
+HISTIGNORE="\:*: *"
+HISTCONTROL=ignoredups
 
 alias ls="ls -F"
 alias hsot=host
