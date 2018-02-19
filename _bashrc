@@ -171,6 +171,23 @@ bN() {
 b3() { bN 3 "$@"; }
 b4() { bN 4 "$@"; }
 b5() { bN 5 "$@"; }
+bgem() {
+    local gem="$1"; shift
+    local -a args
+    case $1 in
+    -v)
+        args=($@) ;;
+    [0-9]*)
+        args=(-v "$@") ;;
+    "")
+        : ;;
+    *)
+        echo "Usage: bgem gemname [version]" >&2;
+        return
+        ;;
+    esac
+    bundle exec gem contents "$gem" ${args[*]} | grep -v /spec/
+}
 
 grep_options="--directories=skip --colour=auto"
 alias grep="grep $grep_options"
