@@ -140,7 +140,7 @@ then
     export MOSH_SERVER_NETWORK_TMOUT=604800
 fi
 
-export LC_COLLATE=C
+export LC_COLLATE=C LC_NUMERIC=C
 export EDITOR=vi
 export PAGER=less
 export GIT_PAGER="less -F"
