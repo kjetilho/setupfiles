@@ -171,6 +171,26 @@ bN() {
 b3() { bN 3 "$@"; }
 b4() { bN 4 "$@"; }
 b5() { bN 5 "$@"; }
+b() {
+    (
+        if [ -r Gemfile.lock ]
+        then
+            local ver=$(awk '$1 == "puppet" { gsub("[(]|\\..*", "", $2); print $2; exit }' Gemfile.lock)
+            if [ "$ver" ]
+            then
+                export PUPPET_VERSION="~> $ver.0" PUPPET_GEM_VERSION="~> $ver.0"
+            fi
+            local exec=""
+            case $1 in
+	        rake|rspec|gem) exec=exec ;;
+            esac
+            bundle $exec "$@"
+        else
+            bN 3 "$@"
+        fi
+    )
+}
+
 bgem() {
     local gem="$1"; shift
     local -a args
@@ -186,7 +206,7 @@ bgem() {
         return
         ;;
     esac
-    bundle exec gem contents "$gem" ${args[*]} | grep -v /spec/
+    b gem contents "$gem" ${args[*]} | grep -v /spec/
 }
 
 grep_options="--directories=skip --colour=auto"
