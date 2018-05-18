@@ -8,7 +8,7 @@ use IPC::Open2;
 my $action = 'toggle';
 my $debug;
 # Reverse prefered order, since -d adds to end of array
-my @lookfor = ('M9', 'Jaybird X2', 'ATH-ANC40BT');
+my @lookfor = ('Jaybird X2', 'M9', 'ATH-ANC40BT');
 
 sub usage {
     print STDERR "Usage: $0 [--debug] [-d DEV] {--connect|--disconnect|--toggle}\n";
