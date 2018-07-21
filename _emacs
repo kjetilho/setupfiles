@@ -13,8 +13,11 @@
 
 (require 'package)
 (add-to-list 'package-archives
-             '("melpa" . "http://melpa.org/packages/")
+             '("melpa" . "http://melpa.org/packages/"))
+(add-to-list 'package-archives
              '("melpa-stable" . "https://stable.melpa.org/packages/"))
+(add-to-list 'package-archives
+             '("marmalade" . "http://marmalade-repo.org/packages/"))
 (package-initialize)
 
 ;; Bootstrap `use-package'
@@ -24,6 +27,8 @@
 
 (use-package markdown-mode
   :ensure t)
+(use-package markdown-mode-toc
+  :config (custom-set-variables '(markdown-toc-user-toc-structure-manipulation-fn 'cdr)))
 
 ;;(require 'ws-trim)
 ;; default ws-trim-level is 0, only individually edited lines
@@ -97,7 +102,7 @@
  '(gnus-summary-thread-gathering-function (quote gnus-gather-threads-by-references))
  '(line-move-visual nil)
  '(mm-text-html-renderer (quote w3m))
- '(package-selected-packages (quote (markdown-mode use-package)))
+ '(package-selected-packages (quote (markdown-toc markdown-mode use-package)))
  '(safe-local-variable-values (quote ((puppet-indent-level . 4))))
  '(select-enable-clipboard t)
  '(send-mail-function (quote sendmail-send-it))
