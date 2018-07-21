@@ -98,6 +98,7 @@ bindsym $mod+Shift+w layout tabbed
 bindsym $mod+Shift+e layout toggle split
 
 # activate interesting windows
+bindsym $mod+bar [instance="irssi"] focus
 bindsym $mod+e [class="Emacs"] focus
 bindsym $mod+t [class="Thunderbird"] focus
 bindsym $mod+m [class="Mattermost"] focus
