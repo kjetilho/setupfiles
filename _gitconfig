@@ -12,9 +12,14 @@
         lg = log -p
         lol = log --graph --abbrev-commit --date=relative --decorate
         lola = log --graph --abbrev-commit --date=relative --decorate --all
+        patch = !git --no-pager diff --no-color
 
 [core]
 	excludesfile = /home/kjetilho/.gitignore_global
+	pager = diff-so-fancy | less -p '^(Date|added|deleted|modified): '
+        # if stripLeadingSymbols is enabled, "^─+" has less chance of false matches
+[diff-so-fancy]
+	stripLeadingSymbols = false
 
 [diff "gpg"]
 	textconv = gpg --quiet --decrypt --use-agent
