@@ -143,7 +143,6 @@ fi
 export LC_COLLATE=C LC_NUMERIC=C
 export EDITOR=vi
 export PAGER=less
-export GIT_PAGER="less -F"
 
 # rspec-puppet
 if [ -d ~/git/git.i.bitbit.net/puppet-ms0/basemodules_common/modules/ ]
