@@ -469,12 +469,7 @@ case `uname -n`:$COLUMNS in
                         ;;
                 esac
             }
-        else
-            unset hosts
         fi
-        ;;
-    *)
-        unset hosts
         ;;
 esac
 
