@@ -16,12 +16,12 @@
 
 [core]
 	excludesfile = /home/kjetilho/.gitignore_global
-        # if stripLeadingSymbols is enabled, "^─+" has less chance of false matches
+	pager = less -F
 
 [pager]
-	diff = diff-so-fancy | less -p '^(Date|added|deleted|modified): '
+	diff = diff-so-fancy | less -FRX -p '^(Date|added|deleted|modified): '
 [diff-so-fancy]
-	stripLeadingSymbols = false
+	stripLeadingSymbols = true
 
 [diff "gpg"]
 	textconv = gpg --quiet --decrypt --use-agent
