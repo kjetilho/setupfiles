@@ -516,7 +516,11 @@ g() {
             do
                 for m in $HOME/$p
                 do
-                    [ -d "$m" ] && cd "$m" && return
+                    case "$m" in
+                         $HOME/*"$2"*)
+                             [ -d "$m" ] && cd "$m" && return
+                             ;;
+                    esac
                 done
             done
             ;;
