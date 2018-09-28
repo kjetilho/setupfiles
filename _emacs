@@ -103,7 +103,10 @@
  '(line-move-visual nil)
  '(mm-text-html-renderer (quote w3m))
  '(package-selected-packages (quote (markdown-toc markdown-mode use-package)))
- '(safe-local-variable-values (quote ((puppet-indent-level . 4))))
+ '(safe-local-variable-values
+   (quote
+    ((puppet-indent-level . 8)
+     (puppet-indent-level . 4))))
  '(select-enable-clipboard t)
  '(send-mail-function (quote sendmail-send-it))
  '(user-mail-address "kjetil.homme@redpill-linpro.com"))
