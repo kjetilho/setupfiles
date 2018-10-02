@@ -32,6 +32,7 @@ find . \( \( -name .git -o -name '*.swp' -o -name '*~' -o -name '*#' -o -name su
                 if ! ssh -V | grep -q OpenSSH_6
                 then
                     sed "s/#OLD //" < $path > $dest
+                    sed "/#OLD .*/d" < $path > $dest-old
                 fi
 		find $HOME/.ssh -perm /077 -print -exec chmod go-rwx {} +
 		continue

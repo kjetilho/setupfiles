@@ -267,8 +267,14 @@ bind "set revert-all-at-newline On"
 bind 'Control-g: "git branch\n"'
 
 ssh() {
+    local conf=$HOME/.ssh/config
     printf '\e]0;%s\a' "$1" >&2
-    env TERM=xterm ssh -F $HOME/.ssh/config "$@"
+
+    case $HOSTNAME in
+         login-osl1)
+             conf="${conf}-old" ;;
+    esac
+    env TERM=xterm ssh -F "$conf" "$@"
 }
 
 cssh() {
