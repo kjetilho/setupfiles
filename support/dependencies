@@ -1,6 +1,6 @@
 nyttige ting å ha installert:
 
-basis:               i3 network-manager-applet emacs subversion mosh xscreensaver
+basis:               i3 network-manager-applet dunst emacs subversion mosh xscreensaver
 for reset-resources: xorg-x11-resutils
 for myi3status:      perl-JSON
 for activate-window: xdotool wmctrl
