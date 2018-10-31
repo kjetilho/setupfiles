@@ -3,13 +3,31 @@
 use warnings;
 use strict;
 use utf8;
+use Encode qw(decode encode);
 use charnames qw(:full);
+use Getopt::Long;
+
+sub usage {
+    print STDERR "Usage: $0 [--octal] [--utf8]\n";
+    exit(64);
+}
+
+my ($octal, $utf8);
+
+GetOptions(
+    'octal|o' => \$octal,
+    'utf8|U' => \$utf8,
+    ) or usage();
+
+my $collect_unicode_octets;
 
 for (@ARGV) {
     my $code;
     if (/^0x[0-9a-f]+$/i || /^0b[01]+$/ || /^\d+$/) {
-        my $code = /^0/ ? oct($_) : $_;
-        if ($code <= 0x10FFFD && defined charnames::viacode($code)) {
+        my $code = (/^0/ || $octal) ? oct($_) : $_;
+        if ($utf8) {
+            $collect_unicode_octets .= pack('C', $code);
+        } elsif ($code <= 0x10FFFD && defined charnames::viacode($code)) {
             if ($code <= 0xff) {
                 printf("%7s 0%03o %5d 0b%08b %c   %s\n",
                        fmt_hex($code), ($code)x4, charnames::viacode($code));
@@ -30,15 +48,22 @@ for (@ARGV) {
             printf("U+%05X %7d\n", ($code)x2);
         }
     } else {
-        for (split //) {
-            my $code = ord($_);
-            if ($code <= 255) {
-                printf("%7s 0%03o %5d 0b%08b %c   %s\n",
-                       fmt_hex($code), ($code)x4, charnames::viacode($code));
-            } else {
-                printf("U+%05X    %7d %10s %c   %s\n",
-                       ($code)x2, '', $code, charnames::viacode($code));
-            }
+        print_string($_);
+    }
+}
+if ($utf8) {
+    print_string(decode('utf8', $collect_unicode_octets));
+}
+
+sub print_string {
+    for (split(//, $_[0])) {
+        my $code = ord($_);
+        if ($code <= 255) {
+            printf("%7s 0%03o %5d 0b%08b %c   %s\n",
+                   fmt_hex($code), ($code)x4, charnames::viacode($code));
+        } else {
+            printf("U+%05X    %7d %10s %c   %s\n",
+                   ($code)x2, '', $code, charnames::viacode($code));
         }
     }
 }
