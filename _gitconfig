@@ -13,6 +13,7 @@
         lol = log --graph --abbrev-commit --date=relative --decorate
         lola = log --graph --abbrev-commit --date=relative --decorate --all
         patch = !git --no-pager diff --no-color
+	co = checkout
 
 [core]
 	excludesfile = /home/kjetilho/.gitignore_global
