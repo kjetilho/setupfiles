@@ -67,7 +67,7 @@ if [ -e ~/.ssh/config ]; then
 fi
 complete -r
 complete -W "${hosts[*]}" ssh ssh-keygen ping ping6 host showmount mtr traceroute vlan cssh console
-complete -W "${hosts[*]}" -o default scp rsync bacula-conf
+complete -W "${hosts[*]}" -o default scp rsync bacula-conf thruk
 
 for comp in /usr/share/bash-completion/completions/pass /etc/bash_completion.d/password-store
 do
