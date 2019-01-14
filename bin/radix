@@ -12,12 +12,17 @@ sub usage {
     exit(64);
 }
 
-my ($octal, $utf8);
+my ($octal, $utf8, $compose);
 
 GetOptions(
     'octal|o' => \$octal,
     'utf8|U' => \$utf8,
+    'compose|C' => \$compose,
     ) or usage();
+
+if ($compose) {
+    $compose = read_compose_table();
+}
 
 my $collect_unicode_octets;
 
@@ -30,10 +35,10 @@ for (@ARGV) {
         } elsif ($code <= 0x10FFFD && defined charnames::viacode($code)) {
             if ($code <= 0xff) {
                 printf("%7s 0%03o %5d 0b%08b %c   %s\n",
-                       fmt_hex($code), ($code)x4, charnames::viacode($code));
+                       fmt_hex($code), ($code)x4, charname($code));
             } else {
                 printf("%7s   %8d            %c   %s\n",
-                       fmt_hex($code), ($code)x2, charnames::viacode($code));
+                       fmt_hex($code), ($code)x2, charname($code));
             }
         } else {
             printf("%7s %7d %s\n",
@@ -43,7 +48,7 @@ for (@ARGV) {
         my $code = hex($1);
         if ($code <= 0x10FFFD && defined charnames::viacode($code)) {
             printf("U+%05X %7d %10s %c   %s\n",
-                   ($code)x2, '', $code, charnames::viacode($code));
+                   ($code)x2, '', $code, charname($code));
         } else {
             printf("U+%05X %7d\n", ($code)x2);
         }
@@ -60,10 +65,10 @@ sub print_string {
         my $code = ord($_);
         if ($code <= 255) {
             printf("%7s 0%03o %5d 0b%08b %c   %s\n",
-                   fmt_hex($code), ($code)x4, charnames::viacode($code));
+                   fmt_hex($code), ($code)x4, charname($code));
         } else {
             printf("U+%05X    %7d %10s %c   %s\n",
-                   ($code)x2, '', $code, charnames::viacode($code));
+                   ($code)x2, '', $code, charname($code));
         }
     }
 }
@@ -81,4 +86,35 @@ sub fmt_human {
 
 sub fmt_hex {
     sprintf("0x%X", shift);
+}
+
+sub charname {
+    my $code = shift;
+
+    my $name = charnames::viacode($code);
+    return unless defined $name;
+
+    if ($compose) {
+        my $symbol = sprintf("%c", $code);
+        $name .= " (" . join("|", @{$compose->{$_}}) . ")"
+            if defined $compose->{$symbol};
+    }
+    return $name;
+}
+
+sub read_compose_table {
+    my $compose_file = '/usr/share/X11/locale/en_US.UTF-8/Compose';
+    open(my $f, $compose_file)
+        or return warn "$compose_file: $!\n";
+    my %table;
+    while (<$f>) {
+        if (/^<Multi_key>\s+(.*?)\s+:\s*"(.*?)"/) {
+            my ($keys, $symbol) = ($1, $2);
+            $keys =~ s/[<>]//g;
+            $table{$symbol} ||= [];
+            push(@{$table{$symbol}}, $keys);
+        }
+    }
+    close($f);
+    return \%table;
 }
