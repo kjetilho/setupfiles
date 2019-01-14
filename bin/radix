@@ -96,7 +96,7 @@ sub charname {
 
     if ($compose) {
         my $symbol = sprintf("%c", $code);
-        $name .= " (" . join("|", @{$compose->{$_}}) . ")"
+        $name .= " (" . join("|", @{$compose->{$symbol}}) . ")"
             if defined $compose->{$symbol};
     }
     return $name;
