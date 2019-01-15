@@ -534,9 +534,9 @@ g() {
 }
 gclone() {
     url="git@git.i.bitbit.net:$1.git"
-    dir=$(dirname "$1")
+    dir=$(dirname ~/git/git.i.bitbit.net/$1)
     mkdir -p $dir
-    cd ~/git/git.i.bitbit.net/$dir &&
+    cd $dir &&
 	git clone $url &&
 	cd ~/git/git.i.bitbit.net/$1
 }
