@@ -98,7 +98,11 @@ _reset='\[\e[0m\]'
 case $TERM in
 	linux)	PS1="\[${_status}\]${_prompt}${_reset} "
 		;;
-	xterm*|rxvt*)	PS1="\[${_rl}${_tb}${_status}\]${_prompt}${_reset} "
+	xterm*|rxvt*)
+                _C_() { :; }
+                PROMPT_COMMAND=_C_
+                trap '_C_() { echo "New window size: ${COLUMNS}x${LINES}"; _C_() { :; } } ' winch
+                PS1="\[${_rl}${_tb}${_status}\]${_prompt}${_reset} "
 		;;
 	*)	PS1="${_prompt} "
 		;;
