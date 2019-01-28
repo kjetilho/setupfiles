@@ -20,7 +20,7 @@
 	pager = less -F
 
 [pager]
-	diff = diff-so-fancy | less -FRX -p '^(Date|added|deleted|modified): '
+	diff = diff-so-fancy | less -RFX
 [diff-so-fancy]
 	stripLeadingSymbols = true
 
