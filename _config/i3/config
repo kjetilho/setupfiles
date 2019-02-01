@@ -34,6 +34,7 @@ for_window [title="gimp"] floating enable
 for_window [title="pinentry-gtk-2"] floating enable
 for_window [instance="sun-awt"] floating enable
 for_window [class="Firefox"] floating enable
+for_window [class="Nm-connection-editor"] floating enable
 for_window [class="Firefox" instance="Navigator"] floating disable
 
 # start a terminal
