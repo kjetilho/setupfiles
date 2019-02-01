@@ -544,6 +544,14 @@ gclone() {
 	git clone $url &&
 	cd ~/git/git.i.bitbit.net/$1
 }
+ghclone() {
+    url="git@github.com:$1.git"
+    dir=$(dirname ~/git/github.com/$1)
+    mkdir -p $dir
+    cd $dir &&
+	git clone $url &&
+	cd ~/git/github.com/$1
+}
 
 upd() {
     (cd $HOME/svn
