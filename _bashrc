@@ -99,9 +99,13 @@ case $TERM in
 	linux)	PS1="\[${_status}\]${_prompt}${_reset} "
 		;;
 	xterm*|rxvt*)
-                _C_() { :; }
-                PROMPT_COMMAND=_C_
-                trap '_C_() { echo "New window size: ${COLUMNS}x${LINES}"; _C_() { :; } } ' winch
+                # Store exit status in _S_ (if error, PIPESTATUS).
+                # Enclose it in {}, this makes it easy to remove "{0} ".
+                _func_PC='_PC_() { _S_="{${?/#[1-9]*/${PIPESTATUS[@]}}""} "; }'
+                eval $_func_PC
+                PROMPT_COMMAND=_PC_
+                trap '_PC_() { echo "New window size: ${COLUMNS}x${LINES}"; eval $_func_PC; } ' winch
+                _prompt=': ${_S_/#\{0\} /}[\u@\h \w];'
                 PS1="\[${_rl}${_tb}${_status}\]${_prompt}${_reset} "
 		;;
 	*)	PS1="${_prompt} "
