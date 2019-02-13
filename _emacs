@@ -57,6 +57,7 @@
 (global-set-key "\C-cg" 'goto-line)
 (global-set-key "\C-x%" 'query-replace-regexp)
 (global-set-key "\C-ce" 'eval-region)
+(global-set-key "\C-cv" 'set-variable)
 
 (defun create-subdir ()
   "Create a subdirectory using the current contents of the minibuffer"
