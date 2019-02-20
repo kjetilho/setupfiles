@@ -197,6 +197,10 @@ b() {
         fi
     )
 }
+B() {
+    case $1 in [0-9]*) version=$1; shift;; *) version=3;; esac
+    docker run -v $(pwd):/tmp/test:rw -w /tmp/test containers.i.bitbit.net/ci-images/puppet-test:$version "$@"
+}
 
 bgem() {
     local gem="$1"; shift
