@@ -1,6 +1,9 @@
 #! /bin/bash
 
+set -e
+
 cd $(dirname $0)/..
+base=$(pwd)
 
 for path in $(find */ \! -name support -type d)
 do
@@ -40,3 +43,11 @@ find . \( \( -name .git -o -name '*.swp' -o -name '*~' -o -name '*#' -o -name su
 	esac
 	ln -v -s -f `pwd`/$path $dest
     done
+
+cd ${base}/support
+for prof in $HOME/.mozilla/firefox/*/prefs.js
+do
+    # no use with relative link here, since .mozilla/firefox is not in
+    # NFS home.
+    command ln -v -s -f `pwd`/firefox/chrome $(dirname "$prof")
+done
