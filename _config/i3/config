@@ -23,6 +23,8 @@ font pango:DejaVu Sans Mono 8
 # X core fonts rendering does not support right-to-left and this being a bitmap
 # font, it doesn’t scale on retina/hidpi displays.
 
+popup_during_fullscreen leave_fullscreen
+
 for_window [class=".*"] title_format "%title <i>[%class:%instance]</i>"
 
 # Use Mouse+$mod to drag floating windows to their wanted position
@@ -94,13 +96,14 @@ bindsym $mod+v split v
 bindsym $mod+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
-bindsym $mod+Shift+s layout stacking
-bindsym $mod+Shift+w layout tabbed
-bindsym $mod+Shift+e layout toggle split
+# bindsym $mod+Shift+s layout stacking
+# bindsym $mod+Shift+w layout tabbed
+# bindsym $mod+Shift+e layout toggle split
 
 # activate interesting windows
 bindsym $mod+bar [instance="irssi"] focus
 bindsym $mod+e [class="Emacs"] focus
+bindsym $mod+Control+e [class="Evolution"] focus
 bindsym $mod+t [class="Thunderbird"] focus
 bindsym $mod+m [class="Mattermost"] focus
 bindsym XF86Mail [class="Evolution"] focus
@@ -245,6 +248,13 @@ bindsym $mod+Shift+KP_Subtract exec "adjust_volume Master toggle"
 
 bindsym --release $mod+Shift+Print  exec "grabb --all"
 bindsym --release $mod+Print        exec "grabb --select"
+
+assign [class="Emacs"] 4
+assign [class="Firefox"] 11
+assign [class="Evolution"] 17
+assign [class="Thunderbird"] 18
+assign [class="Mattermost"] 19
+assign [instance="irssi"] 1
 
 exec dunst
 exec reset-resources
