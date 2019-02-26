@@ -1,0 +1,7 @@
+#! /usr/bin/env ruby
+
+require 'yaml'
+require 'json'
+
+data = YAML::load_file(ARGV[0])
+print JSON::pretty_generate(data), "\n"
