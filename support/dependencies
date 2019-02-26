@@ -27,3 +27,5 @@ replacebell comes from
 
 Firefox:
  * turn off web search in address bar: about:config, keyword.enable -> false
+
+compositor?  xcompmgr -c -t-6 -l-6 -o.1
