@@ -37,6 +37,7 @@
 (setq visible-bell t)
 (setq mouse-yank-at-point t)
 (transient-mark-mode -1)
+(ido-mode 'buffers)
 
 (setq sentence-end-double-space t)
 (setq calendar-week-start-day 1)
