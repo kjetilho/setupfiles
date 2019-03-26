@@ -102,7 +102,9 @@
  ;; If there is more than one, they won't work right.
  '(canlock-password "de2a748f5e19321b59207fb48fa91a734912ce77")
  '(gnus-summary-thread-gathering-function (quote gnus-gather-threads-by-references))
+ '(ido-default-buffer-method (quote selected-window))
  '(line-move-visual nil)
+ '(markdown-toc-user-toc-structure-manipulation-fn (quote cdr))
  '(mm-text-html-renderer (quote w3m))
  '(package-selected-packages (quote (markdown-toc markdown-mode use-package)))
  '(safe-local-variable-values
