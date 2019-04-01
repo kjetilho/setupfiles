@@ -624,4 +624,5 @@ osinit() {
         fi
     fi
 }
+complete -W "$(cd $HOME/.config/openstack; echo *-openrc.sh | sed s/-openrc.sh//g)" osinit
 alias r='. ~/.bashrc'
