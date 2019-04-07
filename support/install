@@ -44,6 +44,7 @@ find . \( \( -name .git -o -name '*.swp' -o -name '*~' -o -name '*#' -o -name su
 	ln -v -s -f `pwd`/$path $dest
     done
 
+cd $HOME/lib/X11/fonts && mkfontdir && mkfontscale
 cd ${base}/support
 for prof in $HOME/.mozilla/firefox/*/prefs.js
 do
