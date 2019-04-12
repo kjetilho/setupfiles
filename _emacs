@@ -48,6 +48,18 @@
 (setq ruby-indent-level 2)
 (add-hook 'c-mode-common-hook (lambda () (c-set-style "awk")))
 
+(defun kjetilho-set-indent-level (&optional arg)
+  "Set indent level to prefix argument."
+  (interactive "P")
+  (let ((level (or arg 4)))
+    (set (make-local-variable
+          (pcase major-mode
+            ('perl-mode 'perl-indent-level)
+            ('cperl-mode 'cperl-indent-level)
+            ('puppet-mode 'puppet-indent-level)
+            ('ruby-mode 'ruby-indent-level)))
+         level)))
+
 (if (not window-system)
     (add-hook 'puppet-mode-hook
               (lambda() (define-key puppet-mode-map "\r" 'newline))))
@@ -59,6 +71,7 @@
 (global-set-key "\C-x%" 'query-replace-regexp)
 (global-set-key "\C-ce" 'eval-region)
 (global-set-key "\C-cv" 'set-variable)
+(global-set-key "\C-ci" 'kjetilho-set-indent-level)
 
 (defun create-subdir ()
   "Create a subdirectory using the current contents of the minibuffer"
