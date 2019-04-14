@@ -37,6 +37,7 @@ for_window [title="pinentry-gtk-2"] floating enable
 for_window [instance="sun-awt"] floating enable
 for_window [class="Firefox"] floating enable
 for_window [class="Nm-connection-editor"] floating enable
+for_window [class="Blueman-manager"] floating enable
 for_window [class="Firefox" instance="Navigator"] floating disable
 
 # start a terminal
@@ -260,4 +261,5 @@ exec dunst
 exec reset-resources
 exec nm-applet
 exec /home/kjetilho/bin/hhkb
+exec blueman-tray
 exec xscreensaver
