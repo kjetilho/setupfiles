@@ -25,6 +25,8 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
+(use-package puppet-mode
+  :ensure t)
 (use-package markdown-mode
   :ensure t)
 (use-package markdown-toc
