@@ -121,7 +121,9 @@
  '(line-move-visual nil)
  '(markdown-toc-user-toc-structure-manipulation-fn (quote cdr))
  '(mm-text-html-renderer (quote w3m))
- '(package-selected-packages (quote (markdown-toc markdown-mode use-package)))
+ '(package-selected-packages
+   (quote
+    (puppet-mode markdown-toc markdown-mode use-package)))
  '(safe-local-variable-values
    (quote
     ((puppet-indent-level . 8)
