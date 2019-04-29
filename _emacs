@@ -138,4 +138,5 @@
  '(send-mail-function (quote sendmail-send-it))
  '(user-mail-address "kjetil.homme@redpill-linpro.com"))
 
+;; use load-theme to switch to lys-solarized
 (put 'narrow-to-page 'disabled nil)
