@@ -107,15 +107,21 @@
                             (nnimap-article-ranges articles))
           (nnimap-command "EXPUNGE")))))
 
-
-
 (require 'cl)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ansi-color-faces-vector
+   [default default default italic underline success warning error])
+ '(ansi-color-names-vector
+   ["black" "red3" "ForestGreen" "yellow3" "blue" "magenta3" "DeepSkyBlue" "gray50"])
  '(canlock-password "de2a748f5e19321b59207fb48fa91a734912ce77")
+ '(custom-enabled-themes (quote (midnightblue)))
+ '(custom-safe-themes
+   (quote
+    ("3ff5fe0cd9fa2aaa1119882cdd782f49107c5b9b22b374b68fa080e6a9f80462" "d580783ef5f70d2d9fa438c8d553caf6a74691dfef392f8f7230257dcec591c7" "b8d535b81f1fd753456f63c30c6a967286933c0fa28f8b3194ccd84d5d57804d" "00c26ff7742ff0d4a66a3c20628a98c072d105a6ddedeb3c4ef20547efac7646" default)))
  '(gnus-summary-thread-gathering-function (quote gnus-gather-threads-by-references))
  '(ido-default-buffer-method (quote selected-window))
  '(line-move-visual nil)
@@ -131,11 +137,5 @@
  '(select-enable-clipboard t)
  '(send-mail-function (quote sendmail-send-it))
  '(user-mail-address "kjetil.homme@redpill-linpro.com"))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :background "MidnightBlue" :foreground "White" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 100 :width normal :foundry "unknown" :family "DejaVu Sans Mono")))))
 
 (put 'narrow-to-page 'disabled nil)
