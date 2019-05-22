@@ -59,7 +59,9 @@
             ('perl-mode 'perl-indent-level)
             ('cperl-mode 'cperl-indent-level)
             ('puppet-mode 'puppet-indent-level)
-            ('ruby-mode 'ruby-indent-level)))
+            ('ruby-mode 'ruby-indent-level)
+            ('c-mode 'c-basic-offset)
+            ('sh-mode 'sh-basic-offset)))
          level)))
 
 (if (not window-system)
