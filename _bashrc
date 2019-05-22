@@ -545,7 +545,7 @@ g() {
     esac
 }
 gclone() {
-    url="git@git.i.bitbit.net:$1.git"
+    url="git@git.i.bitbit.net:${1%/}.git"
     dir=$(dirname ~/git/git.i.bitbit.net/$1)
     mkdir -p $dir
     cd $dir &&
@@ -553,7 +553,7 @@ gclone() {
 	cd ~/git/git.i.bitbit.net/$1
 }
 ghclone() {
-    url="git@github.com:$1.git"
+    url="git@github.com:${1%/}.git"
     dir=$(dirname ~/git/github.com/$1)
     mkdir -p $dir
     cd $dir &&
