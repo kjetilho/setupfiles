@@ -66,7 +66,7 @@ if [ -e ~/.ssh/config ]; then
     hosts=(${hosts[*]} `awk '/^Host [a-z0-9.-]+ *$/ { print $2 }' ~/.ssh/config`)
 fi
 complete -r
-complete -W "${hosts[*]}" ssh ssh-keygen ping ping6 host showmount mtr traceroute vlan cssh console
+complete -W "${hosts[*]}" ssh ssh-keygen telnet nc ping ping6 host showmount mtr traceroute vlan cssh console
 complete -W "${hosts[*]}" -o default scp rsync bacula-conf thruk
 
 for comp in /usr/share/bash-completion/completions/pass /etc/bash_completion.d/password-store
@@ -77,6 +77,29 @@ do
         break
     fi
 done
+
+scp() {
+    local -a args=("$@")
+    local last_arg=$(( ${#args[@]} - 1))
+    case ${args[$(( last_arg - 1))]} in
+        *:*)
+            # okay, penultimate argument is a remote source, don't
+            # change target argument.
+            ;;
+        *)
+            case ${args[$last_arg]} in
+                *:*|*/*)
+                    # last argument is a remote source
+                    ;;
+                *)
+                    echo "(fixing destination)" >&2
+                    args[$last_arg]="${args[$last_arg]}:"
+                    ;;
+            esac
+            ;;
+    esac
+    command scp ${args[@]}
+}
 
 if [ -e $HOME/.work-password-store ]
 then
