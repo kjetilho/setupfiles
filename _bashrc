@@ -196,6 +196,14 @@ bN() {
     case $1 in
 	rake|rspec) cmd=("${cmd[@]}" exec) ;;
     esac
+    ourbase=~/git/git.i.bitbit.net/puppet-ms0/basemodules_common/modules/
+    apibase=~/git/git.i.bitbit.net/puppet-ms4/api_common/modules/
+    case $PWD in
+        */api_*)
+            export MODULEPATH=design:modules:$apibase:$ourbase ;;
+        *)
+            export MODULEPATH=design:modules:$ourbase ;;
+    esac
     env PUPPET_VERSION="~> $ver.0" PUPPET_GEM_VERSION="~> $ver.0" "${cmd[@]}" "$@"
 }
 b3() { bN 3 "$@"; }
