@@ -194,7 +194,7 @@ bN() {
         env PUPPET_VERSION="~> $ver.0" PUPPET_GEM_VERSION="~> $ver.0" bundle install --path=$HOME/.cache/bundler/
     fi
     case $1 in
-	rake|rspec) cmd=("${cmd[@]}" exec) ;;
+	rake|rspec|gem) cmd=("${cmd[@]}" exec) ;;
     esac
     ourbase=~/git/git.i.bitbit.net/puppet-ms0/basemodules_common/modules/
     apibase=~/git/git.i.bitbit.net/puppet-ms4/api_common/modules/
@@ -214,19 +214,9 @@ b() {
     (
         if [ -r Gemfile.lock ]
         then
-            local ver=$(awk '$1 == "puppet" { gsub("[(]|\\..*", "", $2); print $2; exit }' Gemfile.lock)
-            if [ "$ver" ]
-            then
-                export PUPPET_VERSION="~> $ver.0" PUPPET_GEM_VERSION="~> $ver.0"
-            fi
-            local exec=""
-            case $1 in
-	        rake|rspec|gem) exec=exec ;;
-            esac
-            bundle $exec "$@"
-        else
-            bN 3 "$@"
+            version=$(awk '$1 == "puppet" { gsub("[(]|\\..*", "", $2); print $2; exit }' Gemfile.lock)
         fi
+        bN ${version-3} "$@"
     )
 }
 B() {
