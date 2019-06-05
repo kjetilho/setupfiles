@@ -23,7 +23,21 @@ fi
 
 mkdir -p $HOME/lib/X11/fonts $HOME/lib/elisp $HOME/.config/openstack
 
-find . \( \( -name .git -o -name '*.swp' -o -name '*~' -o -name '*#*' -o -name '.?*' -o -name support \) -prune \) -o \( -type f -o -type l \) -print |
+eval $(xrandr 2>/dev/null | awk '/^Screen 0/ {printf("XWIDTH=%d XHEIGHT=%d\n", $8, $10)}')
+
+find . -name '*.erb' -print |
+    cut -c3- |
+    while read path
+    do
+          base=${path%.erb}
+          if ! [ -f "$base" -a "$base" -nt "$path" ]
+          then
+              echo "Updating $base from $path"
+              erb -T - "$path" > "${base}.tmp" && mv "${base}.tmp" "$base"
+          fi
+    done
+
+find . \( \( -name .git -o -name '*.swp' -o -name '*~' -o -name '*#*' -o -name '.?*' -o -name '*.erb' -o -name support \) -prune \) -o \( -type f -o -type l \) -print |
     cut -c3- |
     while read path
     do
