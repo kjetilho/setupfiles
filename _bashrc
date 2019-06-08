@@ -244,6 +244,10 @@ bgem() {
     b gem contents "$gem" ${args[*]} | grep -v /spec/
 }
 
+j() {
+    jq ".[]|${1-.certname}"
+}
+
 grep_options="--directories=skip --colour=auto"
 alias grep="grep $grep_options"
 alias egrep="egrep $grep_options"
