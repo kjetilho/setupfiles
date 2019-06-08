@@ -199,7 +199,7 @@ bN() {
     ourbase=~/git/git.i.bitbit.net/puppet-ms0/basemodules_common/modules/
     apibase=~/git/git.i.bitbit.net/puppet-ms4/api_common/modules/
     case $PWD in
-        */api_*)
+        */api*)
             export MODULEPATH=design:modules:$apibase:$ourbase ;;
         *)
             export MODULEPATH=design:modules:$ourbase ;;
@@ -221,6 +221,8 @@ b() {
 }
 B() {
     case $1 in [0-9]*) version=$1; shift;; *) version=3;; esac
+    chmod 1777 spec/fixtures/manifests spec/fixtures/modules
+    rm -f spec/fixtures/manifests/site.pp spec/fixtures/modules/${PWD##*/}
     docker run -v $(pwd):/tmp/test:rw -w /tmp/test containers.i.bitbit.net/ci-images/puppet-test:$version "$@"
 }
 
