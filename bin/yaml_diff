@@ -1,0 +1,149 @@
+#! /usr/bin/perl
+
+use warnings;
+use strict;
+use YAML;
+use Getopt::Long;
+use Algorithm::Diff qw(sdiff);
+
+#$YAML::UseHeader = 0;
+
+sub usage() {
+    print STDERR <<"END";
+Usage: $0 [OPTIONS] FILE_A FILE_B
+
+-a  Show keys only in FILE_A
+-b  Show keys only in FILE_B
+-c  Show keys common to FILE_A and FILE_B, with same values
+-d  Show keys common to FILE_A and FILE_B, but with differences
+END
+    
+    exit(64);
+}
+
+
+my %keep = ('a' => 0, 'b' => 0, 'common' => 0, 'diff' => 0);
+
+GetOptions('help|?' => sub { usage },
+           'a' => sub { $keep{a} = 1 },
+           'b' => sub { $keep{b} = 1 },
+           'c' => sub { $keep{common} = 1 },
+           'd' => sub { $keep{diff} = 1 },
+    ) or usage();
+usage() unless @ARGV == 2;
+
+my ($file_a, $file_b) = @ARGV;
+
+my $a = YAML::LoadFile($file_a);
+my $b = YAML::LoadFile($file_b);
+
+
+if ($keep{a}) {
+    my %just_a;
+    for my $k (keys %{$a}) {
+        $just_a{$k} = $a->{$k} unless defined $b->{$k};
+    }
+    print "# Only in $file_a:\n";
+    print YAML::Dump(\%just_a) if keys %just_a;
+}
+
+if ($keep{b}) {
+    my %just_b;
+    for my $k (keys %{$b}) {
+        $just_b{$k} = $b->{$k} unless defined $a->{$k};
+    }
+    print "# Only in $file_b:\n";
+    print YAML::Dump(\%just_b) if keys %just_b;
+}
+
+my (%common, %diff_a, %diff_b);
+for my $k (keys %{$a}) {
+    if (defined $b->{$k}) {
+        my $val_a = YAML::Dump($a->{$k});
+        my $val_b = YAML::Dump($b->{$k});
+        if ($val_a eq $val_b) {
+            $common{$k} = $a->{$k};
+        } else {
+            $diff_a{$k} = substr($val_a, 3);
+            $diff_b{$k} = substr($val_b, 3);
+        }
+    }
+}
+if ($keep{common}) {
+    print "# Same in $file_a and $file_b:\n";
+    print YAML::Dump(\%common) if keys %common;
+}
+
+if ($keep{diff} && keys %diff_a) {
+    print "# Differences between $file_a and $file_b\n";
+
+    # This code is lifted from my check_changes script with some adjustments
+    for my $k (sort keys %diff_a) {
+        my @lines_a = split(/\n/, $diff_a{$k});
+        my @lines_b = split(/\n/, $diff_b{$k});
+        
+        my @diff_list = sdiff(\@lines_a, \@lines_b);
+        my %report;
+        my %kw = (
+            'u' => 'unchanged',
+            'c' => 'changed',
+            '+' => 'added',
+            '-' => 'removed',
+            );
+        my @diff = ();
+        my $lineno_new = 0;
+        my $lineno_old = 0;
+
+        for my $entry (@diff_list) {
+            my $type = $kw{$entry->[0]};
+            ++$report{$type};
+            if ($type eq 'unchanged') {
+                ++$lineno_old;
+                ++$lineno_new;
+            } elsif ($type eq 'changed') {
+                # Calculate diff within the line, with format -«old»+«new»
+                my @old_letters = grep { defined && $_ ne '' } split(/(\b|\s+)/, $entry->[1]);
+                my @new_letters = grep { defined && $_ ne '' } split(/(\b|\s+)/, $entry->[2]);
+                my @letter_diff = sdiff(\@old_letters, \@new_letters);
+                my $del = '';
+                my $add = '';
+                my $line = '';
+                my $changes = 0;
+                for my $e (@letter_diff) {
+                    my $t = $kw{$e->[0]};
+                    if ($t eq 'unchanged') {
+                        $line .= "-«$del»", ++$changes if $del ne '';
+                        $line .= "+«$add»", ++$changes if $add ne '';
+                        $del = $add = '';
+                        $line .= $e->[1];
+                    } elsif ($t eq 'changed') {
+                        $del .= $e->[1];
+                        $add .= $e->[2];
+                    } elsif ($t eq 'added') {
+                        $add .= $e->[2];
+                    } elsif ($t eq 'removed') {
+                        $del .= $e->[1];
+                    }
+                }
+                $line .= "-«$del»", ++$changes if $del ne '';
+                $line .= "+«$add»", ++$changes if $add ne '';
+                # Don't use the word level diff if it is complex
+                if ($changes <= 4) {
+                    $lineno_old++;
+                    push(@diff, [ $lineno_new++, "±" . $line ]);
+                } else {
+                    push(@diff, [ $lineno_old++, "-" . $entry->[1] ]);
+                    push(@diff, [ $lineno_new++, "+" . $entry->[2] ]);
+                }
+            } elsif ($type eq 'added') {
+                push(@diff, [ $lineno_new++, "+" . $entry->[2] ]);
+            } elsif ($type eq 'removed') {
+                push(@diff, [ $lineno_old++, "-" . $entry->[1] ]);
+            }
+        }
+        # @diff = sort { $a->[0] <=> $b->[0] } @diff;
+        @diff = map { "line " . $_->[0] . ":" . $_->[1] } @diff;
+        print "$k:\n  ", join("\n  ", @diff), "\n";
+    }
+}
+    
