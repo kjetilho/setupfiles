@@ -652,5 +652,9 @@ osinit() {
         fi
     fi
 }
+2a02() {
+    dig axfr 0.c.0.0.2.0.a.2.ip6.arpa. | perl -pe 's/(\S+)\.ip6\.arpa\./reverse($1)/e' | grep ^2 | sort
+}
+
 complete -W "$(cd $HOME/.config/openstack; echo *-openrc.sh | sed s/-openrc.sh//g)" osinit
 alias r='. ~/.bashrc'
