@@ -183,11 +183,16 @@ then
 fi
 bN() {
     declare ver="$1";
+    declare rubyver=2.1.10
     declare -a cmd=(bundle)
     shift;
-    if [ ! -r .ruby-version ]
+    case $ver in
+        3|4) rubyver="2.1.10" ;;
+        *)   rubyver="2.3.3" ;;
+    esac
+    if [ ! -r .ruby-version -o $(< .ruby-version) != $rubyver ]
     then
-        rbenv local 2.1.10
+        rbenv local $rubyver
     fi
     if [ ! -r .bundle/config ]
     then
@@ -653,7 +658,8 @@ osinit() {
     fi
 }
 2a02() {
-    dig axfr 0.c.0.0.2.0.a.2.ip6.arpa. | perl -pe 's/(\S+)\.ip6\.arpa\./reverse($1)/e' | grep ^2 | sort
+    dig axfr 0.c.0.0.2.0.a.2.ip6.arpa. @ns-foo.i.bitbit.net |
+        perl -pe 's/(\S+)\.ip6\.arpa\./reverse($1)/e' | grep ^2 | sort
 }
 
 complete -W "$(cd $HOME/.config/openstack; echo *-openrc.sh | sed s/-openrc.sh//g)" osinit
