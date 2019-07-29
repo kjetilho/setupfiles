@@ -103,9 +103,10 @@ bindsym $mod+f fullscreen toggle
 
 # activate interesting windows
 bindsym $mod+bar [instance="irssi"] focus
+bindsym $mod+Escape [instance="irssi"] focus
 bindsym $mod+e [class="Emacs"] focus
 bindsym $mod+Control+e [class="Evolution"] focus
-bindsym $mod+t [class="Thunderbird"] focus
+bindsym $mod+t [class="Thunderbird" instance="Mail"] focus
 bindsym $mod+m [class="Mattermost"] focus
 bindsym XF86Mail [class="Evolution"] focus
 bindsym XF86HomePage [class="Firefox"] focus
