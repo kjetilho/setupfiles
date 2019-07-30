@@ -190,7 +190,7 @@ bN() {
         3|4) rubyver="2.1.10" ;;
         *)   rubyver="2.3.3" ;;
     esac
-    if [ ! -r .ruby-version -o $(< .ruby-version) != $rubyver ]
+    if [ ! -r .ruby-version ] || [ $(< .ruby-version) != $rubyver ]
     then
         rbenv local $rubyver
     fi
