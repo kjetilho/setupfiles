@@ -12,12 +12,12 @@
 (add-to-list 'load-path "~/lib/elisp")
 
 (require 'package)
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.org/packages/"))
+;; Reset to Emacs 26 default with
+;(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")))
+;(add-to-list 'package-archives
+;             '("melpa" . "http://melpa.org/packages/"))
 (add-to-list 'package-archives
              '("melpa-stable" . "https://stable.melpa.org/packages/"))
-(add-to-list 'package-archives
-             '("marmalade" . "http://marmalade-repo.org/packages/"))
 (package-initialize)
 
 ;; Bootstrap `use-package'
