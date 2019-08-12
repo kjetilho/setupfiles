@@ -201,11 +201,13 @@ bN() {
     case $1 in
 	rake|rspec|gem) cmd=("${cmd[@]}" exec) ;;
     esac
-    ourbase=~/git/git.i.bitbit.net/puppet-ms0/basemodules_common/modules/
-    apibase=~/git/git.i.bitbit.net/puppet-ms4/api_common/modules/
+    ourbase=~/git/git.i.bitbit.net/puppet-ms0/basemodules_common/modules
+    apibase=~/git/git.i.bitbit.net/puppet-ms4/api_common/modules
     case $PWD in
         */api*)
-            export MODULEPATH=design:modules:$apibase:$ourbase ;;
+            export MODULEPATH=design:modules:$apibase:$ourbase
+            echo "Adding API base to MODULEPATH: $MODULEPATH"
+            ;;
         *)
             export MODULEPATH=design:modules:$ourbase ;;
     esac
