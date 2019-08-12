@@ -7,6 +7,7 @@ for activate-window: xdotool wmctrl
 for setcursor:       libX11-devel
 for horse:           aspell-en aspell-no
 for grabb:           scrot zenity xclip
+for ranger:          ranger w3m-img
 
 for rbenv:
   git clone https://github.com/rbenv/rbenv.git ~/.rbenv
