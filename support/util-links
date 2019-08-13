@@ -1,0 +1,72 @@
+#! /bin/bash
+
+# Make symlinks for utilities in SVN or Git
+
+git_path="git/git.i.bitbit.net"
+svn_path="svn"
+
+mkdir -p ~/$git_path ~/$svn_path
+
+if [ ! -d ~/$svn_path/puppet ]
+then
+    cd ~/$svn_path
+    svn co svn+ssh://svn.i.bitbit.net/srv/svn/puppet/trunk puppet
+fi
+
+symlink() {
+    local target="$1" 
+    link=$HOME/bin/$(basename "$target")
+    if [ -L "$link" ] && [ $(readlink "$link") = "$target" ]
+    then
+        if [ "$VERBOSE" ]
+        then
+            echo "OK: $target"
+        fi
+    else
+        if [ -e "$link" -a ! -L "$link" ]
+        then
+            echo -n "Not a symlink: "; ls -l "$link"
+        else
+            ln -vsf "$target" "$link"
+        fi
+    fi
+}
+
+# Do Puppet SVN
+for m in modules/san/files/scripts/emcinfo \
+             modules/san/files/scripts/p2k-manage \
+             modules/san/files/scripts/zone-config
+do
+    symlink "../$svn_path/puppet/$m"
+done
+
+for m in puppet-ms0/bitbit_backup/design/profile/files/bareos/scripts/bacula-check \
+             puppet-ms0/bitbit_backup/design/profile/files/bareos/scripts/bacula-du \
+             puppet-ms0/bitbit_backup/design/profile/files/bareos/scripts/bacula-logs \
+             backup/bareos-osl/scripts/bacula-conf \
+             backup/bareos-osl/scripts/bacula-pw \
+             puppet-ms0/hieradata/utils/optional-repositories.pl \
+             puppet-ms0/bitbit_login/design/profile/files/utilities/hiera-lookup \
+             puppet-ms0/bitbit_login/design/profile/files/utilities/host-lookup \
+             puppet-ms0/bitbit_login/design/profile/files/utilities/ipv6-slaac \
+             puppet-ms0/bitbit_login/design/profile/files/utilities/ldap-lookup \
+             puppet-ms0/bitbit_login/design/profile/files/utilities/puppetdb \
+             puppet-ms0/bitbit_login/design/profile/files/utilities/thruk \
+             puppet-ms0/bitbit_login/design/profile/files/utilities/vlan
+do
+    repo=$(echo "$m" | cut -d/ -f1,2)
+    if [ ! -d ~/$git_path/$repo ]
+    then
+        echo "Cloning $repo ..."
+        (mkdir -p ~/$git_path/$(dirname $repo)
+         cd ~/$git_path/$(dirname $repo)
+         git clone "git@git.i.bitbit.net:${repo}.git"
+        )
+    fi
+    symlink "../$git_path/$m"
+done
+
+
+    
+
+             
