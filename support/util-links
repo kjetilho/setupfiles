@@ -14,8 +14,13 @@ then
 fi
 
 symlink() {
-    local target="$1" 
-    link=$HOME/bin/$(basename "$target")
+    local target="$1"
+    local link=$HOME/bin/$(basename "$target")
+
+    if [ -n "$2" ]
+    then
+        link="$2"
+    fi
     if [ -L "$link" ] && [ $(readlink "$link") = "$target" ]
     then
         if [ "$VERBOSE" ]
@@ -52,7 +57,8 @@ for m in puppet-ms0/bitbit_backup/design/profile/files/bareos/scripts/bacula-che
              puppet-ms0/bitbit_login/design/profile/files/utilities/ldap-lookup \
              puppet-ms0/bitbit_login/design/profile/files/utilities/puppetdb \
              puppet-ms0/bitbit_login/design/profile/files/utilities/thruk \
-             puppet-ms0/bitbit_login/design/profile/files/utilities/vlan
+             puppet-ms0/bitbit_login/design/profile/files/utilities/vlan \
+             secrets/pass/bin/pass
 do
     repo=$(echo "$m" | cut -d/ -f1,2)
     if [ ! -d ~/$git_path/$repo ]
@@ -66,7 +72,4 @@ do
     symlink "../$git_path/$m"
 done
 
-
-    
-
-             
+symlink "$git_path/secrets/pass" ~/.work-password-store
