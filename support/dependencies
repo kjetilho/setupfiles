@@ -1,13 +1,16 @@
+grep :: <<_SIGNING_OFF_ | sed "s/.*:: */sudo dnf install -y /"
+
 nyttige ting å ha installert:
 
-basis:               i3 network-manager-applet dunst emacs subversion mosh xscreensaver
-for reset-resources: xorg-x11-resutils
-for myi3status:      perl-JSON
-for activate-window: xdotool wmctrl
-for setcursor:       libX11-devel
-for horse:           aspell-en aspell-no
-for grabb:           scrot zenity xclip
-for ranger:          ranger w3m-img
+basis::               i3 network-manager-applet dunst emacs ruby subversion mosh xscreensaver
+for reset-resources:: xorg-x11-resutils
+for myi3status::      perl-JSON light
+for activate-window:: xdotool wmctrl
+for setcursor::       libX11-devel
+for horse::           aspell-en aspell-no
+for grabb::           scrot zenity xclip
+for ranger::          ranger w3m-img
+
 
 for rbenv:
   git clone https://github.com/rbenv/rbenv.git ~/.rbenv
@@ -30,3 +33,5 @@ Firefox:
  * turn off web search in address bar: about:config, keyword.enable -> false
 
 compositor?  xcompmgr -c -t-6 -l-6 -o.1
+
+_SIGNING_OFF_

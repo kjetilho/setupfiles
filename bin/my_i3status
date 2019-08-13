@@ -48,7 +48,7 @@ sub find_section {
 }
 
 sub brightness {
-    chomp(my $brightness = `chbacklight`);
+    chomp(my $brightness = `light`);
     return {"name" => "brightness 0", "full_text" => "[☼ ${brightness}%]"};
 }
 
