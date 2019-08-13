@@ -30,6 +30,7 @@
 (use-package markdown-mode
   :ensure t)
 (use-package markdown-toc
+  :ensure t
   :config (custom-set-variables '(markdown-toc-user-toc-structure-manipulation-fn 'cdr)))
 
 ;;(require 'ws-trim)
