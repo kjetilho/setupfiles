@@ -1,0 +1,4 @@
+#! /bin/bash
+
+light "$@"
+pkill -USR1 -x i3status

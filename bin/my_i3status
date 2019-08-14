@@ -11,7 +11,7 @@ $SIG{USR1} = undef;
 
 # See if this workstation has a directly attached display (== laptop)
 my $xrandr = `xrandr`;
-my $builtin_panel = $xrandr =~ /^LVDS-?\d+ connected/m;
+my $builtin_panel = $xrandr =~ /^(LVDS|eDP)-?\d+ connected/m;
 
 open(my $i3, '-|', 'i3status') or die "i3status: $!\n";
 $| = 1;

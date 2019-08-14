@@ -222,8 +222,10 @@ bindsym $mod+r mode "resize"
 bar {
         status_command my_i3status
 }
-bindsym XF86MonBrightnessDown  exec "light -U 5"
-bindsym XF86MonBrightnessUp    exec "light -A 5"
+bindsym XF86MonBrightnessDown  exec "chbacklight -U 5"
+bindsym XF86MonBrightnessUp    exec "chbacklight -A 5"
+bindsym Shift+XF86MonBrightnessDown  exec "chbacklight -U 1"
+bindsym Shift+XF86MonBrightnessUp    exec "chbacklight -A 1"
 bindsym XF86AudioRaiseVolume   exec "adjust_volume Master 5%+"
 bindsym XF86AudioLowerVolume   exec "adjust_volume Master 5%-"
 bindsym XF86AudioMute          exec "adjust_volume Master toggle"
