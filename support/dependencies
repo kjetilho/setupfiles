@@ -11,6 +11,10 @@ for horse::           aspell-en aspell-no
 for grabb::           scrot zenity xclip
 for ranger::          ranger w3m-img
 
+rpmfusion for video i Firefox:
+  free:: http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
+  nonfree:: http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+  codecs:: ffmpeg-libs
 
 for rbenv:
   git clone https://github.com/rbenv/rbenv.git ~/.rbenv
