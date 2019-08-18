@@ -188,7 +188,7 @@ bN() {
     shift;
     case $ver in
         3|4) rubyver="2.1.10" ;;
-        *)   rubyver="2.3.3" ;;
+        *)   rubyver="2.3.8" ;;
     esac
     if [ ! -r .ruby-version ] || [ $(< .ruby-version) != $rubyver ]
     then

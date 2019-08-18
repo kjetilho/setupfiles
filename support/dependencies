@@ -10,6 +10,7 @@ for setcursor::       libX11-devel
 for horse::           aspell-en aspell-no
 for grabb::           scrot zenity xclip
 for ranger::          ranger w3m-img
+for rbenv::           openssl-devel readline-devel zlib-devel
 
 rpmfusion for video i Firefox:
   free:: http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
@@ -21,9 +22,14 @@ for rbenv:
   cd ~/.rbenv && src/configure && make -C src
   git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
   . ~/.bashrc
-  rbenv install 1.9.3-p551
-  # eh, why did I make a note of this?  /opt/local?
-  env RUBY_CONFIGURE_OPTS=--with-openssl-dir=/opt/local rbenv install 1.9.3-p551
+  dnf install compat-openssl10-devel --allowerasing   # needed for Ruby pre 2.4
+  rbenv install 2.1.10
+  rbenv install 2.3.8
+  dnf install openssl-devel --allowerasing
+  rbenv local 2.1.10
+  gem install -v 1.17.3 bundler
+  rbenv local 2.3.8
+  gem install bundler
 
 cknfs:
   git clone https://github.com/kjetilho/cknfs.git
