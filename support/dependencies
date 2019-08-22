@@ -11,6 +11,7 @@ for horse::           aspell-en aspell-no
 for grabb::           scrot zenity xclip
 for ranger::          ranger w3m-img
 for rbenv::           openssl-devel readline-devel zlib-devel yamllint
+for valuta::          perl-LWP-Protocol-https
 
 rpmfusion for video i Firefox:
   free:: http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
