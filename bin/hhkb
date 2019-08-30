@@ -12,6 +12,13 @@ else
 fi
 
 # not really Keyboard
+
+if synclient -l 2>/dev/null | tr -d ' ' | grep -q 'HorizEdgeScroll=0'
+then
+    # Enable horizontal scrolling when dragging along the bottom edge.
+    synclient HorizEdgeScroll=1
+fi
+
 xrandr | awk '$2 == "connected" {
 	if (sz && $3 < sz)
 		system("xrandr --output " $1 " --left-of " out);
