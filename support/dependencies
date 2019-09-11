@@ -3,6 +3,7 @@ grep :: <<_SIGNING_OFF_ | sed "s/.*:: */sudo dnf install -y /"
 nyttige ting å ha installert:
 
 basis::               i3 network-manager-applet dunst emacs ruby subversion mosh xscreensaver
+nyttige verktøy::     jq
 for reset-resources:: xorg-x11-resutils
 for myi3status::      perl-JSON light
 for activate-window:: xdotool wmctrl
