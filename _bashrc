@@ -251,8 +251,20 @@ bgem() {
     b gem contents "$gem" ${args[*]} | grep -v /spec/
 }
 
+bfacter() {
+    local facterver=$(b exec facter --version | cut -d. -f-2)
+    bgem facterdb | fgrep /$facterver/
+}
+
 j() {
-    jq ".[]|${1-.certname}"
+    if [ $# -gt 0 ]
+    then
+       local expr="$1"
+       shift
+       jq "$@" ".[] | $expr"
+    else
+       jq ".[] | .certname"
+    fi
 }
 
 grep_options="--directories=skip --colour=auto"
