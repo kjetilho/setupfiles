@@ -41,8 +41,8 @@ for (@ARGV) {
                        fmt_hex($code), ($code)x2, charname($code));
             }
         } else {
-            printf("%7s %7d %s\n",
-                   fmt_hex($code), $code, fmt_human($code));
+            printf("%7s %7d %s %s\n",
+                   fmt_hex($code), $code, fmt_human($code), fmt_human_dur($code));
         }
     } elsif (/^U\+([0-9a-f]+)$/i) {
         my $code = hex($1);
@@ -81,7 +81,24 @@ sub fmt_human {
         $unit = shift(@units);
         $num /= 1024;
     }
-    sprintf("%d%s", $num, $unit);
+    sprintf("%d%s", $num, $unit || '');
+}
+
+# This is used for 0x110000 or higher, ie. 12.9 days
+# or when there is no known Unicode known
+sub fmt_human_dur {
+    my ($num) = @_;
+    my $days = $num / 86400;
+
+    if ($days > 365) {
+        sprintf("%dy%dd", $days / 365, $days % 365);
+    } elsif ($days > 100) {
+        sprintf("%dd", $days);
+    } elsif ($days > 1) {
+        sprintf("%.1fd", $days);
+    } else {
+        sprintf("%.1fh", ($num % 86400) / 60);
+    }
 }
 
 sub fmt_hex {
