@@ -4,8 +4,24 @@ use warnings;
 use strict;
 use utf8;
 use charnames qw(:full);
+use Getopt::Long;
+
+sub usage {
+    my ($exitstatus) = @_;
+    $exitstatus = 64 unless defined $exitstatus;
+    print STDERR "Usage: $0 [--no-filter-letters] [startpoint]\n";
+    print STDERR "Use U+XXXXX or numeric value in decimal, octal or hexadecimal\n";
+    exit($exitstatus);
+}
 
 my $filter_letters = 1;
+
+GetOptions('filter-letters|F!', \$filter_letters,
+           'help|?', sub { usage(0); },
+    ) or usage();
+
+usage() if @ARGV > 1;
+
 my $i = 0;
 
 if (@ARGV == 1) {
@@ -17,13 +33,8 @@ if (@ARGV == 1) {
         $i = $1;
     } else {
         print STDERR "Unrecognised start point syntax.\n";
-        print STDERR "Use U+XXXXX or numeric value in decimal, octal or hexadecimal\n";
-        exit(2);
+        usage(2);
     }
-} elsif (@ARGV > 1) {
-    print STDERR "Usage: $0 [startpoint]\n";
-    print STDERR "Use U+XXXXX or numeric value in decimal, octal or hexadecimal\n";
-    exit(64);
 }
 
 while ($i++ < 0x1ffff) {
