@@ -37,7 +37,11 @@ else
     export PATH=$mypath
 fi
 
-type rbenv >/dev/null 2>&1 && eval "$(rbenv init -)"
+if type rbenv >/dev/null 2>&1
+then
+    eval "$(rbenv init -)"
+    rubyver23=$(rbenv versions | tac | awk '$1 ~ /^2\.3\./ {print $1}')
+fi
 
 if [ -d $HOME/lib/perl/share/perl ]
 then
@@ -181,6 +185,7 @@ then
     export MODULEPATH=design:modules:~/git/git.i.bitbit.net/puppet-ms0/basemodules_common/modules/
     export FUTURE_PARSER=yes STRICT_VARIABLES=yes
 fi
+
 bN() {
     declare ver="$1";
     declare rubyver=2.1.10
@@ -188,7 +193,7 @@ bN() {
     shift;
     case $ver in
         3|4) rubyver="2.1.10" ;;
-        *)   rubyver="2.3.8" ;;
+        *)   rubyver="${rubyver23-2.3.8}" ;;
     esac
     if [ ! -r .ruby-version ] || [ $(< .ruby-version) != $rubyver ]
     then
