@@ -1,0 +1,37 @@
+#! /bin/sh
+
+user=Administrator
+geo=1600x1200
+
+if [ $# = 0 ]
+then
+    echo "Usage: $0 [-g WxH | -g N%] [-u USER] HOST" >&2
+    exit 64
+fi
+
+while [ $# -gt 0 ]
+do
+    case $1 in
+        -u) user=$2; shift; shift ;;
+        -g) geo=$2; shift; shift ;;
+        [a-z]*.*[a-z])
+            host=$1
+            addr=$(getent ahosts $1 | grep -v : | awk '{print $1; exit}')
+            shift
+            ;;
+        *) break ;;
+    esac
+done
+
+case $user in
+    */*) user=${user/\//\\} ;;
+    *\\*) : ;;
+    *)   user=".\\${user}" ;;
+esac
+
+echo Trying: xfreerdp -grab-keyboard /title:"${host}" /size:"${geo}" /u:"${user}" /v:"${addr}" /cert-name:"${host}" "$@"
+exec xfreerdp -grab-keyboard /title:"${host}" /size:"${geo}" /u:"${user}" /v:"${addr}" /cert-name:"${host}" "$@"
+
+echo Trying: rdesktop -k no -g $geo -K -u $user $host "$@" 
+exec rdesktop -k no -g $geo -K -u $user $host "$@" 
+exec rdesktop -k no -g $geo -D -K -u $user $host "$@"
