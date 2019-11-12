@@ -55,6 +55,7 @@ for m in puppet-ms0/bitbit_backup/design/profile/files/bareos/scripts/bacula-che
              puppet-ms0/bitbit_login/design/profile/files/utilities/host-lookup \
              puppet-ms0/bitbit_login/design/profile/files/utilities/ipv6-slaac \
              puppet-ms0/bitbit_login/design/profile/files/utilities/ldap-lookup \
+             puppet-ms0/bitbit_login/design/profile/files/utilities/pfw-sync \
              puppet-ms0/bitbit_login/design/profile/files/utilities/puppetdb \
              puppet-ms0/bitbit_login/design/profile/files/utilities/thruk \
              puppet-ms0/bitbit_login/design/profile/files/utilities/vlan \
