@@ -55,7 +55,7 @@ find . \( \( -name .git -o -name '*.swp' -o -name '*~' -o -name '*#*' -o -name '
 		continue
                 ;;
             _docker/config.json)
-                cmp <(jq 'del(.auths)' < ~/.docker/config.json)  $path >/dev/null 2>&1 && continue
+                cmp <(jq 'del(.auths)' < $dest) $path >/dev/null 2>&1 && continue
                 cp $path $dest
 		;;
 	esac
