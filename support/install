@@ -53,6 +53,10 @@ find . \( \( -name .git -o -name '*.swp' -o -name '*~' -o -name '*#*' -o -name '
                 fi
 		find $HOME/.ssh -perm /077 -print -exec chmod go-rwx {} +
 		continue
+                ;;
+            _docker/config.json)
+                cmp <(jq 'del(.auths)' < ~/.docker/config.json)  $path >/dev/null 2>&1 && continue
+                cp $path $dest
 		;;
 	esac
 	ln -v -s -f `pwd`/$path $dest
