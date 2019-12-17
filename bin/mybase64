@@ -1,0 +1,17 @@
+#! /usr/bin/perl -w
+
+use MIME::Base64;
+
+if (@ARGV && $ARGV[0] eq "-d") {
+	shift;
+	while (<>) {
+	       	chomp;
+	        print decode_base64("$_");
+	}
+} else {
+	while (<>) {
+	       	chomp;
+	        print encode_base64("$_");
+	}
+}
+	
