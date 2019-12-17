@@ -1,0 +1,92 @@
+#! /usr/bin/perl
+#
+# inode-usage 1.0
+#
+# Written by Kjetil Torgrim Homme <kjetil.homme@redpill-linpro.com>
+# Copyright 2012-2014
+# Released under the GNU General Public Licence, version 2 or later.
+
+use strict;
+use warnings;
+use File::Find;
+use Getopt::Long;
+
+sub usage {
+    print STDERR <<"_END_";
+Usage: $0 [OPTION] [DIRECTORY...]
+
+Like du(1), but report inode counts instead of disk space usage.
+
+When no directory is specified, report on current directory and its
+sub-directories.
+
+Options are:
+  -t, --threshold=N      exclude directories with fewer than N inodes
+  -x, --one-file-system  skip directories on different file systems
+
+The four columns in the output are as follows:
+ 1: Count of inodes including sub-directories
+ 2: Cound of inodes in this directory
+ 3: Marked with "*" if this directory contains hardlinked files
+ 4: Directory name
+
+The inode count is an approximation.  If the tree contains files hardlinked
+from the outside, the reported count can be a little too small.
+
+_END_
+    exit(64);
+}
+
+
+my %counted;
+my %total;
+my %multilink;
+my $threshold = 1;
+my $onefs;
+
+sub count {
+  
+    $File::Find::prune = 1
+        if ((lstat($_))[0] != $File::Find::topdev
+            && $onefs);
+
+    if (-d _) {
+        ++$counted{$File::Find::dir};
+    } else {
+        my $nlinks = (lstat(_))[3];
+        if ($nlinks > 1) {
+            ++$multilink{$File::Find::dir};
+            $counted{$File::Find::dir} += 1.0 / $nlinks;
+        } else {
+            ++$counted{$File::Find::dir};
+        }
+    }
+}
+
+sub exeunt {
+    my $dir = $File::Find::dir;
+
+    # Don't report leaf directories with no files
+    return unless $counted{$dir}; 
+
+    my $parent = $dir;
+    $parent =~ s!/[^/]*$!!;
+    $parent = '/' if $parent eq '';
+
+    $total{$dir} += $counted{$dir};
+    $total{$parent} += $total{$dir} if $parent ne $dir;
+    printf("%8d %8d  %s  %s\n",
+           $total{$dir}, $counted{$dir}, $multilink{$dir} ? "*" : "-", $dir)
+        if $total{$dir} >= $threshold;
+    delete $counted{$dir};
+    delete $total{$dir};
+}
+
+GetOptions(
+    "threshold|t=i", \$threshold,
+    "one-file-system|x", \$onefs,
+    "help|?", sub { usage(); },
+) or usage();
+
+push(@ARGV, ".") unless @ARGV;
+find({ wanted => \&count, postprocess => \&exeunt}, @ARGV);
