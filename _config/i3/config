@@ -253,12 +253,24 @@ bindsym $mod+Shift+KP_Subtract exec "adjust_volume Master toggle"
 bindsym --release $mod+Shift+Print  exec "grabb --all"
 bindsym --release $mod+Print        exec "grabb --select"
 
+assign [instance="irssi"] 1
 assign [class="Emacs"] 4
 assign [class="Firefox"] 11
+assign [class="Spotify"] 12
 assign [class="Evolution"] 17
 assign [class="Thunderbird"] 18
 assign [class="Mattermost"] 19
-assign [instance="irssi"] 1
+
+# DP3 is for small Dell screen on scribus
+workspace 1 output DP3
+workspace 11 output DP3
+workspace 12 output DP3
+workspace 19 output DP3
+
+workspace 2 output primary
+workspace 4 output primary
+workspace 17 output primary
+workspace 18 output primary
 
 exec dunst
 exec reset-resources
