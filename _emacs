@@ -126,6 +126,7 @@
    (quote
     ("3ff5fe0cd9fa2aaa1119882cdd782f49107c5b9b22b374b68fa080e6a9f80462" "d580783ef5f70d2d9fa438c8d553caf6a74691dfef392f8f7230257dcec591c7" "b8d535b81f1fd753456f63c30c6a967286933c0fa28f8b3194ccd84d5d57804d" "00c26ff7742ff0d4a66a3c20628a98c072d105a6ddedeb3c4ef20547efac7646" default)))
  '(gnus-summary-thread-gathering-function (quote gnus-gather-threads-by-references))
+ '(ido-case-fold nil)
  '(ido-default-buffer-method (quote selected-window))
  '(line-move-visual nil)
  '(markdown-toc-user-toc-structure-manipulation-fn (quote cdr))
