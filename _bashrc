@@ -671,6 +671,7 @@ alias horse-en="horse en"
 alias cwdiff="wdiff -n -w $'\033[30;41m' -x $'\033[0m' -y $'\033[30;42m' -z $'\033[0m'"
 alias qr="xclip -o selection clipboard | qrencode --size 10 -o - | feh -x --title QR -g +200+200 -"
 alias trunc='cut -c-${COLUMNS-80}'
+alias mtr='env TERM=vt220 mtr'
 
 osinit() {
     local proj="${1-users.kjetilho}"
