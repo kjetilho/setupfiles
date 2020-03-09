@@ -31,7 +31,7 @@ Rxvt*font:                      xft:MONO_FONT-FONT_SIZE_NORMAL
 Rxvt.letterSpace:               -1 *//* Urxvt calculates wrong overall width for my font at size 9 */
 #endif
 
-URxvt.perl-ext:   default,selection-to-clipboard
+URxvt.perl-ext-common:          default,selection-to-clipboard
 URxvt.selection.pattern-0:      ([a-zA-Z0-9/._~-]+)
 URxvt.selection.pattern-1:      (.*)
 URxvt.secondaryScroll: false
@@ -109,6 +109,8 @@ irssi*font:			xft:MONO_FONT-20
 irssi.VT100.geometry:		84x34
 irssi*faceSize:			9
 #endif
+irssi.perl-ext:                 bell-command,-selection
+irssi.bell-command:             bell
 
 irssi*color3:                   S_yellow
 irssi*pointerShape:             gumby

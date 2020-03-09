@@ -1,3 +1,32 @@
-#! /bin/sh
+#! /usr/bin/perl
 
-paplay $HOME/lib/ahem.wav &
+use warnings;
+use strict;
+
+my $min_volume = 0;
+my $max_volume = 65536;
+my $target_pct = 25;
+my $current_pct = 100;
+open(my $amixer, '-|', 'amixer', 'get', 'Master') or die;
+while (<$amixer>) {
+    if (/^\s*Limits: Playback (\d+) - (\d+)/) {
+        ($min_volume, $max_volume) = ($1, $2);
+    } elsif (/Front Left: Playback +(\d+)/) {
+        $current_pct = 100 * ($1 - $min_volume) / $max_volume;
+    }
+}
+close($amixer);
+
+my $paplay_volume = $max_volume;
+if ($current_pct > 0) {
+    $paplay_volume = $target_pct / $current_pct * ($max_volume - $min_volume) + $min_volume;
+    if ($paplay_volume > $max_volume) {
+        # print "got $paplay_volume, clipping\n";
+        $paplay_volume = $max_volume;
+    }
+} else {
+    $paplay_volume = 0;
+}
+# urxvt run us async
+system('paplay', '--volume', $paplay_volume, "${ENV{'HOME'}}/lib/ahem.wav");
+
