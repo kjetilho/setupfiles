@@ -662,8 +662,7 @@ function horse() {
     local lang="${1-en}" words=${2-4}
     for i in a b c d e
     do
-        aspell -d $lang dump master | 
-            grep -v "['A-Z]" | tr -d \" | shuf -n $words | xargs echo
+        echo $(aspell -d $lang dump master | egrep -v '.{11}' | tr -d \" | shuf -n $words)
     done
 }
 alias horse-en="horse en"
