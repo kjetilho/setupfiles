@@ -11,8 +11,12 @@ open(my $amixer, '-|', 'amixer', 'get', 'Master') or die;
 while (<$amixer>) {
     if (/^\s*Limits: Playback (\d+) - (\d+)/) {
         ($min_volume, $max_volume) = ($1, $2);
-    } elsif (/Front Left: Playback +(\d+)/) {
-        $current_pct = 100 * ($1 - $min_volume) / $max_volume;
+    } elsif (/Front Left: Playback +(\d+)\s*.*\[(on|off)\]/) {
+        if ($2 eq 'off') {
+            $current_pct = 0;
+        } else {
+            $current_pct = 100 * ($1 - $min_volume) / $max_volume;
+        }
     }
 }
 close($amixer);
@@ -24,9 +28,9 @@ if ($current_pct > 0) {
         # print "got $paplay_volume, clipping\n";
         $paplay_volume = $max_volume;
     }
+    # urxvt run us async
+    system('paplay', '--volume', $paplay_volume, "${ENV{'HOME'}}/lib/ahem.wav");
 } else {
-    $paplay_volume = 0;
+    system('notify-send', '-u', 'low', ' 🔔 *BELL RANG* 🔔 ');
 }
-# urxvt run us async
-system('paplay', '--volume', $paplay_volume, "${ENV{'HOME'}}/lib/ahem.wav");
 
