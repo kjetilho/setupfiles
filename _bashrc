@@ -688,6 +688,13 @@ osinit() {
     dig axfr 0.c.0.0.2.0.a.2.ip6.arpa. @ns-foo.i.bitbit.net |
         perl -pe 's/(\S+)\.ip6\.arpa\./reverse($1)/e' | grep ^2 | sort
 }
+axfr() {
+    case $1 in
+        *.*) dom="$1" ;;
+        *)   dom="$1.bitbit.net" ;;
+    esac
+    dig axfr $dom @ns-foo.i.bitbit.net
+}
 
 complete -W "$(cd $HOME/.config/openstack; echo *-openrc.sh | sed s/-openrc.sh//g)" osinit
 alias r='. ~/.bashrc'
