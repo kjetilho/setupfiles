@@ -374,6 +374,7 @@ newest() {
     fi
 }
 
+set +f  # so a reload of .bashrc fixes it
 alias finn='set -f; do_finn'
 do_finn() {
     name="$1"; shift;
