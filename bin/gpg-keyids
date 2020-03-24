@@ -1,0 +1,39 @@
+#! /usr/bin/perl
+
+use warnings;
+use strict;
+
+for my $key (@ARGV) {
+    if (-f $key) {
+        my $slurp = `gpg $key 2>/dev/null`;
+        if ($slurp =~ /\b([0-9A-F]{40})\b/) {
+            $key = $1;
+        } else {
+            warn "$key: did not find key in gpg output\n";
+            next;
+        }
+    }
+    if ($key =~ /^(0x)?([0-9a-f]{8,})$/i) {
+        $key = lc $2;
+        my $len = length($key);
+        unless ($len == 8 || $len == 16 || $len == 40) {
+            warn "$key: invalid length $len\n";
+            if ($len < 16) {
+                $key = substr($key, -8);
+            } elsif ($len < 40) {
+                $key = substr($key, -16);
+            } elsif ($len > 40) {
+                next;
+            }
+            $len = length($key);
+        }
+        if ($len > 16) {
+            printf("%40s\n", $key);
+        }
+        if ($len > 8) {
+            printf("%40s\n", substr($key, -16));
+        }
+        printf("%40s\n", substr($key, -8));
+    }
+}
+
