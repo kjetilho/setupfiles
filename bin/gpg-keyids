@@ -13,6 +13,12 @@ for my $key (@ARGV) {
             next;
         }
     }
+    if ($key !~ /^(0x)?([0-9a-f]{8,})$/i) {
+        my $slurp = `gpg --with-colons --fingerprint $key`;
+        if ($slurp =~ /^fpr:+([0-9A-Z]{40}):/m) {
+            $key = $1;
+        }
+    }
     if ($key =~ /^(0x)?([0-9a-f]{8,})$/i) {
         $key = lc $2;
         my $len = length($key);
@@ -27,13 +33,20 @@ for my $key (@ARGV) {
             }
             $len = length($key);
         }
+        if ($len < 40) {
+            my $slurp = `gpg --with-colons --fingerprint $key`;
+            if ($slurp =~ /^fpr:+([0-9A-Z]{40}):/m) {
+                $key = $1;
+                $len = length($key);
+            }
+        }
         if ($len > 16) {
-            printf("%40s\n", $key);
+            print join(" ", $key =~ /(....)/g), "\n";
+            printf("%49s\n", $key);
         }
         if ($len > 8) {
-            printf("%40s\n", substr($key, -16));
+            printf("%49s\n", substr($key, -16));
         }
-        printf("%40s\n", substr($key, -8));
+        printf("%49s\n", substr($key, -8));
     }
 }
-
