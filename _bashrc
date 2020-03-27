@@ -597,6 +597,15 @@ g() {
             ;;
     esac
 }
+
+# Jump to webpage for current git repo
+gw() {
+    local origin="${1-origin}"
+    local giturl=$(git remote get-url $origin) || return
+    url=$(echo "$giturl" | sed 's|^[a-z]\+@\([^:]\+\):|https://\1/|')
+    ${XDG_OPEN-xdg-open} "$url"
+}
+
 gclone() {
     url="git@git.i.bitbit.net:${1%/}.git"
     dir=$(dirname ~/git/git.i.bitbit.net/$1)
