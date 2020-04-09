@@ -4,6 +4,7 @@ nyttige ting å ha installert:
 
 basis::               i3 network-manager-applet dunst emacs ruby subversion mosh xscreensaver
 nyttige verktøy::     jq perl-YAML perl-YAML-LibYAML perl-LDAP feh perl-DBI perl-XML-Simple
+for terminal::        rxvt-unicode liberation-mono-fonts
 for reset-resources:: xorg-x11-resutils
 for myi3status::      perl-JSON light
 for activate-window:: xdotool wmctrl
