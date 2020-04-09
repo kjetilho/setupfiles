@@ -5,7 +5,7 @@
 
 Xft.dpi: 96
 
-#define MONO_FONT Bitstream Vera Sans Mono
+#define MONO_FONT Liberation Mono
 
 #if NUM_SCREENS == 1 && WIDTH <= 1600
 #  define FONT_SIZE_NORMAL 8
