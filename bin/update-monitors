@@ -1,0 +1,60 @@
+#! /usr/bin/perl
+
+use strict;
+use warnings;
+
+sub xrandr_state {
+    my %state;
+    open(my $xrandr, '-|', 'xrandr') or die "xrandr: $!\n";
+    my $mon;
+    my $todo;
+    while (<$xrandr>) {
+	if (/^(\S+)\s+([a-z ]+?)(?: ((\d+)x(\d+)\+\d+\+\d+))? \(.*\)/) {
+	    $mon = $1;
+	    my ($conn, $geo, $w, $h) = ($2, $3, $4, $5);
+	    if ($conn =~ /primary/) {
+		$state{$mon} = { monitor => $mon, width => $w, height => $h };
+		$state{primary} = $state{$mon};
+	    } elsif ($conn =~ /disconnected/) {
+		if ($geo) {
+		    print "Disabling $mon\n";
+		    system("xrandr", "--output", $mon, "--off");
+		}
+	    } elsif ($conn =~ /connected/) {
+		unless ($geo) {
+		    $todo = 'add';
+		    next;
+		}
+	    }
+	    $todo = undef;
+	} elsif ($mon && /^\s*(\d+)x(\d+)/) {
+	    my ($w, $h) = ($1, $2);
+	    $state{$mon} = { monitor => $mon, width => $w, height => $h };
+	    if ($todo) {
+		# A bit finnicky.  If the attached screen has lower resolution than
+		# main screen (ie., scribus), add it to the left.  Otherwise (e.g.,
+		# ranger (1920x1080) at home office (Eizo 1920x1200) in Billingsfors,
+		# put it to the right.)
+		my $biggest = ($w >= $state{primary}->{width} &&
+			       $h >= $state{primary}->{height});
+		my $direction = $biggest ? 'right' : 'left';
+		my $pri = $state{primary}->{monitor};
+		print "Adding ${mon} (${w}x${h}) $direction of ${pri}\n";
+		system("xrandr", "--output", $mon, "--auto", "--${direction}-of", $pri);
+	    }
+	    $mon = undef;
+	    $todo = undef;
+	}
+    }
+    close($xrandr);
+}
+
+xrandr_state();
+
+# xrandr | awk '$2 == "connected" {
+#	if (sz) {
+#            dir = ($3 + 0 >= sz + 0) ? "right" : "left";
+#            system("echo xrandr --output " $1 " --auto --" dir "-of " out);
+#        }
+#	out = $1; sz = $3
+#}'

@@ -19,18 +19,8 @@ then
     synclient HorizEdgeScroll=1
 fi
 
-# A bit finnicky.  If the attached screen has lower resolution than
-# main screen (ie., scribus), add it to the left.  Otherwise (e.g.,
-# ranger (1920x1080) at home office (Eizo 1920x1200) in Billingsfors,
-# put it to the right.)
-
-xrandr | awk '$2 == "connected" {
-	if (sz) {
-            dir = ($3 + 0 >= sz + 0) ? "right" : "left";
-            system("echo xrandr --output " $1 " --auto --" dir "-of " out);
-        }
-	out = $1; sz = $3
-}'
-
 # override cursor font with big cursor at Gumby position (56)
 xset +fp $HOME/lib/X11/fonts
+
+# attach extra monitors to desktop
+update-monitors

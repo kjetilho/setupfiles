@@ -128,6 +128,7 @@ bindsym $mod+Shift+a focus child
 
 bindsym $mod+b workspace back_and_forth
 bindsym $mod+x move workspace to output right
+bindsym $mod+Shift+x exec "update-monitors"
 
 # switch to workspace
 bindsym $mod+1 workspace 1
