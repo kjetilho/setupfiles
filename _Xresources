@@ -97,7 +97,7 @@ XTerm*SimpleMenu*font: lucidasanstypewriter-12
 XLock.font:			-*-lucidatypewriter-medium-r-*-*-*-140-*-*-*-*-iso10646-*
 irssi*background:		gray
 irssi*foreground:		black
-irssi*visualBell:		false
+irssi*visualBell:		true
 irssi*faceName:         	MONO_FONT
 irssi*scrollBar:		false
 /* suitable for secondary screen on scribus */
