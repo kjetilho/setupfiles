@@ -8,8 +8,11 @@ sub xrandr_state {
     open(my $xrandr, '-|', 'xrandr') or die "xrandr: $!\n";
     my $mon;
     my $todo;
+    my $screen;
     while (<$xrandr>) {
-	if (/^(\S+)\s+([a-z ]+?)(?: ((\d+)x(\d+)\+\d+\+\d+))? \(.*\)/) {
+        if (/^Screen \d:.*current (\d+) x (\d+)/) {
+            $screen = { width => $1, height => $2 };
+        } elsif (/^(\S+)\s+([a-z ]+?)(?: ((\d+)x(\d+)\+\d+\+\d+))? \(.*\)/) {
 	    $mon = $1;
 	    my ($conn, $geo, $w, $h) = ($2, $3, $4, $5);
 	    if ($conn =~ /primary/) {
@@ -21,10 +24,17 @@ sub xrandr_state {
 		    system("xrandr", "--output", $mon, "--off");
 		}
 	    } elsif ($conn =~ /connected/) {
-		unless ($geo) {
-		    $todo = 'add';
-		    next;
-		}
+                if ($geo) {
+                    # detect cloned screen
+                    if ($screen->{width} < $state{primary}->{width} + $w ||
+                        $screen->{height} < $state{primary}->{height} + $h) {
+                        $todo = 'add';
+                        next;
+                    }
+                } else {
+                    $todo = 'add';
+                    next;
+                }
 	    }
 	    $todo = undef;
 	} elsif ($mon && /^\s*(\d+)x(\d+)/) {
