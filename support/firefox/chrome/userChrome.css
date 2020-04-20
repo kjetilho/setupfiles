@@ -1,4 +1,23 @@
-@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
-#TabsToolbar {
-    visibility: collapse !important;
+/* As of Firefox 69, set
+   toolkit.legacyUserProfileCustomizations.stylesheets to true
+ */
+
+/* "First navigate to about:config and, if it exists, set
+   browser.tabs.drawInTitlebar to false."  not relevant for me - I use
+   normal title decoration in i3wm.
+*/
+
+/* https://framagit.org/ariasuni/tabcenter-reborn/-/wikis/home#hide-the-horizontal-tab-strip-15 */
+#TabsToolbar:not([customizing="true"]) {
+  visibility: collapse !important;
+}
+/* if the titlebar is also hidden and your browser is maximized,
+ * clicking on the top pixel of the screen should trigger menu items (Fitt’s law)
+ */
+#toolbar-menubar {
+  padding-top: 0px !important;
+}
+/* https://framagit.org/ariasuni/tabcenter-reborn/-/wikis/home#hide-sidebar-with-only-one-tab-open */
+#main-window[titlepreface^="[1] "] #sidebar-box[sidebarcommand="tabcenter-reborn_ariasuni-sidebar-action"] {
+  visibility: collapse;
 }
