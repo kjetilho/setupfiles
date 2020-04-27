@@ -42,7 +42,7 @@ for_window [class="Firefox" instance="Navigator"] floating disable
 
 # start a terminal
 bindsym $mod+Return       exec i3-sensible-terminal -name solarized
-bindsym $mod+Shift+Return exec choosehost
+bindsym $mod+Shift+Return exec i3-sensible-terminal -name dump
 bindsym $mod+Shift+i      exec run_irssi
 
 # lock screen
@@ -257,6 +257,7 @@ bindsym --release $mod+Print        exec "grabb --select"
 
 assign [instance="irssi"] 1
 assign [class="Emacs"] 4
+assign [instance="dump"] 9
 assign [class="Firefox"] 11
 assign [class="Spotify"] 12
 assign [class="Evolution"] 17
