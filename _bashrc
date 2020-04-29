@@ -420,7 +420,19 @@ src() {
 	\) -print0 | xargs -0 "$@"
 }
 
-edit_last() { e $(fc -s "$@"); }
+edit_last() {
+    local prev_output=$(fc -s "$@")
+    if [[ ! "$prev_output" ]]
+    then
+        echo "No output from last command" >&2
+        return
+    fi
+    local IFS='
+'
+    local files=($(echo "$prev_output" | sed s/:.*// | sort -u))
+    e "${files[@]}"
+}
+
 alias e!=edit_last
 
 la() {
