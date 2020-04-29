@@ -50,4 +50,6 @@ Firefox:
 
 compositor?  xcompmgr -c -t-6 -l-6 -o.1
 
+radix: ftp://ftp.unicode.org/Public/UNIDATA/Blocks.txt
+
 _SIGNING_OFF_

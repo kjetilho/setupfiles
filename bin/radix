@@ -69,8 +69,17 @@ sub print_string {
             printf("%7s 0%03o %5d 0b%08b %c   %s\n",
                    fmt_hex($code), ($code)x4, charname($code));
         } else {
+            my $name = charname($code);
+            unless (defined $name) {
+                $name = lookup_block($code);
+                if ($name) {
+                    $name = "[$name]";
+                } else {
+                    $name = "[no name]";
+                }
+            }
             printf("U+%05X    %7d %10s %c   %s\n",
-                   ($code)x2, '', $code, charname($code));
+                   ($code)x2, '', $code, $name);
         }
     }
 }
@@ -136,4 +145,19 @@ sub read_compose_table {
     }
     close($f);
     return \%table;
+}
+
+sub lookup_block {
+    my ($code) = @_;
+    my $block_file = $ENV{HOME} . "/lib/Blocks.txt";
+    open(my $f, $block_file)
+        or return warn "$block_file: $!\n";
+    while (<$f>) {
+        if (/^([0-9a-f]+)\.\.([0-9a-f]+); (.*)/i) {
+            my ($start, $end, $block_name) = ($1, $2, $3);
+            return $block_name if $code >= hex($start) && $code <= hex($end);
+        }
+    }
+    close($f);
+    return "";
 }
