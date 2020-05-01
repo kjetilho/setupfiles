@@ -45,12 +45,17 @@ fi
 
 if [ -d $HOME/lib/perl/share/perl ]
 then
-	export PERL5LIB=$(echo $HOME/lib/perl/share/perl/5.* | tr " " :)
+    export PERL5LIB=$(echo $HOME/lib/perl/share/perl/5.* | tr " " :)
 fi
 
 if [ -d /opt/python ]
 then
-	export PYTHONPATH=/opt/python/lib/python2.7/site-packages
+    export PYTHONPATH=/opt/python/lib/python2.7/site-packages
+fi
+
+if type podman >/dev/null 2>&1
+then
+    export DOCKER=podman
 fi
 
 # If not running interactively, don't do anything more
