@@ -2,13 +2,41 @@
 
 use POSIX;
 
+use Getopt::Long;
+my $call_radix;
+
+GetOptions('r' => \$call_radix) or die "Usage: $0 [-r] calculation\n";
+
+my $base = 1000;
+$val = 1;
+for my $u (qw(k M G T P E)) {
+    $val *= $base;
+    $units{$u} = $val;
+}
+
+$base = 1024;
+$val = 1;
+for my $u (qw(Ki Mi Gi Ti Pi Ei)) {
+    $val *= $base;
+    $units{$u} = $val;
+}
+# make simple regexp work
+$units{'K'} = $units{'k'};
+$units{'ki'} = $units{'Ki'};
+
 my $expr = join(" ", @ARGV);
 $expr =~ s/,(\d\d\d)/$1/g;
 
+$expr =~ s{(\d+([.]\d+)?) ([kKMGTPE]i?)\b}{
+    my ($num, $unit) = ($1, $3); $num *= $units{$unit} if $unit && $units{$unit};
+    "$num"
+}xeg;
+
 my $a = eval $expr;
-if ($a == int($a)) {
+if ($call_radix) {
+    system("radix", int($a));
+} elsif ($a == int($a)) {
     print $a, "\n";
 } else {
     printf ("%.6f\n", $a);
 }
-
