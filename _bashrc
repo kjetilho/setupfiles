@@ -623,29 +623,29 @@ gw() {
     ${XDG_OPEN-xdg-open} "$url"
 }
 
-gclone() {
-    url="git@git.i.bitbit.net:${1%/}.git"
-    dir=$(dirname ~/git/git.i.bitbit.net/$1)
+_gclone() {
+    local server="$1"
+    shift
+    declare -a args=("$@")
+    # get last argument, remove trailing / if present
+    local proj="${args[${#args[@]} - 1]%/}"
+    # remove last argument
+    unset "args[${#args[@]} - 1]"
+    url="git@${server}:${proj}.git"
+    dir=$(dirname ~/git/$server/$proj)
     mkdir -p $dir
     cd $dir &&
-	git clone $url &&
-	cd ~/git/git.i.bitbit.net/$1
+	git clone "${args[@]}" $url &&
+	cd ~/git/$server/$proj
+}
+gclone() {
+    _gclone git.i.bitbit.net "$@"
 }
 grlclone() {
-    url="git@gitlab.redpill-linpro.com:${1%/}.git"
-    dir=$(dirname ~/git/gitlab.redpill-linpro.com/$1)
-    mkdir -p $dir
-    cd $dir &&
-	git clone $url &&
-	cd ~/git/gitlab.redpill-linpro.com/$1
+    _gclone gitlab.redpill-linpro.com "$@"
 }
 ghclone() {
-    url="git@github.com:${1%/}.git"
-    dir=$(dirname ~/git/github.com/$1)
-    mkdir -p $dir
-    cd $dir &&
-	git clone $url &&
-	cd ~/git/github.com/$1
+    _gclone github.com "$@"
 }
 
 upd() {
