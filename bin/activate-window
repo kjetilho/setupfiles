@@ -4,9 +4,13 @@ use warnings;
 use Getopt::Long;
 
 sub usage() {
-    print STDERR "Usage: $0 pattern\n";
+    print STDERR "Usage: $0 [-d] pattern\n";
     exit(64);
 }
+my $debug = 0;
+
+GetOptions('debug|d+' => \$debug)
+    or usage();
 usage() unless @ARGV == 1;
 
 my $pattern = shift;
@@ -19,9 +23,15 @@ my @iwindows;
 while (<$wmctrl>) {
     my ($id, $desktop, $x, $y, $w, $h, $host, $title) =
         (/^(\S+)\s+(-?\d+)\s+(-?\d+)\s+(-?\d+)\s+(\d+)\s+(\d+)\s+(\S+)\s+(.*)/);
+    print "[${title}\@{$host}] $id on desktop $desktop at ${x}x${y}\n"
+        if $debug > 1;
     if ($title =~ $pattern) {
+        print "Found match, [${title}\@{$host}] $id on desktop $desktop at ${x}x${y}\n"
+            if $debug;
         push(@windows, [ $id, $desktop, $x, $y, $w, $h ] );
     } elsif ($title =~ /$pattern/i) {
+        print "Found MaTCh, [${title}\@{$host}] $id on desktop $desktop at ${x}x${y}\n"
+            if $debug;
         push(@iwindows, [ $id, $desktop, $x, $y, $w, $h ] );
     }
 }
