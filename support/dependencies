@@ -52,6 +52,8 @@ Firefox:
 
 ApacheDirectoryStudio:
   * download from https://directory.apache.org/studio/download/download-linux.html
+    into /opt.  extract file directly into /opt/ApacheDirectoryStudio.
+  * cd /opt; ls -t Apache*.tar.gz | head -1 > /opt/ApacheDirectoryStudio/DOWNLOADED_VERSION
   * install java 1.8 (see above)
   * sudo alternatives --config java
   * sudo ln -s java /usr/bin/jre
