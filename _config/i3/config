@@ -55,6 +55,7 @@ bindsym $mod+F4 kill
 
 # mute/unmute in Jitsi
 bindsym $mod+KP_Enter  exec xdotool search --name Jitsi.Meet windowactivate key m
+bindsym $mod+Shift+m   exec xdotool search --name Jitsi.Meet windowactivate key m
 
 # start dmenu (a program launcher)
 # bindsym $mod+d exec dmenu_run
