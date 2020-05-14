@@ -1,14 +1,24 @@
 #! /bin/sh
 
-if lsusb | grep -q Chicony
+# Throw away output when not interactive
+[ -t 0 ] || exec >/dev/null
+
+if lsusb | grep -q 0472:0065 # Chicony Electronics Co., Ltd PFU-65 USB Keyboard
 then
-	xmodmap $HOME/.Xmodmap.hhkb
-	xmodmap -e 'add shift = Shift_L'
-	xmodmap -e 'add shift = Shift_R'
-	xmodmap -e 'add control = Control_L'
+    echo "Congratulations, you have a Happy Hacking Keyboard!"
+    setxkbmap us
+    xmodmap $HOME/lib/X11/Xmodmap.hhkb
+    xmodmap $HOME/lib/X11/Xmodmap.no
+elif lsusb | grep -q 04d9:0006 # Holtek Semiconductor, Inc., RPI Wired Keyboard 4
+then
+    echo "Congratulations, you have a Raspberry Pi keyboard!"
+    setxkbmap -option compose:rctrl -option nbsp:none 'us(altgr-intl)'
+    xmodmap $HOME/lib/X11/Xmodmap.rpi
+    xmodmap $HOME/lib/X11/Xmodmap.no
 else
-	# not really Happy Hacking
-	setxkbmap -option compose:rctrl -option nbsp:none -option ctrl:nocaps 'no(nodeadkeys)'
+    # assume a normal Norwegian keyboard
+    echo "You have a Norwegian keyboard - hopefully"
+    setxkbmap -option compose:rctrl -option nbsp:none -option ctrl:nocaps 'no(nodeadkeys)'
 fi
 
 # not really Keyboard

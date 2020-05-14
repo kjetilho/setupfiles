@@ -1,0 +1,13 @@
+! Make Delete into an Insert key (no such key), and make
+! AltGr-Backspace into Delete.
+!
+! This does not work with ISO_Level3_Shift, so we switch to using good
+! old Mode_switch instead.  With Mode_switch, applications only need
+! to do a character lookup, so it is slightly more low level.
+!
+keycode 108 = Mode_switch
+add mod5 = Mode_switch
+
+keycode 119 = Insert    Insert    Delete Delete Delete Delete
+keycode  22 = BackSpace BackSpace Delete Delete Delete Delete
+!keycode  36 = Return    Return    KP_Enter KP_Enter KP_Enter KP_Enter

@@ -1,0 +1,16 @@
+! Support the use of ISO_Level3_Shift for mod5 by duplicating the
+! keys.  The second pair is without modifiers, the second is for
+! Mode_switch, and the last is for ISO_Level3_Shift.  us(altgr-intl)
+! sets AltGr/Alt_R key to ISO_Level3_Shift, so go with the flow.  (It
+! also sets 3 more pairs for each key, I have no idea what those are
+! used for.)
+!
+! mod5        ISO_Level3_Shift (0x5c),  Mode_switch (0xcb)
+!
+keycode  34 = bracketleft  braceleft  ae     AE       ae     AE
+keycode  35 = bracketright braceright aring  Aring    aring  Aring
+keycode  51 = backslash    bar        oslash Ooblique oslash Ooblique
+!keycode  47 = semicolon colon leftsinglequotemark guillemotleft
+!keycode  48 = apostrophe quotedbl rightsinglequotemark guillemotright
+!keycode  59 = comma less leftsinglequotemark guillemotleft
+!keycode  60 = period greater rightsinglequotemark guillemotright

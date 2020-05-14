@@ -1,12 +1,6 @@
+! This is preference was implemented with DIP switch instead
 ! keycode 107 = BackSpace 
 ! keycode  22 = Delete
-keycode  34 = bracketleft braceleft ae AE
-keycode  35 = bracketright braceright aring Aring
-keycode  51 = backslash bar oslash Ooblique
-!keycode  47 = semicolon colon leftsinglequotemark guillemotleft
-!keycode  48 = apostrophe quotedbl rightsinglequotemark guillemotright
-keycode  59 = comma less leftsinglequotemark guillemotleft
-keycode  60 = period greater rightsinglequotemark guillemotright
 
 ! Lite
 !      64 - 131 - SPACE - 129 - 113
@@ -31,3 +25,7 @@ clear mod4
 add mod4 = Super_L
 clear mod1
 add mod1 = Alt_L Meta_L
+
+add shift = Shift_L
+add shift = Shift_R
+add control = Control_L
