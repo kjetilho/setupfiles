@@ -33,6 +33,7 @@ floating_modifier $mod
 for_window [title="CSSH"] floating enable
 for_window [title="feh"] floating enable
 for_window [title="gimp"] floating enable
+for_window [instance="pavucontrol"] floating enable
 for_window [title="pinentry-gtk-2"] floating enable
 for_window [instance="sun-awt"] floating enable
 for_window [class="Firefox"] floating enable
@@ -106,8 +107,13 @@ bindsym $mod+f fullscreen toggle
 # bindsym $mod+Shift+e layout toggle split
 
 # activate interesting windows
+# Norwegian keyboard
 bindsym $mod+bar [instance="irssi"] focus
+# Happy Hacking keyboard
 bindsym $mod+Escape [instance="irssi"] focus
+# Raspberry Pi keyboard
+bindsym $mod+grave [instance="irssi"] focus
+
 bindsym $mod+e [class="Emacs"] focus
 bindsym $mod+Control+e [class="Evolution"] focus
 bindsym $mod+t [class="Thunderbird" instance="Mail"] focus
@@ -250,6 +256,8 @@ bindsym $mod+equal             exec "adjust_volume Master 5%+"
 bindsym $mod+minus             exec "adjust_volume Master 5%-"
 bindsym $mod+Shift+equal       exec "adjust_volume Master toggle"
 bindsym $mod+Shift+minus       exec "adjust_volume Master toggle"
+bindsym $mod+Control+equal     exec "pavucontrol"
+bindsym $mod+Control+minus     exec "pavucontrol"
 
 bindsym $mod+KP_Add            exec "adjust_volume Master 5%+"
 bindsym $mod+KP_Subtract       exec "adjust_volume Master 5%-"
