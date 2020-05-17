@@ -8,6 +8,6 @@
 keycode 108 = Mode_switch
 add mod5 = Mode_switch
 
-keycode 119 = Insert    Insert    Delete Delete Delete Delete
+keycode 119 = Delete    Insert    Delete Delete Delete Delete
 keycode  22 = BackSpace BackSpace Delete Delete Delete Delete
 !keycode  36 = Return    Return    KP_Enter KP_Enter KP_Enter KP_Enter
