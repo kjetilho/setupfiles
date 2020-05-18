@@ -1,0 +1,49 @@
+#! /bin/bash
+#
+# i3-disp-size
+# Displays the focused container's dimensions in that container's corner.
+#
+# Written by GermainZ and kjetilho from #i3@freenode
+#
+# Dependencies:
+#
+# - i3 <https://i3wm.org/>
+# - xosd <http://sourceforge.net/projects/libxosd/>
+# - xwininfo (xorg-x11-utils)
+# - xdotool
+#
+# Usage:
+#
+# In your i3 config, execute this script after resize commands, and
+# kill osd_cat when exiting the resize mode. For example:
+#
+# mode "resize" {
+#     bindsym h resize shrink width 10 px or 1 ppt, exec --no-startup-id "i3-disp-size"
+#     bindsym j resize grow height 10 px or 1 ppt, exec --no-startup-id "i3-disp-size"
+#     bindsym k resize shrink height 10 px or 1 ppt, exec --no-startup-id "i3-disp-size"
+#     bindsym l resize grow width 10 px or 1 ppt, exec --no-startup-id "i3-disp-size"
+#     bindsym Return mode "default", exec --no-startup-id "pkill osd_cat"
+#     bindsym Escape mode "default", exec --no-startup-id "pkill osd_cat"
+# }
+
+fontsize=24  # in pixels
+
+# osd_cat only supports old style XLFD font names, not pango.
+style=( --colour yellow
+        --outline 1 --outlinecolour black
+        --shadow 3 --shadowcolour darkgrey
+        --font "-*-*-bold-r-*-*-$fontsize-*-100-100-*-*-iso8859-1" )
+
+# Get focused container's rectangle
+eval "$(xdotool getwindowfocus getwindowgeometry --shell)"
+
+# Get character cell geometry instead (useful for terminals and Emacs)
+# If you want pixel size always, just remove the next command.
+eval $(xwininfo -id "$WINDOW" |
+           awk -F'[^0-9]+' '/-geometry/ { print "WIDTH=" $2; print "HEIGHT=" $3 }')
+
+# Kill previous instances.
+pkill osd_cat
+
+# Draw text.
+printf "%s×%s" "$WIDTH" "$HEIGHT" | osd_cat -i $X -o $Y "${style[@]}"

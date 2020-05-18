@@ -8,6 +8,7 @@ nyttige perl-ting::   perl-YAML perl-YAML-LibYAML perl-LDAP perl-DBI perl-XML-Si
 for terminal::        rxvt-unicode liberation-mono-fonts
 for reset-resources:: xorg-x11-resutils
 for myi3status::      perl-JSON light
+for i3-disp-size::    xosd xorg-x11-utils xdotool
 for activate-window:: xdotool wmctrl
 for setcursor::       libX11-devel
 for horse::           aspell-en aspell-no
