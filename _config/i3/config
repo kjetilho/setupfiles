@@ -254,6 +254,9 @@ bindsym $mod+Shift+KP_Subtract exec "adjust_volume Master toggle"
 
 bindsym --release $mod+Shift+Print  exec "grabb --all"
 bindsym --release $mod+Print        exec "grabb --select"
+# hack: I rebound Print key to be Insert on RPi keyboard
+bindsym --release $mod+Shift+Insert exec "grabb --all"
+bindsym --release $mod+Insert       exec "grabb --select"
 
 assign [instance="irssi"] 1
 assign [class="Emacs"] 4
