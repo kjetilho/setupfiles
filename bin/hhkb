@@ -30,7 +30,10 @@ then
 fi
 
 # override cursor font with big cursor at Gumby position (56)
-xset +fp $HOME/lib/X11/fonts
+if ! xset q | grep -q kjetilho/lib/X11/fonts
+then
+    xset +fp $HOME/lib/X11/fonts
+fi
 
 # attach extra monitors to desktop
 update-monitors
