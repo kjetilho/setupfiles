@@ -284,3 +284,4 @@ exec nm-applet
 exec /home/kjetilho/bin/hhkb
 exec blueman-tray
 exec xscreensaver
+exec xsetroot -solid black
