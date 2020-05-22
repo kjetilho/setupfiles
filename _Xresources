@@ -15,7 +15,7 @@ Xft.dpi: 96
 #else
 #  define FONT_SIZE_NORMAL 9
 #  define FONT_SIZE_SMALL 8
-#  define FONT_SIZE_BIG 10
+#  define FONT_SIZE_BIG 11
 #  define FONT_SIZE_HUGE 18
 #endif
 
@@ -110,7 +110,8 @@ irssi.VT100.geometry:		90x37+0+0
 irssi*font:			xft:MONO_FONT-20
 #else
 irssi.VT100.geometry:		84x34
-irssi*faceSize:			9
+irssi*faceSize:			FONT_SIZE_BIG
+irssi*font:			xft:MONO_FONT-FONT_SIZE_BIG
 #endif
 irssi.perl-ext:                 bell-command,-selection
 irssi.bell-command:             bell
