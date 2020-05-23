@@ -50,7 +50,9 @@ replacebell comes from
   it uses paplay from pulseaudio-utils to play WAV files
 
 Firefox:
- * turn off web search in address bar: about:config, keyword.enable -> false
+ * turn off web search in address bar: about:config,
+   browser.urlbar.suggest.searches -> false
+   OLD? keyword.enable -> false
 
 ApacheDirectoryStudio:
   * download from https://directory.apache.org/studio/download/download-linux.html
