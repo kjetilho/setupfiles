@@ -62,6 +62,9 @@ ApacheDirectoryStudio:
   * sudo alternatives --config java
   * sudo ln -s java /usr/bin/jre
 
+uemcli:
+  https://www.dell.com/support/home/en-us/product-support/product/unity-300/drivers
+
 compositor?  xcompmgr -c -t-6 -l-6 -o.1
 
 radix: ftp://ftp.unicode.org/Public/UNIDATA/Blocks.txt
