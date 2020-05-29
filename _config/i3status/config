@@ -22,6 +22,7 @@ order += "disk /home/kjetilho"
 order += "battery 0"
 # order += "load"
 order += "tztime local"
+order += "volume hyperx"
 order += "volume master"
 
 wireless _first_ {
@@ -77,5 +78,14 @@ volume master {
         format_muted = "[🔈X %volume]"
         device = "default"
         mixer = "Master"
+        mixer_idx = 0
+}
+
+volume hyperx {
+        format = "[🔉♪ %volume]"
+        format_muted = "[🔈X %volume]"
+        # This should be dynamic:
+        device = "hw:2"
+        mixer = "PCM"
         mixer_idx = 0
 }

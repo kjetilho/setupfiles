@@ -32,6 +32,7 @@ while (<$i3>) {
             unshift(@{$info}, brightness());
         }
         check_battery(find_section($info, 'battery'));
+        $info = filter_master_volume($info);
         $_ = ($comma ? "," : ''). $json->encode($info) . "\n";
     }
     print $_;
@@ -52,7 +53,6 @@ sub brightness {
     return {"name" => "brightness 0", "full_text" => "[☼ ${brightness}%]"};
 }
 
-
 sub check_battery {
     my ($info) = @_;
 
@@ -66,4 +66,19 @@ sub check_battery {
         # charging or something?  resetting.
         $previous_battery_level = 100;
     }
+}
+
+# Only keep the first volume section with information
+sub filter_master_volume {
+    my ($info) = @_;
+    my @keep = ();
+    my $seen_volume;
+    for (@{$info}) {
+        if ($_->{name} eq 'volume') {
+            next unless $_->{full_text};
+            next if $seen_volume++; # only include first
+        }
+        push(@keep, $_);
+    }
+    \@keep;
 }

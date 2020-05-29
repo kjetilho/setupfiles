@@ -1,21 +1,44 @@
 #! /bin/bash
 
-if [ $# != 2 ]
+case $1 in
+    -c)
+        card=$2; shift; shift;;
+    *)
+        card=$(awk '/digital audio playback/ {c = substr($0, 7, 2)} END {print c}' /proc/asound/devices)
+        ;;
+esac
+
+if [ $# -eq 2 ]
+then
+    channel="$1"; shift
+else
+    # get name of simple mixers with p(layback) volume
+    channels=($(amixer -c $card scontents |
+                    awk 'BEGIN{RS="Simple mixer control "} /pvolume/ {print $1}' |
+                    cut -d, -f1))
+    # without an index, an array variable expands to first element
+    channel=$channels
+fi
+
+if [ $# != 1 ]
 then
     cat <<EOF >&2
-Usage: $0 <channel> <adjustment>
+Usage: $0 [-c CARD] [<channel>] <adjustment>
 
 Examples:
-  volume_adjust Master toggle   -- toggles mute on/off
-  volume_adjust Master 5%+      -- increase volume by 5%
+  volume_adjust toggle   -- toggles mute on/off
+  volume_adjust 5%+      -- increase volume by 5%
 
 EOF
+    printf "Available controls for card %d: %s\n" $card "${channels[*]}"
     exit 64
 fi
 
-case $2 in
-    toggle) amixer sset $1 $2 >/dev/null ;;
-    *)      amixer set $1 $2 >/dev/null ;;
+case $1 in
+    [0-9]*)
+        amixer -c $card set $channel $1 >/dev/null ;;
+    *) # mute, unmute, toggle
+        amixer -c $card sset $channel $1 >/dev/null ;;
 esac
 
 pkill -USR1 -x i3status
