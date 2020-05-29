@@ -232,6 +232,7 @@ bindsym XF86AudioMute          exec "adjust_volume toggle"
 bindsym Control+XF86AudioMute  exec "bt_connect"
 bindsym XF86AudioPlay          exec "spotify-dbus PlayPause"
 bindsym $mod+Pause             exec "spotify-dbus PlayPause"
+bindsym $mod+comma             exec "spotify-dbus PlayPause"
 
 bindsym XF86AudioStop          exec "spotify-dbus Stop"
 bindsym XF86AudioNext          exec "spotify-dbus Next"
