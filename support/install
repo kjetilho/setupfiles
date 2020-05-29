@@ -63,13 +63,13 @@ find . \( \( -name .git -o -name '*.swp' -o -name '*~' -o -name '*#*' -o -name '
 	ln -v -s -f `pwd`/$path $dest
     done
 
-cd $HOME/lib/X11/fonts && mkfontdir && mkfontscale
+(cd $HOME/lib/X11/fonts && mkfontdir && mkfontscale)
 chmod a+x $HOME $HOME/lib $HOME/lib/X11 `pwd` `pwd`/..
 if [ ! -r /etc/X11/xorg.conf.d/02-font-kjetilho.conf ] ||
-       cmp -s /etc/X11/xorg.conf.d/02-font-kjetilho.conf support/02-font-kjetilho.conf
+       ! cmp -s /etc/X11/xorg.conf.d/02-font-kjetilho.conf support/02-font-kjetilho.conf
 then
     echo "Using sudo to add /etc/X11/xorg.conf.d/02-font-kjetilho.conf"
-    sudo cp support/02-font-kjetilho.conf /etc/X11/xorg.conf.d/02-font-kjetilho.conf
+    sudo cp -v support/02-font-kjetilho.conf /etc/X11/xorg.conf.d/02-font-kjetilho.conf
 fi
 
 cd ${base}/support
