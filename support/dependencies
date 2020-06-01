@@ -1,4 +1,4 @@
-grep :: <<_SIGNING_OFF_ | sed "s/.*:: */sudo dnf install -y /"
+grep :: <<_SIGNING_OFF_ | sed "s/.*:: *//" | xargs sudo dnf install -y
 
 nyttige ting å ha installert:
 
