@@ -6,6 +6,7 @@
 ! to do a character lookup, so it is slightly more low level.
 !
 keycode 108 = Mode_switch
+clear mod5
 add mod5 = Mode_switch
 
 keycode 107 = Insert    Insert    Print Sys_Req Print Sys_Req
