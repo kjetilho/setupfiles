@@ -7,30 +7,52 @@ my $min_volume = 0;
 my $max_volume = 65536;
 my $target_pct = 25;
 my $current_pct = 100;
-open(my $amixer, '-|', 'amixer', 'get', 'Master') or die;
-while (<$amixer>) {
-    if (/^\s*Limits: Playback (\d+) - (\d+)/) {
-        ($min_volume, $max_volume) = ($1, $2);
-    } elsif (/Front Left: Playback +(\d+)\s*.*\[(on|off)\]/) {
-        if ($2 eq 'off') {
-            $current_pct = 0;
-        } else {
-            $current_pct = 100 * ($1 - $min_volume) / $max_volume;
+my $paplay_volume = $max_volume;
+my $played;
+
+if (open(my $sinks, '-|', 'pacmd', 'list-sinks')) {
+    my $sink;
+    my $volume;
+    while (<$sinks>) {
+        if (/^\s+name: <(.*)>/) {
+            $sink = $1;
+        } elsif (/^\s*volume: front-left: (\d+) .* front-right: (\d+)/) {
+            $volume = ($1 + $2) / 2;
+        } elsif (/^\s*base volume: (\d+)/) {
+            $volume *= $1/$max_volume;
+        } elsif (/^\s*muted: (yes|no)/) {
+            if ($1 eq 'yes') {
+                next;
+            }
+            $current_pct = $volume / $max_volume * 100;
+            $current_pct = 1 unless $current_pct; # Zero volume is not muted, we want sound
+
+            $paplay_volume = $target_pct / $current_pct * ($max_volume - $min_volume) + $min_volume;
+            if ($paplay_volume > $max_volume) {
+                $paplay_volume = $max_volume;
+            }
+            ++$played;
+            if (fork() == 0) {
+                system('paplay', '-d', $sink, '--volume', $paplay_volume, "${ENV{'HOME'}}/lib/ahem.wav");
+                exit(0);
+            }
         }
     }
-}
-close($amixer);
-
-my $paplay_volume = $max_volume;
-if ($current_pct > 0) {
-    $paplay_volume = $target_pct / $current_pct * ($max_volume - $min_volume) + $min_volume;
-    if ($paplay_volume > $max_volume) {
-        # print "got $paplay_volume, clipping\n";
-        $paplay_volume = $max_volume;
+    close($sinks);
+    unless ($played) {
+        if ($sink) {
+            muted_bell();
+        } else {
+            muted_bell("could not parse pacmd output");
+        }
     }
-    # urxvt run us async
-    system('paplay', '--volume', $paplay_volume, "${ENV{'HOME'}}/lib/ahem.wav");
 } else {
-    system('notify-send', '-u', 'low', ' 🔔 *BELL RANG* 🔔 ');
+    muted_bell("(pacmd failed, $!)");
 }
 
+sub muted_bell {
+    my ($suppl) = @_;
+    my $msg = " 🔔 *BELL RANG* 🔔 ";
+    $msg .= "\n" . $suppl if $suppl;
+    system('notify-send', '-u', 'low', $msg);
+}
