@@ -347,7 +347,7 @@ ssh() {
 }
 
 cssh() {
-    command cssh -o "-F $HOME/.ssh/config" "$@"
+    command cssh -o "-F $HOME/.ssh/config " "$@"
 }
 
 percd() {
