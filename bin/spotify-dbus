@@ -1,22 +1,99 @@
-#! /bin/bash
+#! /usr/bin/perl
 
-usage() {
-    echo "Usage: $0 [--verbose] {PlayPause|Stop|Next|Previous}" >&2
-    echo "Sends command to Spotify over dbus" >&2
-    exit 64
+use Getopt::Long;
+use Data::Dumper;
+
+my @verbs = qw(PlayPause Stop Next Previous);
+my $format = "%artist: «\%title» (track \%tracknumber on «\%album») [\%autorating]";
+
+sub usage {
+    my $verblist = join('|', @verbs);
+    printf STDERR <<"END";
+Usage: $0 [--verbose] {$verblist}
+
+Sends command to Spotify over dbus.
+
+or     $0 [--format=FMT] Metadata
+
+Print metadata about currently playing song.  FMT can be 'json' or a
+text string where fieldnames prefixed with '%' are replaced.
+END
+    print STDERR "Default format is '$format'.\n";
+    exit 64;
 }
 
-case $1 in
-    -v|--verbose) shift ;;
-    *)  exec >/dev/null ;;
-esac
+my $verbose;
+GetOptions('format=s' => \$format,
+           'verbose|v' => \$verbose,
+    ) or usage();
 
-[ $# = 1 ] || usage
+usage() unless @ARGV == 1;
+my $verb = shift;
+usage() unless $verb eq 'Metadata' or grep { $_ eq $verb } @verbs;
 
-mpris=org.mpris.MediaPlayer2
-case $1 in
-    PlayPause|Stop|Next|Previous)
-        dbus-send --print-reply --dest=$mpris.spotify /${mpris//.//} $mpris.Player.$1 ;;
-    *)
-        usage ;;
-esac
+my @cmd = qw(dbus-send
+    --dest=org.mpris.MediaPlayer2.spotify
+    /org/mpris/MediaPlayer2);
+
+sub decode_type {
+    my ($t) = @_;
+    if ($t =~ /^array \[/) {
+        return [];
+    } elsif ($t =~ /^string "(.*)"/) {
+        return $1;
+    } elsif ($t =~ /^(u?int(32|64)) (-?\d+)/) {
+        return $3;
+    } elsif ($t =~ /^double (-?\d*\.\d*)/) {
+        return $1;
+    } else {
+        print STDERR "UNKNOWN data format [$t]\n";
+    }
+}
+
+if ($verb eq 'Metadata') {
+    close(STDERR) unless $verbose;
+    if (open(my $dbus, '-|', @cmd, '--print-reply',
+             'org.freedesktop.DBus.Properties.Get',
+             'string:org.mpris.MediaPlayer2.Player', 'string:Metadata')) {
+        my $stats = <$dbus>;
+        exit(8) unless $stats;
+        my %meta;
+        while (<$dbus>) {
+            s/^\s+//;
+            if (/^dict entry/) {
+                $key = undef;
+                $val = undef;
+            } elsif (!defined $key && /^string "(xesam:|mpris:)?(.*)"/) {
+                # we simplify keys from "xesam:discNumber" to just "discnumber"
+                $key = lc $2;
+            } elsif (!defined $val) {
+                if (/^variant\s*(.*)/) {
+                    $val = decode_type($1);
+                }
+            } elsif (/^[\)\]]$/) {
+                $meta{$key} = $val if defined $key;
+            } elsif (ref $val eq 'ARRAY') {
+                push(@{$val}, decode_type($_));
+            }
+        }
+        close($dbus);
+        if ($format eq 'json') {
+            # avoid 0.1 second load time and only load when needed
+            # ("use" loads always, even inside ifs)
+            eval 'require JSON;';
+            print JSON::encode_json(\%meta);
+        } else {
+            $format =~ s/%([a-z]+)/ref $meta{$1} ? join(', ', @{$meta{$1}}) : $meta{$1}/ge;
+            print $format, "\n";
+        }
+    } else {
+        die;
+    }
+} else {
+    if ($verbose) {
+        push(@cmd, '--print-reply');
+    } else {
+        push(@cmd, '--type=method_call');
+    }
+    system(@cmd, "org.mpris.MediaPlayer2.Player.$verb");
+}
