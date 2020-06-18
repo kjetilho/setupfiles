@@ -237,9 +237,9 @@ bindsym $mod+comma             exec "spotify-dbus PlayPause"
 bindsym XF86AudioStop          exec "spotify-dbus Stop"
 bindsym XF86AudioNext          exec "spotify-dbus Next"
 bindsym XF86AudioPrev          exec "spotify-dbus Previous"
-# PageUp skips to next, PageDn skips back
-bindsym $mod+Prior             exec "spotify-dbus Next"
-bindsym $mod+Next              exec "spotify-dbus Previous"
+# PageUp skips back, PageDn skip to next
+bindsym $mod+Prior             exec "spotify-dbus Previous"
+bindsym $mod+Next              exec "spotify-dbus Next"
 
 bindsym $mod+equal             exec "adjust_volume 5%+"
 bindsym $mod+minus             exec "adjust_volume 5%-"
