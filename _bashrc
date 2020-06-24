@@ -589,6 +589,7 @@ function up () {
 
 g() {
     case $1 in
+        -) cd - ;;
         p|pu) cd ~/svn/puppet ;;
         pup|pupp|puppet) cd ~/git/git.i.bitbit.net/puppet-mod/puppet ;;
         b|ba|bar|bare|bareos) cd ~/git/git.i.bitbit.net/backup/bareos-osl ;;
@@ -598,6 +599,7 @@ g() {
                      "git/git.i.bitbit.net/*/$1*" \
                      "git/gitlab.redpill-linpro.com/$1*" \
                      "git/git.i.bitbit.net/*/*$1*" \
+                     "git/gitlab.redpill-linpro.com/*/*$1*" \
                      "svn/$1*" \
                      "git/github.com/*/$1*" \
                      "git/*/*$1*"
