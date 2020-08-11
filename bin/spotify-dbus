@@ -24,7 +24,7 @@ END
 
 my $verbose;
 GetOptions('format=s' => \$format,
-           'verbose|v' => \$verbose,
+           'verbose|v+' => \$verbose,
     ) or usage();
 
 usage() unless @ARGV == 1;
@@ -43,7 +43,7 @@ sub decode_type {
         return $1;
     } elsif ($t =~ /^(u?int(32|64)) (-?\d+)/) {
         return $3;
-    } elsif ($t =~ /^double (-?\d*\.\d*)/) {
+    } elsif ($t =~ /^double (-?\d*(\.\d*)?)/) {
         return $1;
     } else {
         print STDERR "UNKNOWN data format [$t]\n";
@@ -52,13 +52,16 @@ sub decode_type {
 
 if ($verb eq 'Metadata') {
     close(STDERR) unless $verbose;
-    if (open(my $dbus, '-|', @cmd, '--print-reply',
-             'org.freedesktop.DBus.Properties.Get',
-             'string:org.mpris.MediaPlayer2.Player', 'string:Metadata')) {
+    my @fullcmd = (@cmd, '--print-reply',
+                   'org.freedesktop.DBus.Properties.Get',
+                   'string:org.mpris.MediaPlayer2.Player', 'string:Metadata');
+    print STDERR join(' ', 'Running:', @fullcmd), "\n";
+    if (open(my $dbus, '-|', @fullcmd)) {
         my $stats = <$dbus>;
         exit(8) unless $stats;
         my %meta;
         while (<$dbus>) {
+            print STDERR "RESPONSE: ", $_ if $verbose > 1;
             s/^\s+//;
             if (/^dict entry/) {
                 $key = undef;
