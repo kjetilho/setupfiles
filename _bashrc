@@ -732,6 +732,8 @@ osinit() {
         fi
     fi
 }
+complete -W "$(ls $HOME/.config/openstack | sed s/-openrc.sh//)" osinit
+
 2a02() {
     dig axfr 0.c.0.0.2.0.a.2.ip6.arpa. @ns-foo.i.bitbit.net |
         perl -pe 's/(\S+)\.ip6\.arpa\./reverse($1)/e' | grep ^2 | sort
