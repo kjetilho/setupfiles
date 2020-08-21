@@ -624,7 +624,26 @@ gw() {
     url=$(echo "$giturl" | sed 's|^[a-z]\+@\([^:]\+\):|https://\1/|')
     ${XDG_OPEN-xdg-open} "$url"
 }
-
+gmv() {
+    local from="$1" to="$2"
+    case $to in
+        */*) : ;;
+        *)   to="$to/${from##*/}" ;;
+    esac
+    base=$HOME/git/git.i.bitbit.net
+    if [ ! -d "$base/$from" ]
+    then
+        echo No such repo
+        return
+    fi
+    new_remote=git@git.i.bitbit.net:$to.git
+    echo Updating $from to $new_remote
+    cd $base
+    mv "$from" "$to"
+    cd $to
+    git remote set-url origin $new_remote
+}
+        
 _gclone() {
     local server="$1"
     shift
