@@ -740,6 +740,9 @@ complete -W "$(ls $HOME/.config/openstack | sed s/-openrc.sh//)" osinit
 }
 axfr() {
     case $1 in
+        [1-9]*.[1-9]*)
+             dom=$(perl -e 'print join(".", reverse(split(/\./, $ARGV[0])), "in-addr.arpa")' $1)
+             ;;
         *.*) dom="$1" ;;
         *)   dom="$1.bitbit.net" ;;
     esac
