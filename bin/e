@@ -1,6 +1,6 @@
 #! /bin/bash
 
-if [ -S /tmp/emacs$UID/server ]
+if [ -S /run/user/$UID/emacs/server -o -S /tmp/emacs$UID/server ]
 then
     echo "Loading in Emacs [$@]..."
     emacsclient -n "$@"
