@@ -587,30 +587,50 @@ function up () {
         esac
 }
 
+# Usage: g [print] <substring> [<restriction>]
+# "g _net"     will do cd ~/git/git.i.bitbit.net/puppet-ms0/bitbit_net
+# "g _net ans" will do cd ~/git/git.i.bitbit.net/ansible/bitbit_net
+#
+# With "print", list all possible matches.  Without "print", the
+# first match will be used as new current directory.
+#
 g() {
+    local cd=cd
+    if [ $# -gt 1 -a "$1" = print ]
+    then
+        cd=echo; shift
+    fi
     case $1 in
-        -) cd - ;;
-        p|pu) cd ~/svn/puppet ;;
-        pup|pupp|puppet) cd ~/git/git.i.bitbit.net/puppet-mod/puppet ;;
-        b|ba|bar|bare|bareos) cd ~/git/git.i.bitbit.net/backup/bareos-osl ;;
-        bc|bch|bcheck) cd ~/git/git.i.bitbit.net/backup/bacula-check ;;
+        -)               cd - ;;
+        /*)              cd "$1" ;;
+        p|pu)            $cd ~/svn/puppet ;;
+        pup|pupp|puppet) $cd ~/git/git.i.bitbit.net/puppet-mod/puppet ;;
         *)
             for p in "git/git.i.bitbit.net/*/$1" \
                      "git/git.i.bitbit.net/*/$1*" \
                      "git/gitlab.redpill-linpro.com/$1*" \
+                     "git/git.i.bitbit.net/puppet*/*$1*" \
                      "git/git.i.bitbit.net/*/*$1*" \
                      "git/gitlab.redpill-linpro.com/*/*$1*" \
                      "svn/$1*" \
                      "git/github.com/*/$1*" \
                      "git/*/*$1*"
             do
-                for m in $HOME/$p
+                for m in $HOME/$p/
                 do
-                    case "$m" in
-                         $HOME/*"$2"*)
-                             [ -d "$m" ] && cd "$m" && return
-                             ;;
-                    esac
+                    if [ -d "$m" ] # could be unexpanded with "*" intact
+                    then
+                        case "$m" in
+                            $HOME/*"$2"*)
+                                if [ $cd = cd ]
+                                then
+                                    cd "$m" && return
+                                else
+                                    $cd "$m" | egrep "($1|$2)"
+                                fi
+                                ;;
+                        esac
+                    fi
                 done
             done
             ;;
