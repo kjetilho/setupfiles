@@ -78,5 +78,5 @@ for prof in $HOME/.mozilla/firefox/*/prefs.js
 do
     # no use with relative link here, since .mozilla/firefox is not in
     # NFS home.
-    command ln -s -f `pwd`/firefox/chrome $(dirname "$prof")
+    command ln -s -f `pwd`/firefox/chrome "$(dirname "$prof")"
 done
