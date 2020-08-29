@@ -37,8 +37,16 @@ fi
 case $1 in
     [0-9]*)
         amixer -c $card set $channel $1 >/dev/null ;;
-    *) # mute, unmute, toggle
-        amixer -c $card sset $channel $1 >/dev/null ;;
+    mute|unmute|toggle)
+        pasink=($(pacmd list-sinks | awk '/[*] index:/ {i=$3} i && /muted:/ {print i, $2; exit}'))
+        case "$1:${pasink[1]}" in
+            mute:*)     mute=true ;;
+            unmute:*)   mute=false ;;
+            toggle:yes) mute=false ;;
+            toggle:no)  mute=true ;;
+            *)          echo "wha?  [$1] [${pasink[@]}]"; exit 1 ;;
+        esac
+        pacmd set-sink-mute ${pasink[0]} $mute
 esac
 
 pkill -USR1 -x i3status
