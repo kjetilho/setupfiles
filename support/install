@@ -22,6 +22,7 @@ then
 fi
 
 mkdir -p $HOME/lib/X11/fonts $HOME/lib/elisp $HOME/.config/openstack
+rsync -a lib/X11/fonts/ $HOME/lib/X11/fonts/
 
 eval $(xrandr 2>/dev/null | awk '/^Screen 0/ {printf("XWIDTH=%d XHEIGHT=%d\n", $8, $10)}')
 
