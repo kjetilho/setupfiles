@@ -107,12 +107,12 @@ bindsym $mod+f fullscreen toggle
 # bindsym $mod+Shift+e layout toggle split
 
 # activate interesting windows
-# Norwegian keyboard
-bindsym $mod+bar [instance="irssi"] focus
-# Happy Hacking keyboard
+
+# keycode 49 is bar on a Norwegian keyboard and grave on my Raspberry
+# Pi keyboard with US layout.
+bindcode $mod+49 [instance="irssi"] focus
+# Happy Hacking keyboard has Escape to the left of the digits
 bindsym $mod+Escape [instance="irssi"] focus
-# Raspberry Pi keyboard
-bindsym $mod+grave [instance="irssi"] focus
 
 bindsym $mod+e [class="Emacs"] focus
 bindsym $mod+Control+e [class="Evolution"] focus
