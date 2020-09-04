@@ -2,7 +2,20 @@
 
 use POSIX qw(strftime);
 use Time::Local;
+use Getopt::Long;
+
 my $format = "%12.06f";
+my $keep_timestamp;
+
+sub usage {
+    print STDERR "Usage: $0 [--keep-timestamp] [--format PRINTF-FORMAT]\n";
+    print STDERR "Default PRINTF-FORMAT is '$format'\n";
+    exit(64);
+}
+
+GetOptions('format=s' => \$format,
+           'keep-timestamp!' => \$keep_timestamp,
+    ) or usage();
 
 my $previous_time;
 
@@ -12,7 +25,9 @@ while (<>) {
         my $t = timelocal($6, $5, $4, $3, $2-1, $1-1900) + $subsec;
         my $delta = defined $previous_time ? $t - $previous_time : 0.0;
         $previous_time = $t;
-        s/\b(\d{4})-(\d{2})-(\d{2}).(\d{2}):(\d{2}):(\d{2})\.(\d+)/sprintf($format, $delta)/e;
+        my $replacement = sprintf($format, $delta);
+        $replacement .= " [$&]" if $keep_timestamp;
+        s/\b(\d{4})-(\d{2})-(\d{2}).(\d{2}):(\d{2}):(\d{2})\.(\d+)/$replacement/e;
     }
     print;
 }

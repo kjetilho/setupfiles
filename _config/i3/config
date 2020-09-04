@@ -114,6 +114,8 @@ bindcode $mod+49 [instance="irssi"] focus
 # Happy Hacking keyboard has Escape to the left of the digits
 bindsym $mod+Escape [instance="irssi"] focus
 
+# $mod + qwyuiopdg;'czn. are available (sometimes Shift is taken)
+
 bindsym $mod+e [class="Emacs"] focus
 bindsym $mod+Control+e [class="Evolution"] focus
 bindsym $mod+t [class="Thunderbird" instance="Mail"] focus
@@ -186,9 +188,9 @@ bindsym $mod+Shift+Control+9 move container to workspace 19, workspace 19
 bindsym $mod+Shift+Control+0 move container to workspace 20, workspace 20
 
 # reload the configuration file
-bindsym $mod+Shift+c reload
+bindsym $mod+Shift+r reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
-bindsym $mod+Shift+r restart
+bindsym $mod+Shift+Control+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+q exec "i3-nagbar -t warning -m 'You pressed the quit shortcut. Do you really want to quit i3? This will end your X session.' -b 'Yes, exit quit' 'i3-msg exit'"
 
