@@ -114,7 +114,7 @@ bindcode $mod+49 [instance="irssi"] focus
 # Happy Hacking keyboard has Escape to the left of the digits
 bindsym $mod+Escape [instance="irssi"] focus
 
-# $mod + qwyuiopdg;'czn. are available (sometimes Shift is taken)
+# $mod + qwyuiopdg;'cn. are available (sometimes Shift is taken)
 
 bindsym $mod+e [class="Emacs"] focus
 bindsym $mod+Control+e [class="Evolution"] focus
@@ -139,6 +139,7 @@ bindsym $mod+Shift+a focus child
 #bindsym $mod+d focus child
 
 bindsym $mod+b workspace back_and_forth
+bindsym $mod+z workspace back_and_forth
 bindsym $mod+x move workspace to output right
 # hhkb also calls update-monitors
 bindsym $mod+Shift+x exec "hhkb"
