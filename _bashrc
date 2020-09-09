@@ -122,7 +122,7 @@ then
 fi
 
 _rl="`tput rmm`"
-_tb='\e]0;${CHOOSEHOST+» }\u@\H\a'
+_titlebar='\e]0;${CHOOSEHOST+» }\u@\H ${OS_PROJECT_NAME+«${OS_PROJECT_NAME}»}\a'
 _status='\e[$(($??1:0))m'
 _prompt=': [\u@\h \w];'
 _reset='\[\e[0m\]'
@@ -138,7 +138,7 @@ case $TERM in
                 PROMPT_COMMAND=_PC_
                 trap '_PC_() { echo "New window size: ${COLUMNS}x${LINES}"; eval $_func_PC; } ' winch
                 _prompt=': ${_S_/#\{0\} /}[\u@\h \w];'
-                PS1="\[${_rl}${_tb}${_status}\]${_prompt}${_reset} "
+                PS1="\[${_rl}${_titlebar}${_status}\]${_prompt}${_reset} "
 		;;
 	*)	PS1="${_prompt} "
 		;;
