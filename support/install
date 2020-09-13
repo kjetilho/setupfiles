@@ -18,33 +18,6 @@ fi
 
 mkdir -p $HOME/lib/elisp $HOME/.config/openstack
 
-if [ "$DISPLAY" ]
-then
-    if [ support/setcursor.c -nt bin/setcursor ]
-    then
-        cc -Wall support/setcursor.c -o bin/setcursor -lX11
-    fi
-
-    mkdir -p $HOME/lib/X11/fonts
-    rsync -a lib/X11/fonts/ $HOME/lib/X11/fonts/
-
-    eval $(xrandr 2>/dev/null | awk '/^Screen 0/ {printf("XWIDTH=%d XHEIGHT=%d\n", $8, $10)}')
-
-    # This is only ./_clusterssh/config.erb for now - may have to move
-    # this out of DISPLAY specific test if more files are templated.
-    find . -name '*.erb' -print |
-        cut -c3- |
-        while read path
-        do
-            base=${path%.erb}
-            if ! [ -f "$base" -a "$base" -nt "$path" ]
-            then
-                echo "Updating $base from $path"
-                erb -T - "$path" > "${base}.tmp" && mv "${base}.tmp" "$base"
-            fi
-        done
-fi
-
 find . \( \( -name .git -o -name '*.swp' -o -name '*~' -o -name '*#*' -o -name '.?*' -o -name '*.erb' -o -name support \) -prune \) -o \( -type f -o -type l \) -print |
     cut -c3- |
     while read path
@@ -71,19 +44,46 @@ find . \( \( -name .git -o -name '*.swp' -o -name '*~' -o -name '*#*' -o -name '
 	ln -v -s -f `pwd`/$path $dest
     done
 
-(cd $HOME/lib/X11/fonts && mkfontdir && mkfontscale)
-chmod a+x $HOME $HOME/lib $HOME/lib/X11 `pwd` `pwd`/..
-if [ ! -r /etc/X11/xorg.conf.d/02-font-kjetilho.conf ] ||
-       ! cmp -s /etc/X11/xorg.conf.d/02-font-kjetilho.conf support/02-font-kjetilho.conf
+if [ "$DISPLAY" ]
 then
-    echo "Using sudo to add /etc/X11/xorg.conf.d/02-font-kjetilho.conf"
-    sudo cp -v support/02-font-kjetilho.conf /etc/X11/xorg.conf.d/02-font-kjetilho.conf
-fi
+    if [ support/setcursor.c -nt bin/setcursor ]
+    then
+        cc -Wall support/setcursor.c -o bin/setcursor -lX11
+    fi
 
-cd ${base}/support
-for prof in $HOME/.mozilla/firefox/*/prefs.js
-do
-    # no use with relative link here, since .mozilla/firefox is not in
-    # NFS home.
-    command ln -s -f `pwd`/firefox/chrome "$(dirname "$prof")"
-done
+    mkdir -p $HOME/lib/X11/fonts
+    rsync -a lib/X11/fonts/ $HOME/lib/X11/fonts/
+
+    eval $(xrandr 2>/dev/null | awk '/^Screen 0/ {printf("XWIDTH=%d XHEIGHT=%d\n", $8, $10)}')
+
+    # This is only ./_clusterssh/config.erb for now - may have to move
+    # this out of DISPLAY specific test if more files are templated.
+    find . -name '*.erb' -print |
+        cut -c3- |
+        while read path
+        do
+            base=${path%.erb}
+            if ! [ -f "$base" -a "$base" -nt "$path" ]
+            then
+                echo "Updating $base from $path"
+                erb -T - "$path" > "${base}.tmp" && mv "${base}.tmp" "$base"
+            fi
+        done
+
+    (cd $HOME/lib/X11/fonts && mkfontdir && mkfontscale)
+    chmod a+x $HOME $HOME/lib $HOME/lib/X11 `pwd` `pwd`/..
+    if [ ! -r /etc/X11/xorg.conf.d/02-font-kjetilho.conf ] ||
+           ! cmp -s /etc/X11/xorg.conf.d/02-font-kjetilho.conf support/02-font-kjetilho.conf
+    then
+        echo "Using sudo to add /etc/X11/xorg.conf.d/02-font-kjetilho.conf"
+        sudo cp -v support/02-font-kjetilho.conf /etc/X11/xorg.conf.d/02-font-kjetilho.conf
+    fi
+
+    cd ${base}/support
+    for prof in $HOME/.mozilla/firefox/*/prefs.js
+    do
+        # no use with relative link here, since .mozilla/firefox is not in
+        # NFS home.
+        command ln -s -f `pwd`/firefox/chrome "$(dirname "$prof")"
+    done
+fi
