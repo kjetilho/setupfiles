@@ -16,27 +16,34 @@ then
 	ln() { command ln -r "$@"; }
 fi
 
-if [ "$DISPLAY" ] && type cc >/dev/null 2>&1 && [ support/setcursor.c -nt bin/setcursor ]
+mkdir -p $HOME/lib/elisp $HOME/.config/openstack
+
+if [ "$DISPLAY" ]
 then
-    cc -Wall support/setcursor.c -o bin/setcursor -lX11
+    if [ support/setcursor.c -nt bin/setcursor ]
+    then
+        cc -Wall support/setcursor.c -o bin/setcursor -lX11
+    fi
+
+    mkdir -p $HOME/lib/X11/fonts
+    rsync -a lib/X11/fonts/ $HOME/lib/X11/fonts/
+
+    eval $(xrandr 2>/dev/null | awk '/^Screen 0/ {printf("XWIDTH=%d XHEIGHT=%d\n", $8, $10)}')
+
+    # This is only ./_clusterssh/config.erb for now - may have to move
+    # this out of DISPLAY specific test if more files are templated.
+    find . -name '*.erb' -print |
+        cut -c3- |
+        while read path
+        do
+            base=${path%.erb}
+            if ! [ -f "$base" -a "$base" -nt "$path" ]
+            then
+                echo "Updating $base from $path"
+                erb -T - "$path" > "${base}.tmp" && mv "${base}.tmp" "$base"
+            fi
+        done
 fi
-
-mkdir -p $HOME/lib/X11/fonts $HOME/lib/elisp $HOME/.config/openstack
-rsync -a lib/X11/fonts/ $HOME/lib/X11/fonts/
-
-eval $(xrandr 2>/dev/null | awk '/^Screen 0/ {printf("XWIDTH=%d XHEIGHT=%d\n", $8, $10)}')
-
-find . -name '*.erb' -print |
-    cut -c3- |
-    while read path
-    do
-          base=${path%.erb}
-          if ! [ -f "$base" -a "$base" -nt "$path" ]
-          then
-              echo "Updating $base from $path"
-              erb -T - "$path" > "${base}.tmp" && mv "${base}.tmp" "$base"
-          fi
-    done
 
 find . \( \( -name .git -o -name '*.swp' -o -name '*~' -o -name '*#*' -o -name '.?*' -o -name '*.erb' -o -name support \) -prune \) -o \( -type f -o -type l \) -print |
     cut -c3- |
