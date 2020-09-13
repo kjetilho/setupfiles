@@ -16,7 +16,7 @@ then
 	ln() { command ln -r "$@"; }
 fi
 
-if [ support/setcursor.c -nt bin/setcursor ]
+if [ "$DISPLAY" ] && type cc >/dev/null 2>&1 && [ support/setcursor.c -nt bin/setcursor ]
 then
     cc -Wall support/setcursor.c -o bin/setcursor -lX11
 fi
