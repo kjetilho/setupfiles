@@ -54,6 +54,13 @@ for (@ARGV) {
             printf("U+%05X %7d\n", ($code)x2);
         }
         goto another_iteration if s/^<?U\+([0-9a-f]+)>? *//i;
+    } elsif (my @octets = /^(?:2a02:c0:.*:(?:64|46):0:)?
+                           ([0-9a-f]{1,2})
+                           ([0-9a-f]{2})
+                           :
+                           ([0-9a-f]{1,2})
+                           ([0-9a-f]{2})$/xi) {
+        printf("%d.%d.%d.%d\n", map { hex } @octets);
     } else {
         print_string($_);
     }
