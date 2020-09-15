@@ -638,11 +638,27 @@ g() {
 }
 
 # Jump to webpage for current git repo
+# Usage: gw [--print] [FILE] [REMOTE]
+# Default remote is "origin"
 gw() {
+    local file xdg_open=${XDG_OPEN-xdg-open}
+    if [ "$1" = "--print" ]
+    then
+        xdg_open=echo; shift
+    fi
+    if [ "$1" -a -e "$1" ]
+    then
+        file="$1"; shift
+    fi
     local origin="${1-origin}"
     local giturl=$(git remote get-url $origin) || return
-    url=$(echo "$giturl" | sed 's|^[a-z]\+@\([^:]\+\):|https://\1/|')
-    ${XDG_OPEN-xdg-open} "$url"
+    local url=$(echo "$giturl" | sed -e 's|^[a-z]\+@\([^:]\+\):|https://\1/|' -e 's|\.git$||')
+    if [ "$file" ]
+    then
+        local branch=$(git branch --show-current)
+        url="${url}/-/blob/${branch}/${file}"
+    fi
+    ${xdg_open} "$url"
 }
 gmv() {
     local from="$1" to="$2"
