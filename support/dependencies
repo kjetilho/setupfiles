@@ -71,4 +71,8 @@ compositor?  xcompmgr -c -t-6 -l-6 -o.1
 
 radix: ftp://ftp.unicode.org/Public/UNIDATA/Blocks.txt
 
+for receiving files over bluetooth:: bluez-obexd
+  systemctl --user enable obex
+  systemctl --user start obex
+
 _SIGNING_OFF_
