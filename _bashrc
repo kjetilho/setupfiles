@@ -123,6 +123,7 @@ fi
 
 _rl="`tput rmm`"
 _titlebar='\e]0;${CHOOSEHOST+» }\u@\H ${OS_PROJECT_NAME+«${OS_PROJECT_NAME}»}\a'
+_titlebar='\e]0;${CHOOSEHOST+» }\u@\H\a'
 _status='\e[$(($??1:0))m'
 _prompt=': [\u@\h \w];'
 _reset='\[\e[0m\]'
