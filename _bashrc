@@ -602,7 +602,7 @@ g() {
         cd=echo; shift
     fi
     case $1 in
-        -)               cd - ;;
+        -|"")            cd - ;;
         /*)              cd "$1" ;;
         p|pu)            $cd ~/svn/puppet ;;
         pup|pupp|puppet) $cd ~/git/git.i.bitbit.net/puppet-mod/puppet ;;
