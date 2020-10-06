@@ -1,0 +1,22 @@
+#! /usr/bin/perl
+
+my @rewritten;
+
+my %map = (
+    lucidasans => 'LiberationMono',
+    );
+
+my $i = 0;
+while ($i <= $#ARGV) {
+    push(@rewritten, $ARGV[$i]);
+    if ($ARGV[$i] eq '-fn' or $ARGV[$i] eq '-font') {
+        my $font = $ARGV[++$i];
+        if ($font =~ /^([a-z].+)-(\d+)$/) {
+            $font = "xft:$map{$1}:pixelsize=$2"
+                if $map{$1};
+        }
+        push(@rewritten, $font);
+    }
+    ++$i;
+}
+exec '/usr/bin/urxvt', @rewritten;
