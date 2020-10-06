@@ -606,6 +606,7 @@ g() {
         /*)              cd "$1" ;;
         p|pu)            $cd ~/svn/puppet ;;
         pup|pupp|puppet) $cd ~/git/git.i.bitbit.net/puppet-mod/puppet ;;
+        ici)             $cd ~/git/git.i.bitbit.net/icinga/config ;;
         *)
             for p in "git/git.i.bitbit.net/*/$1" \
                      "git/git.i.bitbit.net/*/$1*" \
