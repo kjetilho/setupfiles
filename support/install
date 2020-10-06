@@ -54,7 +54,8 @@ then
     mkdir -p $HOME/lib/X11/fonts
     rsync -a lib/X11/fonts/ $HOME/lib/X11/fonts/
 
-    eval $(xrandr 2>/dev/null | awk '/^Screen 0/ {printf("XWIDTH=%d XHEIGHT=%d\n", $8, $10)}')
+    eval $(xrandr 2>/dev/null |
+               awk '/^Screen 0/ {printf("export XWIDTH=%d XHEIGHT=%d\n", $8, $10)}')
 
     # This is only ./_clusterssh/config.erb for now - may have to move
     # this out of DISPLAY specific test if more files are templated.
