@@ -73,9 +73,18 @@ sub add_spotify_info {
     my ($info) = @_;
     chomp(my $track_info = `spotify-dbus Metadata`);
     if ($track_info) {
+        my %charmap = (
+            Playing => '♪',
+            Paused => '‖',
+            );
+        my $colour = $track_info =~ /^Playing/ ? '#1e7fff' : '#104386';
+        $track_info =~ s/^(Playing|Paused):/$charmap{$1}/e;
+        my $short = $track_info; $short =~ s/».*/»/;
         unshift(@{$info}, { name => 'spotify',
-                            color => '#24cf5f',
+                            color => $colour,
+                            align => 'left',
                             full_text => $track_info,
+                            short_text => $short,
                 });
     }
 }

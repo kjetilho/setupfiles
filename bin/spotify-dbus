@@ -4,7 +4,7 @@ use Getopt::Long;
 use Data::Dumper;
 
 my @verbs = qw(PlayPause Stop Next Previous);
-my $format = "%artist: «\%title» (track \%tracknumber on «\%album») [\%autorating]";
+my $format = "%status: %artist: «\%title» (track \%tracknumber on «\%album») [\%autorating]";
 
 sub usage {
     my $verblist = join('|', @verbs);
@@ -50,16 +50,18 @@ sub decode_type {
     }
 }
 
-if ($verb eq 'Metadata') {
-    close(STDERR) unless $verbose;
+sub dbus_properties_get {
+    my ($prop, $initial_key) = @_;
     my @fullcmd = (@cmd, '--print-reply',
                    'org.freedesktop.DBus.Properties.Get',
-                   'string:org.mpris.MediaPlayer2.Player', 'string:Metadata');
-    print STDERR join(' ', 'Running:', @fullcmd), "\n";
+                   'string:org.mpris.MediaPlayer2.Player', "string:$prop");
+    print STDERR join(' ', 'Running:', @fullcmd), "\n"
+        if $verbose;
+    my $key = lc($initial_key) if $initial_key;
+    my %meta;
     if (open(my $dbus, '-|', @fullcmd)) {
         my $stats = <$dbus>;
         exit(8) unless $stats;
-        my %meta;
         while (<$dbus>) {
             print STDERR "RESPONSE: ", $_ if $verbose > 1;
             s/^\s+//;
@@ -74,19 +76,34 @@ if ($verb eq 'Metadata') {
                     $val = decode_type($1);
                 }
             } elsif (/^[\)\]]$/) {
-                $meta{$key} = $val if defined $key;
+                $meta{$key} = $val if defined $key && defined $val;
+                $val = undef;
             } elsif (ref $val eq 'ARRAY') {
                 push(@{$val}, decode_type($_));
             }
         }
+        $meta{$key} = $val if defined $key && defined $val;
         close($dbus);
+    }
+    use Data::Dumper;
+    print Dumper(\%meta) if $verbose;
+    return $initial_key ? $meta{$initial_key} : \%meta;
+}
+
+if ($verb eq 'Metadata') {
+    my $x = dbus_properties_get('Metadata');
+    if ($x) {
+        my %meta = %{$x};
+        if ($format =~ /%status/) {
+            $meta{status} = dbus_properties_get('PlaybackStatus', 'status');
+        }
         if ($format eq 'json') {
             # avoid 0.1 second load time and only load when needed
             # ("use" loads always, even inside ifs)
             eval 'require JSON;';
             print JSON::encode_json(\%meta);
         } else {
-            $format =~ s/%([a-z]+)/ref $meta{$1} ? join(', ', @{$meta{$1}}) : $meta{$1}/ge;
+            $format =~ s/%([a-z_]+)/ref $meta{$1} ? join(', ', @{$meta{$1}}) : $meta{$1}/ge;
             print $format, "\n";
         }
     } else {
@@ -99,4 +116,5 @@ if ($verb eq 'Metadata') {
         push(@cmd, '--type=method_call');
     }
     system(@cmd, "org.mpris.MediaPlayer2.Player.$verb");
+    system('pkill -USR1 -x i3status');
 }
