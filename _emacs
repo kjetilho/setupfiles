@@ -88,7 +88,10 @@
 
 (define-key minibuffer-local-completion-map "\C-c\C-c" 'create-subdir)
 
-(autoload 'puppet-mode "puppet-mode" "Major mode for editing puppet manifests")
+;; (autoload 'puppet-mode "puppet-mode" "Major mode for editing puppet manifests")
+(load-library "puppet-mode")
+(define-key puppet-mode-map "$" 'self-insert-command)
+
 (add-to-list 'auto-mode-alist '("\\.pp$" . puppet-mode))
 
 (setq gnus-select-method '(nntp "news.gmane.org"))
