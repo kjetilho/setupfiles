@@ -1,0 +1,5 @@
+--square-bracket-tightness=2
+--brace-tightness=2
+--paren-tightness=2
+--cuddled-else
+--maximum-line-length=132
