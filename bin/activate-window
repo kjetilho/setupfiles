@@ -43,7 +43,7 @@ close($wmctrl);
 if (@windows == 1 || @windows > 1) { # TODO: cycle through multiple matching windows
     my ($id, $desktop, $x, $y, $w, $h) = @{$windows[0]};
     system('wmctrl', '-i', '-a', $id);
-    system('xdotool', 'mousemove', int($x + $w/2), int($y + $h/2));
+    system('xdotool', 'mousemove', '--sync', int($x + $w/2), int($y + $h/2));
 } else {
     print "No windows matched\n";
     exit(1);

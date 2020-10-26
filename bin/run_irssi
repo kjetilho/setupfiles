@@ -1,5 +1,5 @@
 #! /bin/bash
 
 urxvt -name irssi -e env LANG=en_IE.utf8 mosh njus.no &
-sleep 0.1
+xdotool search --sync --onlyvisible --name "mosh"
 activate-window mosh && setcursor 56
