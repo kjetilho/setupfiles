@@ -787,6 +787,9 @@ axfr() {
     esac
     dig axfr $dom @ns-foo.i.bitbit.net
 }
+whois.no() {
+    ssh login-osl2.i.bitbit.net whois -h registrarwhois.norid.no "$@";
+}
 
 complete -W "$(cd $HOME/.config/openstack; echo *-openrc.sh | sed s/-openrc.sh//g)" osinit
 alias r='. ~/.bashrc'
