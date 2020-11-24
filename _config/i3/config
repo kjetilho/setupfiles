@@ -10,6 +10,7 @@
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
 set $mod Mod4
+set $title %title <i>[%class:%instance]</i>
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
@@ -25,7 +26,7 @@ font pango:DejaVu Sans Mono 8
 
 popup_during_fullscreen leave_fullscreen
 
-for_window [class=".*"] title_format "%title <i>[%class:%instance]</i>"
+for_window [class=".*"] title_format $title
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -93,18 +94,18 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 # split in horizontal orientation
-bindsym $mod+Shift+v split h
+bindsym $mod+Shift+v title_format $title ||; split h
 
 # split in vertical orientation
-bindsym $mod+v split v
+bindsym $mod+v title_format $title =; split v
 
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
-# bindsym $mod+Shift+s layout stacking
-# bindsym $mod+Shift+w layout tabbed
-# bindsym $mod+Shift+e layout toggle split
+bindsym $mod+Shift+s layout stacking
+bindsym $mod+Shift+w layout tabbed
+bindsym $mod+Shift+e layout toggle split
 
 # activate interesting windows
 
