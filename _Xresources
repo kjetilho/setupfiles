@@ -165,3 +165,4 @@ Emacs.pointerColor:     Cyan
 Emacs.MenuBar:		off
 Emacs.ToolBar:		0
 
+URxvt*buffered: false
