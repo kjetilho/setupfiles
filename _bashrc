@@ -697,6 +697,11 @@ _gclone() {
 	git clone "${args[@]}" $url &&
 	cd ~/git/$server/$proj
 }
+gfork() {
+    local user=${1-$USER}
+    local fork=$(git remote get-url origin | sed "s,:[^/]*,:$user,")
+    git remote add $user $fork
+}
 gclone() {
     _gclone git.i.bitbit.net "$@"
 }
@@ -705,6 +710,9 @@ grlclone() {
 }
 ghclone() {
     _gclone github.com "$@"
+}
+glclone() {
+    _gclone gitlab.com "$@"
 }
 
 upd() {
