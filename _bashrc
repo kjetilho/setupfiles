@@ -350,6 +350,8 @@ ssh() {
 cssh() {
     command cssh -o "-F $HOME/.ssh/config " "$@"
 }
+# pdsh(1) default is rsh
+export PDSH_RCMD_TYPE=ssh
 
 percd() {
     history -w
