@@ -1,5 +1,7 @@
 #! /bin/sh
 
+export LC_ALL=en_US.utf8
+
 xrdb -load /etc/X11/Xresources
 xrdb -I$HOME/lib -merge $HOME/.Xresources
 
