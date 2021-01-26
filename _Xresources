@@ -14,7 +14,7 @@ Xft.dpi: 96
 #  define FONT_SIZE_HUGE 16
 #else
 #  define FONT_SIZE_NORMAL 9
-#  define FONT_SIZE_SMALL 8
+#  define FONT_SIZE_SMALL 7
 #  define FONT_SIZE_BIG 11
 #  define FONT_SIZE_HUGE 18
 #endif
