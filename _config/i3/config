@@ -28,6 +28,11 @@ popup_during_fullscreen leave_fullscreen
 
 for_window [class=".*"] title_format $title
 
+default_border normal
+# mnemonic: Outline
+bindsym $mod+o border normal 2
+bindsym $mod+Shift+o border none
+
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
@@ -115,7 +120,7 @@ bindcode $mod+49 [instance="irssi"] focus
 # Happy Hacking keyboard has Escape to the left of the digits
 bindsym $mod+Escape [instance="irssi"] focus
 
-# $mod + qwyuiopdg;'cn. are available (sometimes Shift is taken)
+# $mod + qwyuipdg;'cn. are available (sometimes Shift is taken)
 
 bindsym $mod+e [class="Emacs"] focus
 bindsym $mod+Control+e [class="Evolution"] focus
