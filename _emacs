@@ -94,7 +94,7 @@
 
 (add-to-list 'auto-mode-alist '("\\.pp$" . puppet-mode))
 
-(setq gnus-select-method '(nntp "news.gmane.org"))
+(setq gnus-select-method '(nntp "news.gmane.io"))
 (setq browse-url-browser-function 'browse-url-generic)
 (setq browse-url-generic-program "firefox")
 (setq gnus-novice-user nil)
