@@ -19,6 +19,7 @@ for ranger::          ranger w3m-img
 for rbenv::           openssl-devel readline-devel zlib-devel yamllint
 for valuta::          perl-LWP-Protocol-https
 for host-lookup::     perl-List-MoreUtils perl-Text-CSV
+for wpdsh::           pdsh pdsh-rcmd-ssh
 for workpass::        perl-IPC-Run
 for rdesktop::        freerdp
 for javaws::          icedtea-web

@@ -75,3 +75,5 @@ do
 done
 
 symlink "$git_path/secrets/pass" ~/.work-password-store
+symlink host-lookup wpdsh
+
