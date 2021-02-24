@@ -45,21 +45,22 @@ do
     symlink "../$svn_path/puppet/$m"
 done
 
-for m in puppet-ms0/bitbit_backup/design/profile/files/bareos/scripts/bacula-check \
-             puppet-ms0/bitbit_backup/design/profile/files/bareos/scripts/bacula-du \
-             puppet-ms0/bitbit_backup/design/profile/files/bareos/scripts/bacula-logs \
-             backup/bareos-osl/scripts/bacula-conf \
-             backup/bareos-osl/scripts/bacula-pw \
-             puppet-ms0/hieradata/utils/optional-repositories.pl \
-             puppet-ms0/bitbit_login/design/profile/files/utilities/hiera-lookup \
-             puppet-ms0/bitbit_login/design/profile/files/utilities/host-lookup \
-             puppet-ms0/bitbit_login/design/profile/files/utilities/ipv6-slaac \
-             puppet-ms0/bitbit_login/design/profile/files/utilities/ldap-lookup \
-             puppet-ms0/bitbit_login/design/profile/files/utilities/pfw-sync \
-             puppet-ms0/bitbit_login/design/profile/files/utilities/puppetdb \
-             puppet-ms0/bitbit_login/design/profile/files/utilities/thruk \
-             puppet-ms0/bitbit_login/design/profile/files/utilities/vlan \
-             secrets/pass/bin/pass
+for m in puppet-mod/utilities/files/backup/scripts/bacula-check \
+         puppet-mod/utilities/files/backup/scripts/bacula-du \
+         puppet-mod/utilities/files/backup/scripts/bacula-logs \
+         puppet-mod/utilities/files/openstack/update_sg \
+         backup/bareos-osl/scripts/bacula-conf \
+         backup/bareos-osl/scripts/bacula-pw \
+         puppet-ms0/hieradata/utils/optional-repositories.pl \
+         puppet-ms0/bitbit_login/design/profile/files/utilities/hiera-lookup \
+         puppet-ms0/bitbit_login/design/profile/files/utilities/host-lookup \
+         puppet-ms0/bitbit_login/design/profile/files/utilities/ipv6-slaac \
+         puppet-ms0/bitbit_login/design/profile/files/utilities/ldap-lookup \
+         puppet-ms0/bitbit_login/design/profile/files/utilities/pfw-sync \
+         puppet-ms0/bitbit_login/design/profile/files/utilities/puppetdb \
+         puppet-ms0/bitbit_login/design/profile/files/utilities/thruk \
+         puppet-ms0/bitbit_login/design/profile/files/utilities/vlan \
+         secrets/pass/bin/pass
 do
     repo=$(echo "$m" | cut -d/ -f1,2)
     if [ ! -d ~/$git_path/$repo ]
