@@ -24,13 +24,20 @@ font pango:DejaVu Sans Mono 8
 # X core fonts rendering does not support right-to-left and this being a bitmap
 # font, it doesn’t scale on retina/hidpi displays.
 
+
 popup_during_fullscreen leave_fullscreen
+
+# Change the indicator to be more visible (other colours unchanged)
+# class                 border  backgr. text    indicator child_border
+client.focused          #4c7899 #285577 #ffffff #e06000   #285577
+client.focused_inactive #333333 #5f676a #ffffff #703000   #5f676a
 
 for_window [class=".*"] title_format $title
 
 default_border normal
 # mnemonic: Outline
 bindsym $mod+o border normal 2
+bindsym $mod+Control+o border normal 4
 bindsym $mod+Shift+o border none
 
 # Use Mouse+$mod to drag floating windows to their wanted position
