@@ -46,11 +46,19 @@ for_window [class="Firefox"] floating enable
 for_window [class="Nm-connection-editor"] floating enable
 for_window [class="Blueman-manager"] floating enable
 for_window [class="Firefox" instance="Navigator"] floating disable
+for_window [title="floating"] floating enable
+for_window [instance="floating"] floating enable
 
 # start a terminal
 bindsym $mod+Return       exec i3-sensible-terminal -name solarized
 bindsym $mod+Shift+Return exec i3-sensible-terminal -name dump
 bindsym $mod+Shift+i      exec run_irssi
+
+mode "Floating" {
+  bindsym $mod+Return       exec i3-sensible-terminal -T floating -name solarized, mode "default"
+  bindsym $mod+Shift+Return exec i3-sensible-terminal -T floating -name dump, mode "default"
+  bindsym Escape            mode "default"
+}
 
 # lock screen
 bindsym mod1+Shift+p exec xscreensaver-command -lock
@@ -128,14 +136,18 @@ bindsym $mod+t [class="Thunderbird" instance="Mail"] focus
 bindsym $mod+m [class="Mattermost"] focus
 bindsym XF86Mail [class="Evolution"] focus
 bindsym XF86HomePage [class="Firefox"] focus
+
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
 
-# toggle sticky
-bindsym $mod+s sticky toggle
-
 # change focus between tiling / floating windows
 bindsym $mod+space focus mode_toggle
+
+# launch next window as floating
+bindsym $mod+Control+space mode "Floating"
+
+# toggle sticky
+bindsym $mod+s sticky toggle
 
 # focus the parent container
 bindsym $mod+a focus parent
