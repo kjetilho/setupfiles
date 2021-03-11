@@ -43,6 +43,9 @@ bindsym $mod+Shift+o border none
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
+focus_follows_mouse yes
+mouse_warping none
+
 for_window [title="CSSH"] floating enable
 for_window [title="feh"] floating enable
 for_window [title="gimp"] floating enable
