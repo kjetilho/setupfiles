@@ -11,11 +11,13 @@ Xft.dpi: 96
 #  define FONT_SIZE_NORMAL 8
 #  define FONT_SIZE_SMALL 7
 #  define FONT_SIZE_BIG 9
+#  define FONT_SIZE_BIGGER 11
 #  define FONT_SIZE_HUGE 16
 #else
 #  define FONT_SIZE_NORMAL 9
 #  define FONT_SIZE_SMALL 7
 #  define FONT_SIZE_BIG 11
+#  define FONT_SIZE_BIGGER 13
 #  define FONT_SIZE_HUGE 18
 #endif
 
@@ -108,6 +110,9 @@ irssi*scrollBar:		false
 irssi*faceSize:			20
 irssi.VT100.geometry:		90x37+0+0
 irssi*font:			xft:MONO_FONT-20
+#elif SRVR_comm_ms_redpill_linpro_com
+irssi*faceSize:			FONT_SIZE_BIGGER
+irssi*font:			xft:MONO_FONT-FONT_SIZE_BIGGER
 #else
 irssi.VT100.geometry:		84x34
 irssi*faceSize:			FONT_SIZE_BIG
@@ -126,6 +131,7 @@ Rxvt.keysym.C-F11:              string:type tabashco >/dev/null 2>&1 && echo "Sp
 Rxvt.keysym.C-F10:              command:\033]50;xft:MONO_FONT-FONT_SIZE_SMALL\007
 Rxvt.keysym.Mod4-F10:           command:\033]50;xft:MONO_FONT-FONT_SIZE_NORMAL\007
 Rxvt.keysym.Mod4-C-F10:         command:\033]50;xft:MONO_FONT-FONT_SIZE_BIG\007
+Rxvt.keysym.Mod4-S-F10:         command:\033]50;xft:MONO_FONT-FONT_SIZE_BIGGER\007
 Rxvt.keysym.Mod4-C-S-F10:       command:\033]50;xft:MONO_FONT-FONT_SIZE_HUGE\007
 
 
