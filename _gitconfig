@@ -19,6 +19,10 @@
 [core]
 	excludesfile = /home/kjetilho/.gitignore_global
 	pager = less -F
+	whitespace = trailing-space, space-before-tab, blank-at-eof
+
+[apply]
+	whitespace = warn
 
 [pager]
 	diff = diff-so-fancy | less -RFX
@@ -32,3 +36,4 @@
 	noprefix = true
 [pull]
 	rebase = true
+
