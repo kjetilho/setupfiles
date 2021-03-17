@@ -57,6 +57,9 @@
 (setq ruby-indent-level 2)
 (add-hook 'c-mode-common-hook (lambda () (c-set-style "awk")))
 
+(require 'guess-style)
+(global-guess-style-info-mode 1)
+
 (defun kjetilho-set-indent-level (&optional arg)
   "Set indent level to prefix argument."
   (interactive "P")
