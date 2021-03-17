@@ -33,6 +33,12 @@
   :ensure t
   :config (custom-set-variables '(markdown-toc-user-toc-structure-manipulation-fn 'cdr)))
 
+;; inspiration from https://vlevit.org/en/blog/tech/visual-line-wrap
+(setq visual-line-fringe-indicators '(nil right-curly-arrow))
+(defun my-markdown-mode-hook ()
+  (visual-line-mode 1))
+(add-hook 'markdown-mode-hook 'my-markdown-mode-hook)
+
 ;;(require 'ws-trim)
 ;; default ws-trim-level is 0, only individually edited lines
 ;;(global-ws-trim-mode t)
