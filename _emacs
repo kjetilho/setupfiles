@@ -57,6 +57,17 @@
 (setq ruby-indent-level 2)
 (add-hook 'c-mode-common-hook (lambda () (c-set-style "awk")))
 
+(defun kjetilho-guess-indent-tabs ()
+    "Set indent-tabs-mode to t if more than half of lines in buffer start with TAB"
+  (let ((tab-lines (count-matches "^\t"))
+        (total-lines (count-matches "^")))
+    (setq indent-tabs-mode
+          (and (> tab-lines 0)
+               (> total-lines 4)
+               (> (/ (* tab-lines 100) total-lines) 50)))))
+
+(add-hook 'perl-mode-hook 'kjetilho-guess-indent-tabs)
+
 (require 'guess-style)
 (global-guess-style-info-mode 1)
 
