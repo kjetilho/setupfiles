@@ -66,7 +66,8 @@
                (> total-lines 4)
                (> (/ (* tab-lines 100) total-lines) 50)))))
 
-(add-hook 'perl-mode-hook 'kjetilho-guess-indent-tabs)
+; (add-hook 'perl-mode-hook 'kjetilho-guess-indent-tabs)
+(require 'dtrt-indent)
 
 (require 'guess-style)
 (global-guess-style-info-mode 1)
@@ -148,6 +149,7 @@
  '(custom-enabled-themes '(midnightblue))
  '(custom-safe-themes
    '("3ff5fe0cd9fa2aaa1119882cdd782f49107c5b9b22b374b68fa080e6a9f80462" "d580783ef5f70d2d9fa438c8d553caf6a74691dfef392f8f7230257dcec591c7" "b8d535b81f1fd753456f63c30c6a967286933c0fa28f8b3194ccd84d5d57804d" "00c26ff7742ff0d4a66a3c20628a98c072d105a6ddedeb3c4ef20547efac7646" default))
+ '(dtrt-indent-mode t nil (dtrt-indent))
  '(gnus-summary-thread-gathering-function 'gnus-gather-threads-by-references)
  '(ido-case-fold nil)
  '(ido-default-buffer-method 'selected-window)
