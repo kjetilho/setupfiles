@@ -1,0 +1,42 @@
+#! /usr/bin/perl -CAL
+
+use JSON;
+use Getopt::Long;
+
+sub usage {
+    print STDERR <<"END";
+Usage: $0 [OPTIONS] [num]
+
+Looks for first empty workspace (numerically) and jumps there.  With
+`num`, start looking there.
+
+Options:
+  -m, --move    Move active container to workspace
+
+END
+    exit(64);
+}
+
+my $move;
+GetOptions('move|m', => \$move)
+    or usage();
+my $num = 1;
+$num = shift if @ARGV;
+usage() if $num !~ /^\d+$/;
+usage() if @ARGV;
+
+my $workspaces = `i3-msg -t get_workspaces`;
+my $spaces = decode_json($workspaces);
+
+my %used;
+for my $w (@{$spaces}) {
+    $used{$w->{name}} = 1;
+}
+while ($used{$num}) {
+    ++$num;
+}
+my $command = "workspace $num";
+if ($move) {
+    $command = "move container to $command, $command";
+}
+system('i3-msg', $command);
