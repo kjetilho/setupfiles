@@ -808,5 +808,8 @@ whois.no() {
 mdview() {
     pandoc -t html -o /dev/stdout "$1" | w3m -T text/html
 }
+nsupd() {
+    nsupdate -k$HOME/.config/dns/$USER.user.private "$@"
+}
 
 alias r='. ~/.bashrc'
