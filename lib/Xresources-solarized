@@ -13,7 +13,7 @@
 #define S_blue          #268bd2
 #define S_cyan          #2aa198
 #define S_green         #859900
-#define K_S_green       #40c000 /* kjetilho: make it greener */
+#define K_S_green       #20a000 /* kjetilho: make it greener */
 
 
 ! Dark
@@ -37,7 +37,9 @@
 #define S_L_base00        #839496
 #define S_L_base0         #657b83
 #define K_S_L_base0_50    #323d41 /* kjetilho: a little (50%) darker foreground */
-#define K_S_L_base0       #1e2527 /* kjetilho: a little (70%) darker foreground */
+#define K_S_L_base0_70    #1e2527 /* kjetilho: a little (70%) darker foreground */
+#define K_S_L_base0_80    #14181a /* kjetilho: a little (80%) darker foreground */
+#define K_S_L_base0       #0a0c0b /* kjetilho: a little (90%) darker foreground */
 #define S_L_base1         #586e75
 #define S_L_base2         #073642
 #define S_L_base3         #002b36
@@ -72,4 +74,33 @@ solarized*color12:                 S_L_base0
 solarized*color13:                 S_violet
 solarized*color14:                 S_L_base1
 solarized*color15:                 S_L_base3
+
+dump*background:              #d0d0ff
+dump*fading:                  20 /* 30 normally */
+// These have no effect?
+dump*pointerColor2:           S_L_base01  // background
+dump*pointerColor:            S_L_base1   // foreground
+dump*pointerShape:            gumby
+
+/* rest is same as solarized */
+dump*foreground:              K_S_L_base0
+dump*fadeColor:               black
+dump*cursorColor:             S_L_base1
+
+dump*color0:                  S_L_base02
+dump*color1:                  S_red
+dump*color2:                  K_S_green
+dump*color3:                  S_yellow
+dump*color4:                  S_blue
+dump*color5:                  S_magenta
+dump*color6:                  S_cyan
+dump*color7:                  S_L_base2
+dump*color9:                  S_orange
+dump*color8:                  S_L_base03
+dump*color10:                 S_L_base01
+dump*color11:                 S_L_base00
+dump*color12:                 S_L_base0
+dump*color13:                 S_violet
+dump*color14:                 S_L_base1
+dump*color15:                 S_L_base3
 

@@ -38,8 +38,6 @@ URxvt.selection.pattern-0:      ([a-zA-Z0-9/._~-]+)
 URxvt.selection.pattern-1:      (.*)
 URxvt.secondaryScroll: false
 dump.secondaryScroll: true
-dump*background:      #d0d0ff
-dump*fading:          20
 
 ! Solarized Dark theme begins
 xterm_remote*background:              S_base03
