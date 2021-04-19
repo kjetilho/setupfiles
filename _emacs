@@ -66,9 +66,10 @@
                (> total-lines 4)
                (> (/ (* tab-lines 100) total-lines) 50)))))
 
-; (add-hook 'perl-mode-hook 'kjetilho-guess-indent-tabs)
-(require 'dtrt-indent)
+(add-hook 'perl-mode-hook 'kjetilho-guess-indent-tabs)
 
+;; One of these breaks python-mode?
+(require 'dtrt-indent)
 (require 'guess-style)
 (global-guess-style-info-mode 1)
 
