@@ -811,5 +811,13 @@ mdview() {
 nsupd() {
     nsupdate -k$HOME/.config/dns/$USER.user.private "$@"
 }
+tomquiz() {
+    local num="$1"
+    local dir=$HOME/Documents/quiz/tom
+    local count=$(ls -1 $dir/$num.*.xlsx 2>/dev/null | wc -l)
+    if [ "$count" -ne 1 ]; then echo "$count matching PDF files"; return; fi
+    xdg-open $dir/$num.*.pdf &
+    xdg-open $dir/$num.*.xlsx &
+}
 
 alias r='. ~/.bashrc'
