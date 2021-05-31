@@ -25,8 +25,6 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
-(use-package puppet-mode
-  :ensure t)
 (use-package markdown-mode
   :ensure t)
 (use-package markdown-toc
@@ -43,6 +41,7 @@
 ;; default ws-trim-level is 0, only individually edited lines
 ;;(global-ws-trim-mode t)
 
+(setq debug-on-error t)
 (setq visible-bell t)
 (setq mouse-yank-at-point t)
 (transient-mark-mode -1)
