@@ -78,9 +78,8 @@ bindsym Pause        exec xscreensaver-command -lock
 bindsym $mod+Control+Escape kill
 bindsym $mod+F4 kill
 
-# mute/unmute in Jitsi
-bindsym $mod+KP_Enter       exec xdotool search --name Jitsi.Meet windowactivate key m
-bindsym Mode_switch+Return  exec xdotool search --name Jitsi.Meet windowactivate key m
+# mute/unmute in Jitsi (it doesn't work without shift modifier for some reason)
+bindsym $mod+shift+period [title="Jitsi.Meet"] focus, exec xdotool search --name Jitsi.Meet windowactivate mousemove --window %1 400 200 click 1 type m
 
 # start dmenu (a program launcher)
 # bindsym $mod+d exec dmenu_run
@@ -139,7 +138,7 @@ bindcode $mod+49 [title="^Irssi"] focus; [instance="irssi"] focus
 # Happy Hacking keyboard has Escape to the left of the digits
 bindsym $mod+Escape [title="^Irssi"] focus; [instance="irssi"] focus
 
-# $mod + qwyuidg;'c. are unused/available (sometimes Shift is taken)
+# $mod + qwyuidg;'c are unused/available (sometimes Shift is taken)
 
 bindsym $mod+n workspace next
 bindsym $mod+p workspace prev
