@@ -134,9 +134,10 @@ bindsym $mod+Shift+e layout toggle split
 
 # keycode 49 is bar on a Norwegian keyboard and grave on my Raspberry
 # Pi keyboard with US layout.
-bindcode $mod+49 [instance="irssi"] focus
+# Checking title for gnome-terminal, instance for urxvt
+bindcode $mod+49 [title="^Irssi"] focus; [instance="irssi"] focus
 # Happy Hacking keyboard has Escape to the left of the digits
-bindsym $mod+Escape [instance="irssi"] focus
+bindsym $mod+Escape [title="^Irssi"] focus; [instance="irssi"] focus
 
 # $mod + qwyuidg;'c. are unused/available (sometimes Shift is taken)
 
