@@ -811,6 +811,12 @@ mdview() {
 nsupd() {
     nsupdate -k$HOME/.config/dns/$USER.user.private "$@"
 }
+lc() {
+    tr '[:upper:]' '[:lower:]'
+}
+uc() {
+    tr '[:lower:]' '[:upper:]'
+}
 tomquiz() {
     local num="$1"
     local dir=$HOME/Documents/quiz/tom
