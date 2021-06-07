@@ -3,5 +3,14 @@
 require 'yaml'
 require 'json'
 
+if ARGV.length < 1 or ARGV.length > 2
+  print "Usage: yaml2json FILE [hash-key]\n"
+  exit(64)
+end
+
 data = YAML::load_file(ARGV[0])
-print JSON::pretty_generate(data), "\n"
+if ARGV.length > 1
+  print data[ARGV[1]]
+else
+  print JSON::pretty_generate(data), "\n"
+end
