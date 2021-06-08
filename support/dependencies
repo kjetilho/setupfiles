@@ -8,6 +8,7 @@ nyttige perl-ting::   perl-YAML perl-YAML-LibYAML perl-LDAP perl-DBI perl-XML-Si
 for ncal::            perl-Date-Easter
   manglar i Fedora:   perl-Astro-MoonPhase perl-Astro-Sunrise perl-Astro-Time
 for terminal::        rxvt-unicode liberation-mono-fonts
+for run_irssi::       xfce4-terminal google-noto-emoji-color-fonts
 for reset-resources:: xorg-x11-resutils
 for myi3status::      perl-JSON light
 for i3-disp-size::    xosd xorg-x11-utils xdotool

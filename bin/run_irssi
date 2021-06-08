@@ -4,7 +4,9 @@
 # "When terminal commands sets their own titles: Prepend initial title"
 # (In Command preference tab)
 
-gnome-terminal --profile Irssi -- mosh njus.no
+replacebell xfce4-terminal -T Irssi -x env LANG=en_IE.utf8 mosh njus.no
+
+# gnome-terminal --profile Irssi -- env LANG=en_IE.utf8 mosh njus.no
 
 # urxvt -name irssi -e env LANG=en_IE.utf8 mosh njus.no &
 # xdotool search --sync --onlyvisible --name "mosh"
