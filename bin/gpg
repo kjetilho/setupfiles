@@ -2,4 +2,4 @@
 # Use gpg2 when available
 
 type gpg2 >/dev/null 2>&1 && exec gpg2 "$@"
-exec command gpg "$@"
+exec env PATH=/usr/local/bin:/usr/bin:/bin gpg "$@"
