@@ -10,7 +10,7 @@ end
 
 data = YAML::load_file(ARGV[0])
 if ARGV.length > 1
-  print data[ARGV[1]]
+  print JSON::pretty_generate(data[ARGV[1]]), "\n"
 else
   print JSON::pretty_generate(data), "\n"
 end
