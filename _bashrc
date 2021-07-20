@@ -770,7 +770,18 @@ alias trunc='cut -c-${COLUMNS-80}'
 alias mtr='env TERM=vt220 mtr'
 
 osinit() {
-    local proj="${1-users.kjetilho}"
+    case $1 in
+        --clear)
+            unset $(set | grep ^OS_ | cut -d= -f1)
+            shift
+            [ $# = 0 ] && return
+            ;;
+        '')
+            echo "Current project is '$OS_PROJECT_NAME'"
+            return
+            ;;
+    esac
+    local proj="$1"
     export OS_COMPUTE_API_VERSION=2.53 # To access all Pike features
     if [ "$OS_PROJECT_NAME" = "" -o "$OS_PROJECT_NAME" != "$proj" ]
     then
