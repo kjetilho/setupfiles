@@ -15,6 +15,12 @@ then
     setxkbmap -option compose:rctrl -option nbsp:none 'us(altgr-intl)'
     xmodmap $HOME/lib/X11/Xmodmap.rpi
     xmodmap $HOME/lib/X11/Xmodmap.no
+elif lsusb | grep -q 05ac:024f # Epomaker B21 ("Apple, Inc. Aluminium Keyboard (ANSI)"!)
+then
+    echo "Congratulations, you have a B21!"
+    setxkbmap -option compose:rctrl -option nbsp:none 'us(altgr-intl)'
+    xmodmap $HOME/lib/X11/Xmodmap.rpi
+    xmodmap $HOME/lib/X11/Xmodmap.no
 else
     # assume a normal Norwegian keyboard
     echo "You have a Norwegian keyboard - hopefully"
