@@ -2,7 +2,8 @@ grep :: <<_SIGNING_OFF_ | sed "s/.*:: *//" | xargs sudo dnf install -y
 
 nyttige ting å ha installert:
 
-basis::               i3 network-manager-applet dunst emacs ruby subversion mosh xscreensaver
+basis::               i3 network-manager-applet dunst ruby subversion mosh xscreensaver
+for Emacs::           emacs jetbrains-mono-fonts
 nyttige verktøy::     jq datamash feh
 nyttige perl-ting::   perl-YAML perl-YAML-LibYAML perl-LDAP perl-DBI perl-XML-Simple
 for ncal::            perl-Date-Easter

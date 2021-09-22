@@ -135,7 +135,15 @@
                             (nnimap-article-ranges articles))
           (nnimap-command "EXPUNGE")))))
 
-(require 'cl)
+; Test char and monospace:
+; 0123456789abcdefghijklmnopqrstuvwxyz [] () :;,. !@#$^&*
+; 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ {} <> "'`  ~-_/|\?
+(cond
+ ((find-font (font-spec :name "JetBrainsMono"))
+  (set-frame-font "JetBrainsMono-10"))
+ ((find-font (font-spec :name "Liberation Mono"))
+  (set-frame-font "Liberation Mono-10")))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
