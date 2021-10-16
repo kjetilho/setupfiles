@@ -21,9 +21,10 @@ then
     setxkbmap -option compose:rctrl -option nbsp:none 'us(altgr-intl)'
     xmodmap $HOME/lib/X11/Xmodmap.rpi
     xmodmap $HOME/lib/X11/Xmodmap.no
-elif bluetoothctl info DC:2C:26:0B:5B:D0 2>/dev/null | grep -q "Connected: yes"
+elif bluetoothctl info DC:2C:26:0B:5d:99 2>/dev/null | grep -q "Connected: yes"
 then
-    # Could find MAC using bluetoothctl devices | awk '/B21 BT/ {print $2}'
+    # This will be true as long as the device has been paired, even if the
+    # keyboard is nowhere in sight: bluetoothctl devices | awk '/B21 BT/ {print $2}'
     echo "Congratulations, you have a B21 via Bluetooth!"
     # Same settings as via USB
     setxkbmap -option compose:rctrl -option nbsp:none 'us(altgr-intl)'
