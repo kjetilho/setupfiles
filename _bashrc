@@ -718,6 +718,24 @@ glclone() {
     _gclone gitlab.com "$@"
 }
 
+gitmr() {
+    local branch automerge merge current_main
+    read -p "Name of feature branch: " branch
+    if [[ -z $branch ]]
+    then
+        echo "aborting."
+        return
+    fi
+    read -p "Auto-merge? [no] " automerge
+    case $automerge in
+        y|yes)
+            merge="-o merge_request.merge_when_pipeline_succeeds"
+            ;;
+    esac
+    current_main=$(git branch --show-current)
+    git push -o merge_request.create $merge origin "${current_main}":"${branch}"
+}
+
 upd() {
     (cd $HOME/svn
     for m in puppet
