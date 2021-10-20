@@ -22,7 +22,7 @@ order += "disk /home/kjetilho"
 order += "battery 0"
 # order += "load"
 order += "tztime local"
-order += "volume hyperx"
+# order += "volume hyperx"
 order += "volume master"
 
 wireless _first_ {
