@@ -165,7 +165,7 @@
  '(markdown-toc-user-toc-structure-manipulation-fn 'cdr)
  '(mm-text-html-renderer 'w3m)
  '(package-selected-packages
-   '(yaml-mode puppet-mode markdown-toc markdown-mode use-package))
+   '(flycheck yaml-mode puppet-mode markdown-toc markdown-mode use-package))
  '(safe-local-variable-values '((puppet-indent-level . 8) (puppet-indent-level . 4)))
  '(select-enable-clipboard t)
  '(send-mail-function 'sendmail-send-it)
