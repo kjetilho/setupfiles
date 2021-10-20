@@ -147,8 +147,13 @@ esac
 
 export VIMINIT=':set cp
 set noai
-set nosi
-syntax off'
+set nosi'
+if ! vi --version | fgrep -q -e '-syntax'
+then
+    export VIMINIT="${VIMINIT}
+syntax off"
+fi
+
 unalias vi la 2>/dev/null
 
 # We don't want ^S
