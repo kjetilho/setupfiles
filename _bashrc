@@ -738,7 +738,7 @@ gitmr() {
             ;;
     esac
     current_main=$(git branch --show-current)
-    git push -o merge_request.create $merge origin "${current_main}":"${branch}"
+    git push -o merge_request.create -o merge_request.target="${current_main}" $merge origin "${current_main}":"${branch}"
 }
 
 upd() {
