@@ -71,6 +71,7 @@ sub check_battery {
 
 sub add_spotify_info {
     my ($info) = @_;
+    return unless `pgrep spotify`;
     chomp(my $track_info = `spotify-dbus Metadata`);
     if ($track_info) {
         my %charmap = (
