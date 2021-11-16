@@ -60,13 +60,13 @@ for_window [title="floating"] floating enable
 for_window [instance="floating"] floating enable
 
 # start a terminal
-bindsym $mod+Return       exec i3-sensible-terminal -name solarized
-bindsym $mod+Shift+Return exec i3-sensible-terminal -name dump
+bindsym $mod+Return       exec urxvt -name solarized
+bindsym $mod+Shift+Return exec urxvt -name dump
 bindsym $mod+Shift+i      exec run_irssi
 
 mode "Floating" {
-  bindsym $mod+Return       exec i3-sensible-terminal -T floating -name solarized, mode "default"
-  bindsym $mod+Shift+Return exec i3-sensible-terminal -T floating -name dump, mode "default"
+  bindsym $mod+Return       exec urxvt -T floating -name solarized, mode "default"
+  bindsym $mod+Shift+Return exec urxvt -T floating -name dump, mode "default"
   bindsym Escape            mode "default"
 }
 
