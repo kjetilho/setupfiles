@@ -138,11 +138,15 @@
 ; Test char and monospace:
 ; 0123456789abcdefghijklmnopqrstuvwxyz [] () :;,. !@#$^&*
 ; 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ {} <> "'`  ~-_/|\?
-(cond
- ((find-font (font-spec :name "JetBrainsMono"))
-  (set-frame-font "JetBrainsMono-10"))
- ((find-font (font-spec :name "Liberation Mono"))
-  (set-frame-font "Liberation Mono-10")))
+(let ((display-pixpm (/ (* 1000 (x-display-pixel-height)) (x-display-mm-height)))
+      (font-size (cond
+                ((> display-pixpm 3000) 11)
+                (t 10))))
+     (cond
+      ((find-font (font-spec :name "JetBrainsMono"))
+       (set-frame-font (format "JetBrainsMono-%d" font-size)))
+      ((find-font (font-spec :name "Liberation Mono"))
+       (set-frame-font (format "Liberation Mono-%d" font-size)))))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
