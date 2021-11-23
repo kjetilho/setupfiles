@@ -616,7 +616,10 @@ g() {
         ici)             $cd ~/git/git.i.bitbit.net/icinga/config ;;
         meta)            $cd ~/git/git.i.bitbit.net/mirror/meta ;;
         *)
-            for p in "git/git.i.bitbit.net/*/$1" \
+            for p in "git/git.i.bitbit.net/ops/$1/puppet" \
+                     "git/git.i.bitbit.net/ops/*$1*" \
+                     "git/git.i.bitbit.net/ops/*/$1*" \
+                     "git/git.i.bitbit.net/*/$1" \
                      "git/git.i.bitbit.net/*/$1*" \
                      "git/gitlab.redpill-linpro.com/$1*" \
                      "git/git.i.bitbit.net/puppet*/*$1*" \
