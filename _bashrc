@@ -692,7 +692,9 @@ gmv() {
     cd $to
     git remote set-url origin $new_remote
 }
-        
+gset-upstream() {
+    git branch --set-upstream-to=${1-origin}/$(git symbolic-ref --short HEAD)
+}
 _gclone() {
     local server="$1"
     shift
