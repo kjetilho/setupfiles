@@ -13,7 +13,7 @@ Xft.dpi: 96
 #  define FONT_SIZE_BIG 9
 #  define FONT_SIZE_BIGGER 11
 #  define FONT_SIZE_HUGE 16
-#elif X_RESOLUTION >= 3000 /* 3000 pixpm is roughly 120 dpi */
+#elif HEIGHT > 1200
 #  define FONT_SIZE_NORMAL 11
 #  define FONT_SIZE_SMALL 8
 #  define FONT_SIZE_BIG 13
