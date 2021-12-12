@@ -675,7 +675,11 @@ gw() {
 }
 gmv() {
     local from="$1" to="$2"
+    local base=$HOME/git/git.i.bitbit.net
     case $to in
+        "")  to="$1"
+             from=$(pwd | sed "s,$base/,,")
+             ;;
         */*) : ;;
         *)   to="$to/${from##*/}" ;;
     esac
@@ -687,10 +691,11 @@ gmv() {
     fi
     new_remote=git@git.i.bitbit.net:$to.git
     echo Updating $from to $new_remote
-    cd $base
-    mv "$from" "$to"
-    cd $to
-    git remote set-url origin $new_remote
+    if (cd $base && mkdir -p $(dirname $to) && mv "$from" "$to")
+    then
+        cd $base/$to
+        git remote set-url origin $new_remote
+    fi
 }
 gset-upstream() {
     git branch --set-upstream-to=${1-origin}/$(git symbolic-ref --short HEAD)
