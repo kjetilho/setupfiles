@@ -56,6 +56,7 @@ for_window [class="Firefox"] floating enable
 for_window [class="Nm-connection-editor"] floating enable
 for_window [class="Blueman-manager"] floating enable
 for_window [class="Firefox" instance="Navigator"] floating disable
+for_window [class="MPlayer"] floating enable
 for_window [title="floating"] floating enable
 for_window [instance="floating"] floating enable
 
