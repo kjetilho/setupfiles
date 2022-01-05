@@ -16,6 +16,10 @@
 	co = checkout
         cherrypick = cherry-pick
 
+[tig "bind"]
+        # alternative to using PageUp or "-".
+        generic = <Backspace> scroll-page-up
+
 [core]
 	excludesfile = /home/kjetilho/.gitignore_global
 	pager = less -F
