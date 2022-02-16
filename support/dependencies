@@ -6,6 +6,7 @@ basis::               i3 network-manager-applet dunst ruby subversion mosh xscre
 for Emacs::           emacs jetbrains-mono-fonts
 nyttige verktøy::     jq datamash feh
 nyttige perl-ting::   perl-YAML perl-YAML-LibYAML perl-LDAP perl-DBI perl-XML-Simple
+for punycode::        perl-Net-IDN-Encode
 for ncal::            perl-Date-Easter
   manglar i Fedora:   perl-Astro-MoonPhase perl-Astro-Sunrise perl-Astro-Time
 for terminal::        rxvt-unicode liberation-mono-fonts

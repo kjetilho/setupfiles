@@ -1,0 +1,13 @@
+#! /usr/bin/perl -CSLAD
+
+use warnings;
+use strict;
+use Net::IDN::Encode;
+
+for (@ARGV) {
+    if (/^xn--/) {
+        print Net::IDN::Encode::domain_to_unicode($_), "\n";
+    } else {
+        print Net::IDN::Encode::domain_to_ascii($_), "\n";
+    }
+}
