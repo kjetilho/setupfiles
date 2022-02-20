@@ -752,6 +752,25 @@ gitmr() {
     git push -o merge_request.create -o merge_request.target="${current_main}" $merge origin "${current_main}":"${branch}"
 }
 
+# Remove local remote refs which no longer exist
+git-cleanup-refs() {
+    git remote prune ${1-origin};
+}
+# Remove remote branches if they have been merged into current branch
+# For safety, only look at "feature/xxx" branches
+git-cleanup-merged-feature-branches() {
+    local rem=${1-origin}
+    local branches=$(git branch -r --merged | sed -n "s,$rem/feature,feature,p")
+    if [[ $branches ]]
+    then
+        printf "%s\nPress enter to delete, ^C to abort: " "$branches"
+        read x
+        git push origin --delete $branches
+    else
+        echo "No unmerged branches on '$rem'"
+    fi
+}
+
 upd() {
     (cd $HOME/svn
     for m in puppet
