@@ -628,6 +628,7 @@ g() {
                      "git/gitlab.redpill-linpro.com/*/*$1*" \
                      "svn/$1*" \
                      "git/github.com/*/$1*" \
+                     "git/github.com/*/*$1*" \
                      "git/*/*$1*"
             do
                 for m in $HOME/$p/
