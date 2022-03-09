@@ -58,6 +58,11 @@ then
     export DOCKER=podman
 fi
 
+if type vault >/dev/null 2>&1
+then
+    export VAULT_ADDR=https://vault.i.bitbit.net
+fi
+
 # If not running interactively, don't do anything more
 ######################################################
 [ -z "$PS1" ] && return
@@ -77,6 +82,7 @@ fi
 complete -r
 complete -W "${hosts[*]}" ssh ssh-keygen telnet nc ping ping6 host showmount mtr traceroute vlan cssh console
 complete -W "${hosts[*]}" -o default scp rsync bacula-conf thruk
+complete -C /usr/bin/vault vault
 
 for comp in /usr/share/bash-completion/completions/pass /etc/bash_completion.d/password-store
 do
@@ -86,6 +92,7 @@ do
         break
     fi
 done
+
 
 scp() {
     local -a args=("$@")
