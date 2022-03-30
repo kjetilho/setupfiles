@@ -48,6 +48,7 @@ done
 for m in puppet-mod/utilities/files/backup/scripts/bacula-check \
          puppet-mod/utilities/files/backup/scripts/bacula-du \
          puppet-mod/utilities/files/backup/scripts/bacula-logs \
+         puppet-mod/utilities/files/ldap/ldap-lookup \
          puppet-mod/utilities/files/openstack/update_sg \
          backup/bareos-osl/scripts/bacula-conf \
          backup/bareos-osl/scripts/bacula-pw \
@@ -55,7 +56,6 @@ for m in puppet-mod/utilities/files/backup/scripts/bacula-check \
          puppet-ms0/bitbit_login/design/profile/files/utilities/hiera-lookup \
          puppet-ms0/bitbit_login/design/profile/files/utilities/host-lookup \
          puppet-ms0/bitbit_login/design/profile/files/utilities/ipv6-slaac \
-         puppet-ms0/bitbit_login/design/profile/files/utilities/ldap-lookup \
          puppet-ms0/bitbit_login/design/profile/files/utilities/pfw-sync \
          puppet-ms0/bitbit_login/design/profile/files/utilities/puppetdb \
          puppet-ms0/bitbit_login/design/profile/files/utilities/thruk \
