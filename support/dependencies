@@ -1,3 +1,8 @@
+for copr in valentinb/mattermost
+do
+    dnf copr list | grep -q "/${copr}$" || sudo dnf enable copr "$copr"
+done
+
 grep :: <<_SIGNING_OFF_ | sed "s/.*:: *//" | xargs sudo dnf install -y
 
 nyttige ting å ha installert:
@@ -7,8 +12,8 @@ for Emacs::           emacs jetbrains-mono-fonts
 nyttige verktøy::     jq datamash feh
 nyttige perl-ting::   perl-YAML perl-YAML-LibYAML perl-LDAP perl-DBI perl-XML-Simple
 for punycode::        perl-Net-IDN-Encode
-for ncal::            perl-Date-Easter
-  manglar i Fedora:   perl-Astro-MoonPhase perl-Astro-Sunrise perl-Astro-Time
+for ncal:
+  manglar i Fedora:   perl-Astro-MoonPhase perl-Astro-Sunrise perl-Astro-Time perl-Date-Easter
 for terminal::        rxvt-unicode liberation-mono-fonts
 for run_irssi::       xfce4-terminal google-noto-emoji-color-fonts
 for reset-resources:: xorg-x11-resutils
@@ -27,6 +32,7 @@ for workpass::        perl-IPC-Run
 for rdesktop::        freerdp
 for javaws::          icedtea-web
 for java::            java-1.8.0-openjdk-headless
+for mattermost::      mattermost-desktop
 
 rpmfusion for video i Firefox:
   free:: http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
@@ -46,6 +52,7 @@ for rbenv:
   gem install -v 1.17.3 bundler
   rbenv local 2.3.8
   gem install bundler
+
 
 cknfs:
   git clone https://github.com/kjetilho/cknfs.git
@@ -80,3 +87,8 @@ for receiving files over bluetooth:: bluez-obexd
   systemctl --user start obex
 
 _SIGNING_OFF_
+
+for mod in Astro::MoonPhase Astro::Sunrise Astro::Time Date::Easter
+do
+    perl -M$mod -e '' 2>/dev/null || sudo perl -MCPAN -e "install $mod;"
+done
