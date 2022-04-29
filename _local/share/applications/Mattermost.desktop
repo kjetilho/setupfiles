@@ -1,8 +1,0 @@
-[Desktop Entry]
-Name=Mattermost
-Comment=Mattermost Desktop application for Linux
-Exec="/opt/mattermost/current/mattermost-desktop"
-Terminal=false
-Type=Application
-Icon=/opt/mattermost/current/icon.svg
-Categories=Network;InstantMessaging;
