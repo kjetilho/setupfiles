@@ -73,7 +73,8 @@ do
     fi
     symlink "../$git_path/$m"
 done
-
+(mkdir -p ~/lib/site_perl/Bacula; cd ~/lib/site_perl/Bacula;
+symlink "../../../${git_path}/puppet-mod/utilities/files/backup/scripts/Bacula/DatabaseConfig.pm" ./DatabaseConfig.pm)
 symlink "$git_path/secrets/pass" ~/.work-password-store
 symlink host-lookup wpdsh
 
