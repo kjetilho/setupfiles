@@ -359,8 +359,24 @@ ssh() {
         esac
     done
     printf '\e]0;%s\a' "$likely_host" >&2
-
+    case $TERM in
+        rxvt*|xterm*)
+            default_bg='#fdf6e3'
+            sum=$(echo $likely_host | md5sum)
+            # MD5 gives us 128 bits.  We only use the top 15 bits,
+            # which is distributed 5/6/4 over r/g/b.  Also max value
+            # is #efdfdf, so it will generally be a little darker than
+            # local windows.
+            colour=$(perl -e '$sum=hex(substr("'"$sum"'", 0, 4));
+                              printf("#%02x%02x%02x",
+                                     0xd0 + ($sum & 0x7c00)/1024,
+                                     0xb0 + ($sum & 0x3f0)/16,
+                                     0xd0 + ($sum & 0x0f))')
+            printf '\e]11;%s\a' $colour
+            ;;
+    esac
     env TERM=xterm ssh "$@"
+    [[ $default_bg ]] && printf '\e]11;%s\a' $default_bg
 }
 
 # pdsh(1) default is rsh
