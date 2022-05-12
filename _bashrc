@@ -349,19 +349,20 @@ bind "set revert-all-at-newline On"
 bind 'Control-g: "git branch\n"'
 
 ssh() {
-    local conf=$HOME/.ssh/config
-    printf '\e]0;%s\a' "$1" >&2
+    for arg
+    do
+        case $arg in
+            -*) : ;;
+            *)  likely_host="$arg"
+                break
+                ;;
+        esac
+    done
+    printf '\e]0;%s\a' "$likely_host" >&2
 
-    case $HOSTNAME in
-         login-osl1)
-             conf="${conf}-old" ;;
-    esac
-    env TERM=xterm ssh -F "$conf" "$@"
+    env TERM=xterm ssh "$@"
 }
 
-cssh() {
-    command cssh -o "-F $HOME/.ssh/config " "$@"
-}
 # pdsh(1) default is rsh
 export PDSH_RCMD_TYPE=ssh
 
