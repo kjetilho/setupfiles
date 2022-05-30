@@ -55,8 +55,13 @@ solarized*foreground:              K_S_L_base0
 solarized*fading:                  30
 solarized*fadeColor:               black
 solarized*cursorColor:             S_L_base1
+! Changing mouse pointer colour only works when theme is disabled/unsupported
+! XTerm resource names
 solarized*pointerColorBackground:  S_L_base01
 solarized*pointerColorForeground:  S_L_base1
+! RXvt resource names
+solarized*pointerColor2:           S_L_base01
+solarized*pointerColor:            S_L_base1
 
 solarized*color0:                  S_L_base02
 solarized*color1:                  S_red
@@ -77,10 +82,9 @@ solarized*color15:                 S_L_base3
 
 dump*background:              #d0d0ff
 dump*fading:                  20 /* 30 normally */
-// These have no effect?
-dump*pointerColor2:           S_L_base01  // background
-dump*pointerColor:            S_L_base1   // foreground
-dump*pointerShape:            gumby
+
+dump*pointerColor2:           darkred  // background
+dump*pointerColor:            red      // foreground
 
 /* rest is same as solarized */
 dump*foreground:              K_S_L_base0
