@@ -90,6 +90,7 @@ Rxvt.scrollTtyOutput:	        false
 Rxvt.scrollWithBuffer:          true
 Rxvt.scrollstyle:               plain /* thickness has no effect for other styles */
 Rxvt.thickness:                 5     /* smaller values are ignored */
+Rxvt.print-pipe:                notify-send "You pressed Print!"
 
 /* 12 lines up/down */
 Rxvt.keysym.C-Prior:            command:\033]720;12\007
