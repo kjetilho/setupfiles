@@ -259,6 +259,9 @@ bindsym $mod+r exec --no-startup-id "i3-disp-size", mode "resize"
 # finds out, if available)
 bar {
         status_command my_i3status
+        # Disable scroll wheel moving through workspaces
+        bindsym button4 nop
+        bindsym button5 nop
 }
 bindsym XF86MonBrightnessDown  exec "chbacklight -U 5"
 bindsym XF86MonBrightnessUp    exec "chbacklight -A 5"
