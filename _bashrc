@@ -758,6 +758,9 @@ ghclone() {
 glclone() {
     _gclone gitlab.com "$@"
 }
+gc-() {
+    git checkout -
+}
 
 gitmr() {
     local branch automerge merge current_main
