@@ -3,6 +3,18 @@
 use strict;
 use warnings;
 
+use Getopt::Long;
+my $verbose = 0;
+
+GetOptions('verbose|v+', \$verbose) or die "Usage: $0 [--verbose]\n";
+
+sub run {
+    if ($verbose) {
+        print join(" ", ("Running: ", @_)), "\n";
+    }
+    system(@_);
+}
+
 sub xrandr_state {
     my %state;
     open(my $xrandr, '-|', 'xrandr') or die "xrandr: $!\n";
@@ -15,48 +27,51 @@ sub xrandr_state {
         } elsif (/^(\S+)\s+([a-z ]+?)(?: ((\d+)x(\d+)\+\d+\+\d+))? \(.*\)/) {
 	    $mon = $1;
 	    my ($conn, $geo, $w, $h) = ($2, $3, $4, $5);
-	    if ($conn =~ /primary/) {
-		$state{$mon} = { monitor => $mon, width => $w, height => $h };
-		$state{primary} = $state{$mon};
-	    } elsif ($conn =~ /disconnected/) {
+            # Since the output with "primary" keyword set is not necessarily
+            # part of screen, we pick our own primary: the first listed output
+            # with a geometry (which means it is part of the screen)
+	    if ($conn =~ /disconnected/) {
 		if ($geo) {
 		    print "Disabling $mon\n";
-		    system("xrandr", "--output", $mon, "--off");
+		    run("xrandr", "--output", $mon, "--off");
 		}
+	    } elsif (defined $geo && !$state{primary}) {
+		$state{$mon} = { monitor => $mon, width => $w, height => $h };
+		$state{primary} = $state{$mon};
 	    } elsif ($conn =~ /connected/) {
                 if ($geo) {
                     # detect cloned screen
-                    if ($screen->{width} < $state{primary}->{width} + $w ||
+                    if ($screen->{width} < $state{primary}->{width} + $w &&
                         $screen->{height} < $state{primary}->{height} + $h) {
-                        $todo = 'add';
+                        $todo = $mon;
                         next;
                     }
                 } else {
-                    $todo = 'add';
+                    $todo = $mon;
                     next;
                 }
 	    }
-	    $todo = undef;
 	} elsif ($mon && /^\s*(\d+)x(\d+)/) {
 	    my ($w, $h) = ($1, $2);
 	    $state{$mon} = { monitor => $mon, width => $w, height => $h };
-	    if ($todo) {
-		# A bit finnicky.  If the attached screen has lower resolution than
-		# main screen (ie., scribus), add it to the left.  Otherwise (e.g.,
-		# ranger (1920x1080) at home office (Eizo 1920x1200) in Billingsfors,
-		# put it to the right.)
-		my $biggest = ($w >= $state{primary}->{width} &&
-			       $h >= $state{primary}->{height});
-		my $direction = $biggest ? 'right' : 'left';
-		my $pri = $state{primary}->{monitor};
-		print "Adding ${mon} (${w}x${h}) $direction of ${pri}\n";
-		system("xrandr", "--output", $mon, "--auto", "--${direction}-of", $pri);
-	    }
 	    $mon = undef;
-	    $todo = undef;
 	}
     }
     close($xrandr);
+    if ($todo) {
+        # A bit finnicky.  If the attached screen has lower resolution than
+        # main screen (ie., scribus), add it to the left.  Otherwise (e.g.,
+        # ranger (1920x1080) at home office (Eizo 1920x1200) in Billingsfors,
+        # put it to the right.)
+        my $w = $state{$todo}->{width};
+        my $h = $state{$todo}->{height};
+        my $biggest = ($w >= $state{primary}->{width} &&
+                       $h >= $state{primary}->{height});
+        my $direction = $biggest ? 'right' : 'left';
+        my $pri = $state{primary}->{monitor};
+        print "Adding ${todo} (${w}x${h}) $direction of ${pri}\n";
+        run("xrandr", "--output", $todo, "--auto", "--${direction}-of", $pri);
+    }
 }
 
 xrandr_state();
