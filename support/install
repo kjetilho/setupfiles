@@ -25,6 +25,16 @@ find . \( \( -name .git -o -name '*.swp' -o -name '*~' -o -name '*#*' -o -name '
 	dest=$HOME/${path/#_/.}
 	cmp $path $dest >/dev/null 2>&1 && continue
 	case $path in
+            _ssh/*)
+                cp -v $path $dest
+                if ! ssh -V | grep -q OpenSSH_6
+                then
+                    sed -e "/#OLD *#/d" -e "s/#OLD //" < $path > $dest
+                    sed -e "/#OLD /d" < $path > $dest-old
+                fi
+                find $HOME/.ssh -perm /077 -print -exec chmod go-rwx {} +
+                continue
+                ;;
             _docker/config.json)
                 [ -e $dest ] && cmp <(jq 'del(.auths)' < $dest) $path >/dev/null 2>&1 && continue
                 cp $path $dest
