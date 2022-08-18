@@ -648,6 +648,8 @@ g() {
                      "git/git.i.bitbit.net/*/$1*" \
                      "git/gitlab.redpill-linpro.com/$1*" \
                      "git/git.i.bitbit.net/puppet*/*$1*" \
+                     "git/git.i.bitbit.net/ansible/*$1*" \
+                     "git/git.i.bitbit.net/ansible/*/*$1*" \
                      "git/git.i.bitbit.net/*/*$1*" \
                      "git/gitlab.redpill-linpro.com/*/*$1*" \
                      "svn/$1*" \
