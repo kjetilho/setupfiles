@@ -74,6 +74,7 @@ mode "Floating" {
 # lock screen
 bindsym mod1+Shift+p exec xscreensaver-command -lock
 bindsym Pause        exec xscreensaver-command -lock
+bindsym Shift+Num_Lock exec xscreensaver-command -lock
 
 # kill focused window ("kill" signals application nicely, like close in fvwm)
 bindsym $mod+Control+Escape kill
