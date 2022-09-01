@@ -42,7 +42,7 @@ Rxvt*font:                      xft:MONO_FONT-FONT_SIZE_NORMAL
 Rxvt.letterSpace:               -1 *//* Urxvt calculates wrong overall width for my font at size 9 */
 #endif
 
-URxvt.perl-ext-common:          default,selection-to-clipboard
+URxvt.perl-ext-common:          default,selection-to-clipboard,-confirm-paste
 URxvt.selection.pattern-0:      ([a-zA-Z0-9/._~-]+)
 URxvt.selection.pattern-1:      (.*)
 URxvt.secondaryScroll: false
