@@ -348,6 +348,19 @@ bind "set mark-modified-lines On"
 bind "set revert-all-at-newline On"
 bind 'Control-g: "git branch\n"'
 
+host_colour() {
+    local host=$1 bg=${2-fdf6e3}
+    local sum=$(echo $host | sha256sum)
+
+    # We use 6 bits (0x3f) from each of the first three octets from
+    # the hash and remove this pseudo-random value from the default
+    # colour.
+    perl -e '@def = map { hex } "'$bg'" =~ /(..)(..)(..)/;
+             @rgb = map { hex($_) & 0x7f } "'${sum:0:6}'" =~ /(..)(..)(..)/;
+             printf("%02x%02x%02x\n",
+                      $def[0]-$rgb[0], $def[1]-$rgb[1], $def[2]-$rgb[2]);'
+}
+
 ssh() {
     for arg
     do
@@ -361,22 +374,12 @@ ssh() {
     printf '\e]0;%s\a' "$likely_host" >&2
     case $TERM in
         rxvt*|xterm*)
-            default_bg='#fdf6e3'
-            sum=$(echo $likely_host | md5sum)
-            # MD5 gives us 128 bits.  We only use the top 15 bits,
-            # which is distributed 5/6/4 over r/g/b.  Also max value
-            # is #efdfdf, so it will generally be a little darker than
-            # local windows.
-            colour=$(perl -e '$sum=hex(substr("'"$sum"'", 0, 4));
-                              printf("#%02x%02x%02x",
-                                     0xd0 + ($sum & 0x7c00)/1024,
-                                     0xb0 + ($sum & 0x3f0)/16,
-                                     0xd0 + ($sum & 0x0f))')
-            printf '\e]11;%s\a' $colour
+            default_bg='fdf6e3'
+            printf '\e]11;#%s\a' $(host_colour $likely_host $default_bg)
             ;;
     esac
     env TERM=xterm ssh "$@"
-    [[ $default_bg ]] && printf '\e]11;%s\a' $default_bg
+    [[ $default_bg ]] && printf '\e]11;#%s\a' $default_bg
 }
 
 # pdsh(1) default is rsh
