@@ -176,8 +176,9 @@ bindsym $mod+Shift+a focus child
 bindsym $mod+b workspace back_and_forth
 bindsym $mod+z workspace back_and_forth
 bindsym $mod+x move workspace to output right
-# hhkb also calls update-monitors
-bindsym $mod+Shift+x exec "hhkb"
+
+bindsym $mod+Shift+x exec "update-kvm"
+bindsym $mod+Control+Shift+x exec "hhkb"
 
 # switch to workspace
 bindsym $mod+1 workspace number 1

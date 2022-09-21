@@ -43,12 +43,3 @@ then
     # Enable horizontal scrolling when dragging along the bottom edge.
     synclient HorizEdgeScroll=1
 fi
-
-# override cursor font with big cursor at Gumby position (56)
-if ! xset q | grep -q kjetilho/lib/X11/fonts
-then
-    xset +fp $HOME/lib/X11/fonts
-fi
-
-# attach extra monitors to desktop
-update-monitors

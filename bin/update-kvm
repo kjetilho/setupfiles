@@ -1,0 +1,5 @@
+#! /bin/bash
+
+update-monitors
+hhkb
+reset-resources
