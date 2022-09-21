@@ -903,7 +903,7 @@ whois.no() {
     ssh login-osl2.i.bitbit.net whois -h registrarwhois.norid.no "$@";
 }
 mdview() {
-    pandoc -t html -o /dev/stdout "$1" | w3m -T text/html -o display_link=true -o confirm_qq=false
+    pandoc -t html -o /dev/stdout "$1" | ifne w3m -T text/html -o display_link=true -o confirm_qq=false
 }
 nsupd() {
     nsupdate -k$HOME/.config/dns/$USER.user.private "$@"
