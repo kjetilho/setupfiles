@@ -147,7 +147,7 @@ bindsym $mod+p workspace prev
 
 bindsym $mod+e [class="Emacs"] focus
 bindsym $mod+Control+e [class="Evolution"] focus
-bindsym $mod+t [class="Thunderbird" instance="Mail"] focus
+bindsym $mod+t [class="[Tt]hunderbird" instance="[Mm]ail"] focus
 bindsym $mod+m [class="Mattermost"] focus
 bindsym XF86Mail [class="Evolution"] focus
 bindsym XF86HomePage [class="Firefox"] focus
@@ -308,7 +308,7 @@ assign [instance="dump"] 9
 assign [class="Firefox"] 11
 assign [class="Spotify"] 12
 assign [class="Evolution"] 17
-assign [class="Thunderbird"] 18
+assign [class="[Tt]hunderbird"] 18
 assign [class="Mattermost"] 19
 
 # DP3 is for small Dell screen on scribus
