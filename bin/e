@@ -1,10 +1,17 @@
 #! /bin/bash
 
+# remove trailing colon on every argument
+declare -a args
+for arg
+do
+    args=(${args[@]} ${arg%:})
+done
+
 if [ -S /run/user/$UID/emacs/server -o -S /tmp/emacs$UID/server ]
 then
-    echo "Loading in Emacs [$@]..."
-    emacsclient -n "$@"
+    echo "Loading in Emacs [${args[@]}]..."
+    emacsclient -n "${args[@]}"
     type -p activate-window >/dev/null && activate-window emacs
 else
-    vi "$@"
+    vi "${args[@]}"
 fi
