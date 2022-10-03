@@ -64,10 +64,13 @@ for_window [instance="floating"] floating enable
 bindsym $mod+Return       exec urxvt -name solarized
 bindsym $mod+Shift+Return exec urxvt -name dump
 bindsym $mod+Shift+i      exec run_irssi
+# reverse colours for Powershell
+bindsym $mod+w            exec urxvt -name dark
 
 mode "Floating" {
   bindsym $mod+Return       exec urxvt -T floating -name solarized, mode "default"
   bindsym $mod+Shift+Return exec urxvt -T floating -name dump, mode "default"
+  bindsym $mod+w            exec urxvt -T floating -name dark, mode "default"
   bindsym Escape            mode "default"
 }
 

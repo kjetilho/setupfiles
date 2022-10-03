@@ -80,6 +80,36 @@ solarized*color13:                 S_violet
 solarized*color14:                 S_L_base1
 solarized*color15:                 S_L_base3
 
+dark*background:              S_base03
+dark*foreground:              K_S_base0
+dark*fading:                  30
+dark*fadeColor:               black
+dark*cursorColor:             S_base1
+! Changing mouse pointer colour only works when theme is disabled/unsupported
+! XTerm resource names
+dark*pointerColorBackground:  S_base01
+dark*pointerColorForeground:  S_base1
+! RXvt resource names
+dark*pointerColor2:           S_base01
+dark*pointerColor:            S_base1
+
+dark*color0:                  S_base02
+dark*color1:                  S_red
+dark*color2:                  K_S_green
+dark*color3:                  S_yellow
+dark*color4:                  S_blue
+dark*color5:                  S_magenta
+dark*color6:                  S_cyan
+dark*color7:                  S_base2
+dark*color9:                  S_orange
+dark*color8:                  S_base03
+dark*color10:                 S_base01
+dark*color11:                 S_base00
+dark*color12:                 S_base0
+dark*color13:                 S_violet
+dark*color14:                 S_base1
+dark*color15:                 S_base3
+
 dump*background:              #d0d0ff
 dump*fading:                  20 /* 30 normally */
 
