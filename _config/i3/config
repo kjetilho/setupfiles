@@ -81,6 +81,7 @@ bindsym Shift+Num_Lock exec xscreensaver-command -lock
 
 # kill focused window ("kill" signals application nicely, like close in fvwm)
 bindsym $mod+Control+Escape kill
+bindsym $mod+Control+Shift+Escape exec xkill
 bindsym $mod+F4 kill
 
 # mute/unmute in Jitsi (it doesn't work without shift modifier for some reason)
@@ -180,8 +181,8 @@ bindsym $mod+b workspace back_and_forth
 bindsym $mod+z workspace back_and_forth
 bindsym $mod+x move workspace to output right
 
-bindsym $mod+Shift+x exec "update-kvm"
-bindsym $mod+Control+Shift+x exec "hhkb"
+bindsym $mod+Shift+x exec update-kvm
+bindsym $mod+Control+Shift+x exec hhkb
 
 # switch to workspace
 bindsym $mod+1 workspace number 1
