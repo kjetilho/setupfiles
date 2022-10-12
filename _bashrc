@@ -356,7 +356,7 @@ host_colour() {
     # the hash and remove this pseudo-random value from the default
     # colour.
     perl -e '@def = map { hex } "'$bg'" =~ /(..)(..)(..)/;
-             @rgb = map { hex($_) & 0x7f } "'${sum:0:6}'" =~ /(..)(..)(..)/;
+             @rgb = map { hex($_) & 0x3f } "'${sum:0:6}'" =~ /(..)(..)(..)/;
              printf("%02x%02x%02x\n",
                       $def[0]-$rgb[0], $def[1]-$rgb[1], $def[2]-$rgb[2]);'
 }
@@ -379,6 +379,10 @@ ssh() {
             ;;
     esac
     env TERM=xterm ssh "$@"
+    ssh-reset
+}
+
+ssh-reset() {
     [[ $default_bg ]] && printf '\e]11;#%s\a' $default_bg
 }
 
