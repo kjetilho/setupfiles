@@ -86,6 +86,11 @@ for receiving files over bluetooth:: bluez-obexd
   systemctl --user enable obex
   systemctl --user start obex
 
+for fixing Function keys on Keychron (and B21?)
+  echo options hid_apple fnmode=2 | sudo tee /etc/modprobe.d/hid_apple.conf
+  # runtime: echo 2 | sudo tee /sys/module/hid_apple/parameters/fnmode
+  # ref https://gist.github.com/andrebrait/961cefe730f4a2c41f57911e6195e444
+
 _SIGNING_OFF_
 
 for mod in Astro::MoonPhase Astro::Sunrise Astro::Time Date::Easter
