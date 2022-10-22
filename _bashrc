@@ -927,4 +927,15 @@ tomquiz() {
     xdg-open $dir/$num.*.xlsx &
 }
 
-alias r='. ~/.bashrc'
+# For a limited time only - until all my shells has transitioned from
+# r alias to r function.  -kjetilho 2022-10-22
+if alias -p | grep -q 'alias r='
+then
+    unalias r
+fi
+
+r() {
+    ssh-reset
+    . ~/.bashrc
+}
+
